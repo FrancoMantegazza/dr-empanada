@@ -19,16 +19,26 @@ export default function Home() {
     <>
       {/* ── Hero ── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <Image
-          src="/images/nosotros/foto1.jpg"
-          alt="Dr. Empanada"
-          fill
-          className="object-cover brightness-[0.25]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+        {/* Video de fondo */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover brightness-[0.50]"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
 
-        <div className="relative text-center px-4 max-w-4xl mx-auto">
+        {/* Viñeta cinematográfica */}
+        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)'}} />
+
+        {/* Barras letterbox estilo cine */}
+        <div className="absolute top-0 left-0 right-0 h-[7vh] bg-black z-10" />
+        <div className="absolute bottom-0 left-0 right-0 h-[7vh] bg-black z-10" />
+
+        {/* Contenido */}
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <div className="animate-scale-in">
             <Image
               src="/images/logo.png"
@@ -39,14 +49,14 @@ export default function Home() {
               priority
             />
           </div>
-          <h1 className="text-6xl md:text-8xl font-extrabold mb-4 leading-tight animate-fade-in-up delay-100">
+          <h1 className="text-6xl md:text-8xl font-extrabold mb-4 leading-tight animate-fade-in-up delay-100 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
             <span className="text-orange-500">Dr.</span>
             <span className="text-white">Empanada</span>
           </h1>
-          <p className="text-orange-400 font-semibold text-lg mb-3 animate-fade-in-up delay-200">
+          <p className="text-orange-400 font-semibold text-lg mb-3 animate-fade-in-up delay-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             Villa Devoto, CABA · Desde 1989
           </p>
-          <p className="text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-300">
+          <p className="text-xl md:text-2xl text-gray-100 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
             Empanadas artesanales con rellenos generosos y masa hecha a mano. Clásicas y especiales para todos los gustos.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-400">
@@ -68,9 +78,9 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-60">
-          <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center pt-2">
-            <div className="w-1 h-2 bg-white/60 rounded-full" />
+        <div className="absolute bottom-[8vh] left-1/2 -translate-x-1/2 animate-bounce opacity-70 z-20">
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
+            <div className="w-1 h-2 bg-white/70 rounded-full" />
           </div>
         </div>
       </section>
