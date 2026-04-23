@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 const links = [
   { href: '/', label: 'Inicio' },
   { href: '/nosotros', label: 'Nosotros' },
-  { href: '/productos', label: 'Productos' },
+  { href: '/menu', label: 'Menú' },
   { href: '/contacto', label: 'Contacto' },
 ]
 
@@ -38,6 +38,14 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
+            <Link
+              href="https://wa.me/5491132456209"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-5 rounded-full text-sm transition-all"
+            >
+              Pedí ya
+            </Link>
           </div>
 
           {/* Hamburger */}
@@ -54,7 +62,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden bg-black border-t border-orange-900 transition-all duration-300 ${isOpen ? 'max-h-64' : 'max-h-0 overflow-hidden'}`}>
+      <div className={`md:hidden bg-black border-t border-orange-900 transition-all duration-300 ${isOpen ? 'max-h-72' : 'max-h-0 overflow-hidden'}`}>
         {links.map(({ href, label }) => (
           <Link
             key={href}
@@ -69,6 +77,15 @@ export default function Navbar() {
             {label}
           </Link>
         ))}
+        <Link
+          href="https://wa.me/5491132456209"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setIsOpen(false)}
+          className="block px-6 py-4 text-green-400 font-bold hover:bg-gray-950"
+        >
+          📱 Pedí ya por WhatsApp
+        </Link>
       </div>
     </nav>
   )

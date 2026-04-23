@@ -1,13 +1,15 @@
+import Link from 'next/link'
+
 export const metadata = {
   title: 'Nosotros - Dr. Empanada',
-  description: 'Conocé la historia y los valores detrás de Dr. Empanada.',
+  description: 'Conocé la historia de Dr. Empanada, empanadas artesanales en Villa Devoto desde 1989.',
 }
 
 const valores = [
-  { icon: '🌿', titulo: 'Calidad', desc: 'Ingredientes frescos seleccionados cada día sin excepción.' },
-  { icon: '🤝', titulo: 'Compromiso', desc: 'Con nuestros clientes y con la excelencia en cada producto.' },
-  { icon: '💡', titulo: 'Creatividad', desc: 'Sabores clásicos y combinaciones únicas que sorprenden.' },
-  { icon: '❤️', titulo: 'Pasión', desc: 'Amamos lo que hacemos y eso se nota en cada empanada.' },
+  { icon: '🌿', titulo: 'Calidad', desc: 'Materia prima seleccionada. Nunca bajamos el estándar.' },
+  { icon: '🤝', titulo: 'Compromiso', desc: 'Mejora constante en procesos para garantizar sabor y consistencia.' },
+  { icon: '🤌', titulo: 'Artesanal', desc: 'Masa y rellenos hechos a mano, como siempre se hizo.' },
+  { icon: '❤️', titulo: 'Pasión', desc: 'Más de 35 años dedicados a la gastronomía con identidad propia.' },
 ]
 
 export default function Nosotros() {
@@ -19,7 +21,7 @@ export default function Nosotros() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6">
             Sobre <span className="text-orange-500">nosotros</span>
           </h1>
-          <p className="text-xl text-gray-300">La historia detrás de las mejores empanadas de la ciudad</p>
+          <p className="text-xl text-gray-300">Empanadas artesanales en Villa Devoto desde 1989</p>
         </div>
       </section>
 
@@ -30,22 +32,41 @@ export default function Nosotros() {
             <div>
               <h2 className="text-3xl font-bold text-orange-500 mb-6">Nuestra historia</h2>
               <p className="text-gray-300 mb-5 leading-relaxed text-lg">
-                Dr. Empanada nació de una pasión profunda por la gastronomía tradicional argentina.
-                Creemos que una buena empanada es mucho más que comida: es cultura, es familia, es identidad.
+                Dr. Empanada nació en <strong className="text-white">1989</strong> en el corazón de Villa Devoto,
+                Buenos Aires. Durante más de tres décadas hemos mantenido viva la tradición de la empanada artesanal argentina.
               </p>
               <p className="text-gray-300 mb-5 leading-relaxed text-lg">
-                Con años de experiencia perfeccionando nuestras recetas, cada empanada que sale de nuestra
-                cocina está hecha con los mejores ingredientes y una dedicación que se nota en cada bocado.
+                Desde <strong className="text-white">2006</strong>, bajo la dirección actual, el negocio apostó por
+                la mejora continua: mejores ingredientes, nuevas recetas especiales y un proceso más cuidado,
+                sin perder nunca la esencia artesanal que nos define.
               </p>
               <p className="text-gray-300 leading-relaxed text-lg">
-                Hoy ofrecemos una variedad de sabores únicos, manteniendo siempre la esencia artesanal
-                que nos caracteriza desde el primer día.
+                Hoy ofrecemos empanadas clásicas y especiales con rellenos generosos y masa artesanal,
+                disponibles fritas en grasa o al horno, acompañadas de nuestros pastelitos.
               </p>
             </div>
-            <div className="bg-gray-950 rounded-3xl p-16 text-center border border-orange-900">
-              <div className="text-9xl mb-6">🫔</div>
-              <p className="text-orange-500 font-bold text-xl">Artesanales desde el primer día</p>
-              <p className="text-gray-500 mt-2">Gastronomía con identidad</p>
+            <div className="space-y-4">
+              <div className="bg-gray-950 rounded-2xl p-6 border border-orange-900 flex items-center gap-5">
+                <span className="text-5xl">📅</span>
+                <div>
+                  <p className="text-orange-500 font-bold text-xl">Desde 1989</p>
+                  <p className="text-gray-400">Más de 35 años en Villa Devoto</p>
+                </div>
+              </div>
+              <div className="bg-gray-950 rounded-2xl p-6 border border-orange-900 flex items-center gap-5">
+                <span className="text-5xl">📍</span>
+                <div>
+                  <p className="text-orange-500 font-bold text-xl">Melincué 4399</p>
+                  <p className="text-gray-400">Villa Devoto, CABA</p>
+                </div>
+              </div>
+              <div className="bg-gray-950 rounded-2xl p-6 border border-orange-900 flex items-center gap-5">
+                <span className="text-5xl">🫔</span>
+                <div>
+                  <p className="text-orange-500 font-bold text-xl">Clásicas y especiales</p>
+                  <p className="text-gray-400">Fritas en grasa o al horno</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -57,7 +78,7 @@ export default function Nosotros() {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             Nuestros <span className="text-orange-500">valores</span>
           </h2>
-          <p className="text-gray-400 text-center mb-14">Lo que guía cada cosa que hacemos</p>
+          <p className="text-gray-400 text-center mb-14">Lo que guía todo lo que hacemos</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {valores.map((v) => (
               <div
@@ -73,16 +94,28 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* Misión */}
+      {/* CTA */}
       <section className="py-20 bg-black">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Nuestra <span className="text-orange-500">misión</span>
+            ¿Querés conocer nuestro <span className="text-orange-500">menú</span>?
           </h2>
-          <p className="text-gray-300 text-xl leading-relaxed">
-            Llevar a cada cliente la experiencia de una empanada verdaderamente artesanal,
-            elaborada con respeto por la tradición y amor por la gastronomía argentina.
-          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/menu"
+              className="inline-block bg-orange-500 hover:bg-orange-600 text-black font-bold py-4 px-8 rounded-full text-lg transition-all"
+            >
+              Ver menú completo
+            </Link>
+            <Link
+              href="https://wa.me/5491132456209"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all"
+            >
+              📱 Pedí ya
+            </Link>
+          </div>
         </div>
       </section>
     </div>

@@ -1,15 +1,36 @@
+import Link from 'next/link'
 import ContactForm from '@/components/ContactForm'
 
 export const metadata = {
   title: 'Contacto - Dr. Empanada',
-  description: '¿Tenés alguna consulta? ¡Escribinos! Estamos para ayudarte.',
+  description: 'Contactate con Dr. Empanada en Villa Devoto. WhatsApp, Instagram y más.',
 }
 
 const info = [
-  { icon: '📍', label: 'Dirección', value: 'Tu dirección aquí' },
-  { icon: '📞', label: 'Teléfono', value: 'Tu número aquí' },
-  { icon: '📧', label: 'Email', value: 'tu@email.com' },
-  { icon: '🕐', label: 'Horarios', value: 'Lun – Dom: 11:00 – 22:00' },
+  {
+    icon: '📍',
+    label: 'Dirección',
+    value: 'Melincué 4399, Villa Devoto, CABA',
+    href: 'https://maps.google.com/?q=-34.610505,-58.506771',
+  },
+  {
+    icon: '📱',
+    label: 'WhatsApp',
+    value: '+54 9 11 3245-6209',
+    href: 'https://wa.me/5491132456209',
+  },
+  {
+    icon: '📸',
+    label: 'Instagram',
+    value: '@drempanada.arg',
+    href: 'https://www.instagram.com/drempanada.arg',
+  },
+  {
+    icon: '👥',
+    label: 'Facebook',
+    value: 'SoufleDevoto',
+    href: 'https://www.facebook.com/SoufleDevoto',
+  },
 ]
 
 export default function Contacto() {
@@ -21,7 +42,7 @@ export default function Contacto() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6">
             <span className="text-orange-500">Contacto</span>
           </h1>
-          <p className="text-xl text-gray-300">¿Tenés alguna consulta? ¡Escribinos, estamos para ayudarte!</p>
+          <p className="text-xl text-gray-300">Estamos en Villa Devoto. ¡Escribinos cuando quieras!</p>
         </div>
       </section>
 
@@ -31,19 +52,36 @@ export default function Contacto() {
             {/* Info */}
             <div>
               <h2 className="text-2xl font-bold text-orange-500 mb-8">Encontranos</h2>
-              <div className="space-y-4">
+              <div className="space-y-4 mb-8">
                 {info.map((item) => (
-                  <div
+                  <Link
                     key={item.label}
-                    className="flex items-start gap-4 p-5 bg-gray-950 rounded-2xl border border-gray-800 hover:border-orange-500 transition-colors"
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-4 p-5 bg-gray-950 rounded-2xl border border-gray-800 hover:border-orange-500 transition-colors group"
                   >
                     <span className="text-2xl">{item.icon}</span>
                     <div>
                       <p className="text-orange-500 font-semibold text-xs uppercase tracking-widest mb-0.5">{item.label}</p>
-                      <p className="text-white">{item.value}</p>
+                      <p className="text-white group-hover:text-orange-400 transition-colors">{item.value}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
+              </div>
+
+              {/* Mapa */}
+              <div className="rounded-2xl overflow-hidden border border-gray-800">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.1!2d-58.506771!3d-34.610505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDM2JzM3LjgiUyA1OMKwMzAnMjQuNCJX!5e0!3m2!1ses!2sar!4v1"
+                  width="100%"
+                  height="220"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación Dr. Empanada"
+                />
               </div>
             </div>
 
@@ -51,6 +89,15 @@ export default function Contacto() {
             <div>
               <h2 className="text-2xl font-bold text-orange-500 mb-8">Envianos un mensaje</h2>
               <ContactForm />
+
+              <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-center">
+                <p className="text-green-400 text-sm">
+                  Para respuestas más rápidas escribinos directamente por{' '}
+                  <Link href="https://wa.me/5491132456209" target="_blank" className="font-bold underline hover:text-green-300">
+                    WhatsApp
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
         </div>
