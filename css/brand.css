@@ -1,0 +1,154 @@
+/* ============================================================
+   BROTHERS FOOD.LST — Brand tokens & base
+   Base: negro & blanco · Acento: naranja de marca · damero + kraft
+   ============================================================ */
+
+:root{
+  /* --- Color --- */
+  --ink:        #0c0c0d;   /* near-black base */
+  --ink-2:      #161618;   /* raised surface on dark */
+  --ink-3:      #202023;   /* card on dark */
+  --line-dark:  #2c2c30;   /* hairline on dark */
+
+  --paper:      #f4efe4;   /* warm off-white (kraft paper) */
+  --paper-2:    #eae1d0;   /* deeper kraft */
+  --bone:       #fbf9f3;   /* lightest */
+  --line-light: #ddd3bf;
+
+  --white:      #f7f4ec;
+  --muted:      #9a978f;   /* muted text on dark */
+  --muted-d:    #6f6a5e;   /* muted text on light */
+
+  --orange:     #ea7b1b;   /* brand accent */
+  --orange-2:   #ffd9a8;   /* tint */
+  --orange-deep:#c2620d;
+  --beer:       #e7a92a;   /* draft-beer gold */
+  --foam:       #f6e9c8;
+
+  --ok:         #3fae6b;
+  --warn:       #e9b949;
+  --danger:     #d8533c;
+
+  /* --- Type --- */
+  --display: "Anton", "Arial Narrow", sans-serif;
+  --body:    "Barlow", system-ui, sans-serif;
+  --mono:    "Space Mono", ui-monospace, monospace;
+
+  /* --- Geometry --- */
+  --r-sm: 6px;
+  --r:    10px;
+  --r-lg: 16px;
+  --maxw: 1200px;
+  --shadow: 0 18px 50px -20px rgba(0,0,0,.55);
+  --shadow-sm: 0 6px 18px -8px rgba(0,0,0,.5);
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--body);
+  background:var(--ink);
+  color:var(--white);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img{ display:block; max-width:100%; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+::selection{ background:var(--orange); color:#1a1206; }
+
+/* Scrollbar */
+*::-webkit-scrollbar{ width:11px; height:11px; }
+*::-webkit-scrollbar-track{ background:transparent; }
+*::-webkit-scrollbar-thumb{ background:#3a3a40; border-radius:20px; border:3px solid transparent; background-clip:content-box; }
+*::-webkit-scrollbar-thumb:hover{ background:#54545c; background-clip:content-box; }
+
+/* --- Type helpers --- */
+.display{ font-family:var(--display); font-weight:400; line-height:.92; letter-spacing:.01em; text-transform:uppercase; }
+.mono{ font-family:var(--mono); }
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--orange); font-weight:700;
+}
+.eyebrow.muted{ color:var(--muted); }
+
+/* --- Damero (checkerboard) strip --- */
+.damero{
+  height:14px;
+  background:
+    conic-gradient(#0c0c0d 90deg, #f7f4ec 90deg 180deg, #0c0c0d 180deg 270deg, #f7f4ec 270deg) 0 0/28px 28px;
+  background-repeat:repeat;
+}
+.damero.thin{ height:10px; background-size:20px 20px; }
+
+/* --- Kraft / paper noise texture --- */
+.kraft{
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(rgba(120,90,40,.06) 1px, transparent 1px),
+    radial-gradient(rgba(120,90,40,.05) 1px, transparent 1px);
+  background-size:7px 7px, 13px 13px;
+  background-position:0 0, 4px 4px;
+}
+
+/* --- Buttons --- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  font-family:var(--mono); font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  font-size:13px; line-height:1;
+  padding:14px 22px; border-radius:var(--r-sm); border:2px solid transparent;
+  transition:transform .12s ease, background .15s ease, color .15s ease, border-color .15s;
+  white-space:nowrap;
+}
+.btn:active{ transform:translateY(1px) scale(.99); }
+.btn-orange{ background:var(--orange); color:#1a1206; }
+.btn-orange:hover{ background:#ff8e2a; }
+.btn-white{ background:var(--white); color:var(--ink); }
+.btn-white:hover{ background:#fff; }
+.btn-ghost{ background:transparent; color:var(--white); border-color:var(--line-dark); }
+.btn-ghost:hover{ border-color:var(--orange); color:var(--orange); }
+.btn-dark{ background:var(--ink); color:var(--white); }
+.btn-dark:hover{ background:#000; }
+.btn-block{ width:100%; }
+.btn-lg{ padding:17px 28px; font-size:14px; }
+.btn-sm{ padding:9px 14px; font-size:11.5px; }
+.btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+/* --- Tag / pill --- */
+.tag{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  padding:5px 10px; border-radius:100px; border:1.5px solid var(--line-dark); color:var(--muted);
+}
+.tag.orange{ border-color:var(--orange); color:var(--orange); }
+.tag.solid{ background:var(--orange); color:#1a1206; border-color:transparent; }
+.tag.beer{ border-color:var(--beer); color:var(--beer); }
+
+/* --- Containers --- */
+.wrap{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+
+/* --- Image placeholder (intentional, branded) --- */
+.imgph{
+  position:relative; overflow:hidden; background:#1a1a1c;
+  background-image:repeating-linear-gradient(135deg, #1a1a1c 0 14px, #1f1f22 14px 28px);
+  display:flex; align-items:center; justify-content:center;
+}
+.imgph span{
+  font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:#55555c; text-align:center; padding:8px 12px;
+}
+.imgph.light{ background:#e7ddc9; background-image:repeating-linear-gradient(135deg,#e7ddc9 0 14px,#ddd1b8 14px 28px); }
+.imgph.light span{ color:#9a8a68; }
+
+/* utility */
+.tabular{ font-variant-numeric:tabular-nums; }
+.hairline{ height:1px; background:var(--line-dark); border:0; }
+.fadeup{ opacity:1; }
+@media (prefers-reduced-motion: no-preference){
+  .fadeup{ animation:fadeup .5s ease both; }
+}
+@keyframes fadeup{ from{ transform:translateY(14px); } to{ transform:none; } }
+
+/* focus */
+:focus-visible{ outline:2px solid var(--orange); outline-offset:2px; }
+input:focus, textarea:focus, select:focus{ outline:none; }
