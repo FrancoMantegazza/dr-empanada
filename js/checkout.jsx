@@ -158,11 +158,12 @@ function Checkout({ go }) {
           <h3 className="display" style={{ fontSize: 20, margin: "0 0 14px" }}>Tu pedido</h3>
           <div style={{ display: "grid", gap: 10, maxHeight: 280, overflowY: "auto", marginBottom: 14 }}>
             {lines.map((l) => (
-              <div key={l.id + l.variant} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+              <div key={l.id + l.variant + (l.modsLabel || "")} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                 <span className="mono tabular" style={{ minWidth: 26, height: 26, borderRadius: 6, background: "var(--ink-3)", color: "var(--orange)", display: "grid", placeItems: "center", fontSize: 13, fontWeight: 700 }}>{l.qty}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14, fontWeight: 600 }}>{l.item.name}</div>
-                  {l.variant !== "single" && <div className="mono" style={{ fontSize: 10.5, color: "var(--orange)" }}>{l.variant === "double" ? "Doble" : "Pinta 0,5L"}</div>}
+                  {l.variant === "double" && <div className="mono" style={{ fontSize: 10.5, color: "var(--orange)" }}>Doble</div>}
+                  {l.modsLabel && <div style={{ fontSize: 11.5, color: "var(--muted)", lineHeight: 1.35 }}>{l.modsLabel}</div>}
                 </div>
                 <div className="mono tabular" style={{ fontSize: 13 }}>{money(l.lineTotal)}</div>
               </div>
@@ -240,7 +241,7 @@ function OrderSuccess({ order, go }) {
 
   const waText =
     `¡Hola Brothers! Acabo de hacer el pedido ${order.id} 🍔%0A` +
-    order.lines.map((l) => `• ${l.qty}x ${l.name}${l.variant !== "single" ? " (" + (l.variant === "double" ? "doble" : "pinta") + ")" : ""}`).join("%0A") +
+    order.lines.map((l) => `• ${l.qty}x ${l.name}${l.variant === "double" ? " (doble)" : ""}${l.mods ? " — " + l.mods : ""}`).join("%0A") +
     `%0ATotal: ${money(order.total)}%0AA nombre de ${order.name}.`;
 
   return (

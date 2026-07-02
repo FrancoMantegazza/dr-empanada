@@ -250,7 +250,7 @@ function OrderCard({ order, onDetail }) {
           {order.lines.slice(0, 3).map((l, i) => (
             <div key={i} style={{ display: "flex", gap: 8, fontSize: 13.5 }}>
               <span className="mono" style={{ color: "var(--orange)", fontWeight: 700 }}>{l.qty}×</span>
-              <span style={{ flex: 1 }}>{l.name}{l.variant !== "single" && <span style={{ color: "var(--muted)" }}> · {l.variant === "double" ? "doble" : "pinta"}</span>}</span>
+              <span style={{ flex: 1 }}>{l.name}{l.variant === "double" && <span style={{ color: "var(--muted)" }}> · doble</span>}{l.mods && <span style={{ color: "var(--muted)" }}> · {l.mods}</span>}</span>
             </div>
           ))}
           {order.lines.length > 3 && <div className="mono" style={{ fontSize: 12, color: "var(--muted)" }}>+{order.lines.length - 3} más…</div>}
@@ -326,7 +326,7 @@ function OrderDetail({ order, onClose }) {
               <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < live.lines.length - 1 ? "1px solid var(--line-dark)" : "none" }}>
                 <div style={{ display: "flex", gap: 10 }}>
                   <span className="mono" style={{ color: "var(--orange)", fontWeight: 700 }}>{l.qty}×</span>
-                  <span>{l.name}{l.variant !== "single" && <span style={{ color: "var(--muted)" }}> · {l.variant === "double" ? "doble" : "pinta"}</span>}</span>
+                  <span>{l.name}{l.variant === "double" && <span style={{ color: "var(--muted)" }}> · doble</span>}{l.mods && <span style={{ color: "var(--muted)" }}> · {l.mods}</span>}</span>
                 </div>
                 <span className="mono tabular" style={{ color: "var(--muted)" }}>{money(l.lineTotal)}</span>
               </div>

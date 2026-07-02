@@ -17,9 +17,9 @@ function Nosotros({ go }) {
       </section>
 
       {/* historia */}
-      <section className="wrap" style={{ padding: "60px 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 50, alignItems: "center" }} >
-        <div style={{ borderRadius: 16, overflow: "hidden", border: "1px solid var(--line-dark)", aspectRatio: "4/5" }}>
-          <Photo kind="burger" style={{ width: "100%", height: "100%" }} />
+      <section className="wrap bf-two" style={{ padding: "60px 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 50, alignItems: "center" }} >
+        <div className="zoom" style={{ position: "relative", borderRadius: 16, overflow: "hidden", border: "1px solid var(--line-dark)", aspectRatio: "4/5" }}>
+          <Photo src={IMG("photo-1550547660-d9450f859349", 1000)} alt="Burgers Brothers Food" style={{ position: "absolute", inset: 0 }} />
         </div>
         <div>
           <h2 className="display" style={{ fontSize: "clamp(30px,4vw,46px)", margin: "0 0 18px" }}>De Boedo para el mundo</h2>
@@ -38,7 +38,7 @@ function Nosotros({ go }) {
 
       {/* stats */}
       <section style={{ background: "#0a0a0a", borderTop: "1px solid var(--line-dark)", borderBottom: "1px solid var(--line-dark)" }}>
-        <div className="wrap" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, padding: "10px 24px" }} className="bf-stats">
+        <div className="wrap bf-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, padding: "10px 24px" }}>
           {[["9.7K", "seguidores en IG"], [BIZ.rating, "estrellas en Google"], ["+5", "años en Boedo"], ["100%", "casero"]].map(([n, l], i) => (
             <div key={i} style={{ padding: "36px 16px", textAlign: "center", borderLeft: i ? "1px solid var(--line-dark)" : "none" }}>
               <div className="display" style={{ fontSize: "clamp(34px,5vw,56px)", color: "var(--orange)" }}>{n}</div>
@@ -53,7 +53,7 @@ function Nosotros({ go }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }} className="bf-grid-3">
           {[
             [Ic.fire, "Al momento", "Cada burger se arma cuando la pedís. Nada de cosas recalentadas."],
-            [Ic.beer, "Tirada fresca", "Cuatro estilos en la canilla, siempre bien fría y con la espuma justa."],
+            [Ic.beer, "Tirada fresca", "Siete estilos artesanales en la canilla, siempre bien fría y con la espuma justa."],
             [Ic.truck, "Delivery propio", "Lo llevamos nosotros para que llegue como tiene que llegar."],
           ].map(([Icon, t, d], i) => (
             <div key={i} style={{ border: "1px solid var(--line-dark)", borderRadius: 14, padding: 26, background: "var(--ink-2)" }}>
@@ -110,7 +110,7 @@ function Contacto({ go }) {
         </div>
       </section>
 
-      <div className="wrap" style={{ padding: "44px 24px 70px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} >
+      <div className="wrap bf-two" style={{ padding: "44px 24px 70px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} >
         {/* info + form */}
         <div>
           <div style={{ display: "grid", gap: 14 }}>

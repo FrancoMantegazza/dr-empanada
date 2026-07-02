@@ -2,12 +2,13 @@
    store.jsx — estado global persistente (carrito, órdenes, auth, stock)
    Persiste en localStorage. Sincroniza entre pestañas con 'storage'
    y dentro de la misma pestaña con un EventTarget.
+   Las líneas del carrito soportan mods: { medallon, papas, extras[], protein }
    ============================================================ */
 
 const LS = {
-  cart: "bf_cart_v1",
+  cart: "bf_cart_v2",
   orders: "bf_orders_v1",
-  stock: "bf_stock_v1",
+  stock: "bf_stock_v2",
   auth: "bf_auth_v1",
   seq: "bf_seq_v1",
 };
@@ -28,6 +29,35 @@ function defaultStock() {
   return s;
 }
 
+/* ---- mods helpers ---- */
+function modsTotal(mods) {
+  if (!mods) return 0;
+  let t = 0;
+  if (mods.papas) t += (findPapas(mods.papas) || {}).price || 0;
+  (mods.extras || []).forEach((id) => { t += (findExtra(id) || {}).price || 0; });
+  return t;
+}
+function modsLabel(mods) {
+  if (!mods) return "";
+  const parts = [];
+  if (mods.medallon && mods.medallon !== "Carne") parts.push(mods.medallon);
+  if (mods.protein && mods.protein !== "Carne") parts.push("De " + mods.protein.toLowerCase());
+  if (mods.papas && mods.papas !== "clasicas") { const p = findPapas(mods.papas); if (p) parts.push(p.name); }
+  (mods.extras || []).forEach((id) => { const e = findExtra(id); if (e) parts.push("+ " + e.name); });
+  return parts.join(" · ");
+}
+const normMods = (mods) => {
+  if (!mods) return null;
+  const m = {
+    medallon: mods.medallon || null,
+    protein: mods.protein || null,
+    papas: mods.papas && mods.papas !== "clasicas" ? mods.papas : null,
+    extras: [...(mods.extras || [])].sort(),
+  };
+  if (!m.medallon && !m.protein && !m.papas && !m.extras.length) return null;
+  return m;
+};
+
 const Store = {
   /* ---------- CART ---------- */
   getCart() { return read(LS.cart, []); },
@@ -35,30 +65,31 @@ const Store = {
   cartLines() {
     return this.getCart().map((l) => {
       const item = findItem(l.id);
-      const unit = l.variant === "double" ? (item.priceDouble || item.price)
-                 : l.variant === "pint" ? (item.pint || item.price)
-                 : item.price;
-      return { ...l, item, unit, lineTotal: unit * l.qty };
-    }).filter((l) => l.item);
+      if (!item) return null;
+      const base = l.variant === "double" ? (item.priceDouble || item.price) : item.price;
+      const unit = base + modsTotal(l.mods);
+      return { ...l, item, unit, lineTotal: unit * l.qty, modsLabel: modsLabel(l.mods) };
+    }).filter(Boolean);
   },
   cartTotal() { return this.cartLines().reduce((s, l) => s + l.lineTotal, 0); },
-  _lineKey(id, variant) { return id + "|" + (variant || "single"); },
-  add(id, variant = "single", qty = 1) {
+  _lineKey(id, variant, mods) { return id + "|" + (variant || "single") + "|" + JSON.stringify(normMods(mods)); },
+  add(id, variant = "single", qty = 1, mods = null) {
     const cart = this.getCart();
-    const key = this._lineKey(id, variant);
-    const ex = cart.find((l) => this._lineKey(l.id, l.variant) === key);
-    if (ex) ex.qty += qty; else cart.push({ id, variant, qty });
+    const m = normMods(mods);
+    const key = this._lineKey(id, variant, m);
+    const ex = cart.find((l) => this._lineKey(l.id, l.variant, l.mods) === key);
+    if (ex) ex.qty += qty; else cart.push({ id, variant, qty, mods: m });
     write(LS.cart, cart); emit();
   },
-  setQty(id, variant, qty) {
+  setQty(id, variant, qty, mods = null) {
     let cart = this.getCart();
-    const key = this._lineKey(id, variant);
-    cart = cart.map((l) => this._lineKey(l.id, l.variant) === key ? { ...l, qty } : l).filter((l) => l.qty > 0);
+    const key = this._lineKey(id, variant, mods);
+    cart = cart.map((l) => this._lineKey(l.id, l.variant, l.mods) === key ? { ...l, qty } : l).filter((l) => l.qty > 0);
     write(LS.cart, cart); emit();
   },
-  removeLine(id, variant) {
-    const key = this._lineKey(id, variant);
-    write(LS.cart, this.getCart().filter((l) => this._lineKey(l.id, l.variant) !== key)); emit();
+  removeLine(id, variant, mods = null) {
+    const key = this._lineKey(id, variant, mods);
+    write(LS.cart, this.getCart().filter((l) => this._lineKey(l.id, l.variant, l.mods) !== key)); emit();
   },
   clearCart() { write(LS.cart, []); emit(); },
 
@@ -67,7 +98,8 @@ const Store = {
   nextSeq() { const n = (read(LS.seq, 0) || 0) + 1; write(LS.seq, n); return n; },
   placeOrder(payload) {
     const lines = this.cartLines().map((l) => ({
-      id: l.id, name: l.item.name, variant: l.variant, qty: l.qty, unit: l.unit, lineTotal: l.lineTotal,
+      id: l.id, name: l.item.name, variant: l.variant, qty: l.qty, unit: l.unit,
+      lineTotal: l.lineTotal, mods: l.modsLabel || "",
     }));
     const subtotal = this.cartTotal();
     const shipping = payload.mode === "delivery" ? 2500 : 0;
@@ -130,7 +162,8 @@ const Store = {
   /* ---- demo seed para que el panel no arranque vacío ---- */
   seedDemo() {
     if (this.getOrders().length) return;
-    const mk = (mins, status, name, lines, mode, pay) => {
+    const mk = (mins, status, name, rawLines, mode, pay) => {
+      const lines = rawLines.filter(Boolean);
       const seq = this.nextSeq();
       const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
       const shipping = mode === "delivery" ? 2500 : 0;
@@ -143,14 +176,18 @@ const Store = {
         bell: mode === "delivery" ? String(2 + (seq % 6)) : "", notes: "",
       };
     };
-    const L = (id, variant, qty) => { const it = findItem(id); const unit = variant === "double" ? (it.priceDouble || it.price) : variant === "pint" ? (it.pint || it.price) : it.price; return { id, name: it.name, variant, qty, unit, lineTotal: unit * qty }; };
+    const L = (id, variant, qty, mods) => {
+      const it = findItem(id); if (!it) return null;
+      const unit = (variant === "double" ? (it.priceDouble || it.price) : it.price) + modsTotal(mods);
+      return { id, name: it.name, variant, qty, unit, lineTotal: unit * qty, mods: modsLabel(mods) };
+    };
     const demo = [
-      mk(4, "recibido", "Julián Pérez", [L("big-brothers", "double", 1), L("papas", "single", 1), L("rubia", "pint", 2)], "delivery", "mp"),
-      mk(11, "preparacion", "Mesa / Local", [L("thomason", "single", 2), L("aros", "single", 1)], "takeaway", "efectivo"),
-      mk(19, "camino", "Romina Díaz", [L("crispy", "single", 1), L("ipa", "pint", 1)], "delivery", "transferencia"),
-      mk(42, "entregado", "Franco S.", [L("clasica", "double", 1), L("negra", "single", 1), L("tabla", "single", 1)], "takeaway", "transferencia"),
+      mk(4, "recibido", "Julián Pérez", [L("big-brothers", "double", 1, { extras: ["panceta"] }), L("papas-cheddar", "single", 1), L("rubia", "single", 2)], "delivery", "mp"),
+      mk(11, "preparacion", "Mesa / Local", [L("thomason", "single", 2), L("papas", "single", 1)], "takeaway", "efectivo"),
+      mk(19, "camino", "Romina Díaz", [L("crispy", "single", 1), L("ipa", "single", 1)], "delivery", "transferencia"),
+      mk(42, "entregado", "Franco S.", [L("clasica", "double", 1), L("negra", "single", 1), L("papas-completas", "single", 1)], "takeaway", "transferencia"),
       mk(70, "entregado", "Belén M.", [L("big-brothers", "single", 2), L("gaseosa", "single", 2)], "delivery", "mp"),
-      mk(95, "entregado", "Diego R.", [L("ribs", "single", 1), L("papas", "single", 1), L("roja", "pint", 2)], "takeaway", "efectivo"),
+      mk(95, "entregado", "Diego R.", [L("bondiola", "single", 1), L("papas", "single", 1), L("roja", "single", 2)], "takeaway", "efectivo"),
     ];
     write(LS.orders, demo);
     emit();
@@ -164,5 +201,4 @@ function useStore() {
   return Store;
 }
 
-window.Store = Store;
-window.useStore = useStore;
+Object.assign(window, { Store, useStore, modsTotal, modsLabel });

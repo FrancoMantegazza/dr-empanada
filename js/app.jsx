@@ -68,6 +68,9 @@ function App() {
       <Footer go={go} />
       <WhatsAppFAB />
       <CartDrawer go={go} />
+      <Customizer />
+      <Toaster />
+      <div className="grain" aria-hidden="true" />
       {Tweaks}
     </>
   );

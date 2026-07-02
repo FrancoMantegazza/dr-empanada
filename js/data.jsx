@@ -1,5 +1,6 @@
 /* ============================================================
    data.jsx — negocio, menú, reseñas, logo, íconos, helpers
+   Menú real transcripto de la carta física (jul 2026).
    ============================================================ */
 
 const BIZ = {
@@ -15,8 +16,8 @@ const BIZ = {
   ig: "brothersfood.lst",
   hours: [
     { d: "Lunes", h: "Cerrado", closed: true },
-    { d: "Mar – Dom", h: "Noche · 20:00 – 00:00" },
-    { d: "Jue – Sáb", h: "Mediodía · 12:00 – 16:00" },
+    { d: "Mar – Sáb", h: "09:00 – 00:00" },
+    { d: "Domingo", h: "19:00 – 00:00" },
   ],
   // datos de pago (editables a mano)
   pay: {
@@ -30,68 +31,187 @@ const BIZ = {
 const money = (n) =>
   "$" + n.toLocaleString("es-AR", { minimumFractionDigits: 0 });
 
-/* ---- Menú ---- (editable a mano por el dueño) */
+/* ---- Fotos (Unsplash, reemplazables por fotos propias) ---- */
+const IMG = (id, w = 900) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
+
+/* ---- Horarios en vivo ---- */
+// dom=0 · lun=1 (cerrado) · mar–sáb 09–00 · dom 19–00
+function isOpenNow(now = new Date()) {
+  const d = now.getDay(), h = now.getHours();
+  if (d === 1) return false;
+  if (d === 0) return h >= 19;
+  return h >= 9;
+}
+// happy hour: martes a domingo, 13 a 21 hs
+function isHappyNow(now = new Date()) {
+  const d = now.getDay(), h = now.getHours();
+  return d !== 1 && h >= 13 && h < 21;
+}
+
+/* ============================================================
+   Agregados / dips / upgrades (carta real)
+   ============================================================ */
+const EXTRAS = [
+  { id: "cheddar", name: "Cheddar", price: 1000 },
+  { id: "panceta", name: "Panceta", price: 1500 },
+  { id: "huevo", name: "Huevo", price: 1000 },
+  { id: "cebolla", name: "Cebolla", price: 500 },
+  { id: "cebolla-caramelizada", name: "Cebolla caramelizada", price: 500 },
+  { id: "cebolla-crispy", name: "Cebolla crispy", price: 500 },
+  { id: "lechuga", name: "Lechuga", price: 500 },
+  { id: "tomate", name: "Tomate", price: 500 },
+  { id: "muzzarella", name: "Muzzarella", price: 1000 },
+  { id: "provoleta", name: "Provoleta", price: 1500 },
+  { id: "medallon-muzza", name: "Medallón de muzzarella rebozada", price: 3000 },
+  { id: "medallon-carne", name: "Medallón de carne extra", price: 4500 },
+  { id: "salsa-cuarto", name: "Salsa ¼ (ketchup, mostaza, cebollita)", price: 1000 },
+];
+
+const PAPAS_UPGRADES = [
+  { id: "clasicas", name: "Papas clásicas (incluidas)", price: 0 },
+  { id: "up-cheddar", name: "Papas con cheddar", price: 800 },
+  { id: "up-cheddar-panceta", name: "Papas cheddar y panceta", price: 1000 },
+  { id: "up-completas", name: "Papas cheddar, panceta y verdeo", price: 1200 },
+];
+
+const MEDALLONES = ["Carne", "NotCo (plant based)", "Veggie de lentejas casero"];
+const PROTEINAS = ["Carne", "Pollo"];
+
+const DIPS = {
+  price: 600,
+  items: ["Mayonesa", "Ketchup", "Mostaza", "Mostaza dulce", "Barbacoa", "Alioli", "Picante"],
+  note: "Precio únicamente delivery — en salón, aderezos sin cargo.",
+};
+
+const HAPPY = {
+  where: "Sucursal Boedo · Av. Boedo 1600",
+  when: "Martes a domingo · 13 a 21 hs",
+  deals: [
+    { name: "Rubia · Roja · Honey · APA", price: 7000 },
+    { name: "Negra · IPA · NEIPA", price: 11000 },
+    { name: "Fernet", price: 12000 },
+    { name: "Gin tonic", price: 14000 },
+    { name: "Campari", price: 11000 },
+    { name: "Tinto de verano", price: 10000 },
+  ],
+};
+
+/* ============================================================
+   Menú — layout: "cards" (foto grande) · "taps" (cervezas) · "list" (compacto)
+   ============================================================ */
 const MENU = [
   {
     id: "burgers",
     name: "Hamburguesas",
-    kicker: "Smash & gourmet · pan brioche casero",
+    kicker: "Todos los combos vienen con papas · smash & gourmet",
+    layout: "cards",
+    note: "Todas se pueden hacer con medallón NotCo por el mismo precio, o con medallón veggie de lentejas casero.",
     items: [
-      { id: "big-brothers", name: "Big Brothers", desc: "Doble medallón smash, doble cheddar, cebolla, pepinos y salsa Brothers.", price: 20000, priceDouble: 24500, tags: ["TOP"], photo: "burger" },
-      { id: "crispy", name: "Crispy Brothers", desc: "Pollo crispy, cheddar, panceta, lechuga y alioli ahumado.", price: 23000, tags: [], photo: "burger" },
-      { id: "clasica", name: "Clásica", desc: "Medallón de carne, cheddar, lechuga, tomate y salsa de la casa.", price: 20000, priceDouble: 24000, tags: [], photo: "burger" },
-      { id: "thomason", name: "Viernes Thomason", desc: "Cheddar, panceta, huevo y cebolla caramelizada. La que rompe.", price: 15000, priceDouble: 18500, tags: ["PROMO"], photo: "promo" },
-      { id: "cuarto", name: "Doble Cuarto", desc: "Dos cuartos de libra, triple cheddar y pickles. Para los que tienen hambre.", price: 25500, tags: [], photo: "burger" },
-      { id: "veggie", name: "Veggie Brothers", desc: "Medallón de garbanzo y remolacha, cheddar veggie y rúcula.", price: 19000, tags: ["VEGGIE"], photo: "burger" },
+      { id: "cheese", name: "Cheese Burger", desc: "Con queso cheddar. La que nunca falla.", price: 13200, priceDouble: 17600, tags: [], custom: true, img: IMG("photo-1607013251379-e6eecfffe234") },
+      { id: "big-brothers", name: "Big Brothers", desc: "Cheddar, lechuga, cebolla picada, pepinillos y salsa brother.", price: 16000, priceDouble: 19500, tags: ["TOP"], custom: true, img: IMG("photo-1568901346375-23c9450c58cd") },
+      { id: "clasica", name: "Clásica", desc: "Lechuga, tomate y muzzarella.", price: 16000, priceDouble: 17500, tags: [], custom: true, img: IMG("photo-1571091718767-18b5b1457add") },
+      { id: "oklahoma", name: "Oklahoma", desc: "Carne y cebolla smash con cheddar en pan de molde. Paty melt.", price: 14300, priceDouble: 18700, tags: [], custom: true, img: IMG("photo-1528735602780-2552fd46c7af") },
+      { id: "crispy", name: "Crispy Brothers", desc: "Cebolla crispy, pepinillos, cheddar, panceta y salsa brothers.", price: 17600, priceDouble: 22000, tags: ["TOP"], custom: true, img: IMG("photo-1553979459-d2229ba7433b") },
+      { id: "thomason", name: "Thomason", desc: "Cheddar, panceta, huevo y cebolla caramelizada. Los viernes, en promo.", price: 17600, priceDouble: 22000, tags: ["PROMO VIERNES"], custom: true, img: "assets/promo-thomason.jpg" },
     ],
   },
   {
-    id: "draft",
-    name: "Cervezas tiradas",
-    kicker: "De la canilla · pinta 0,5L · chopp 0,33L",
+    id: "sandwiches",
+    name: "Sandwiches",
+    kicker: "Con papas · pueden ser de carne o de pollo",
+    layout: "cards",
+    items: [
+      { id: "bondiola", name: "Bondiola desmechada", desc: "Con salsa barbacoa.", price: 18700, tags: ["TOP"], custom: true, protein: true, img: IMG("photo-1606755962773-d324e0a13086") },
+      { id: "pollo-caesar", name: "Pollo caesar", desc: "Pechuga de pollo, lechuga y salsa caesar.", price: 16500, tags: [], custom: true, img: IMG("photo-1509722747041-616f39b57569") },
+      { id: "desmechada", name: "Carne desmechada", desc: "Al vino tinto con verduras y provoleta.", price: 18700, tags: [], custom: true, img: IMG("photo-1481070555726-e2fe8357725c") },
+      { id: "mila-tucumano", name: "Milanesa tucumano", desc: "Lechuga, tomate, mayonesa y mostaza.", price: 16500, tags: [], custom: true, protein: true, img: IMG("photo-1553909489-cd47e0907980") },
+      { id: "mila-americano", name: "Milanesa americano", desc: "Con cheddar y panceta.", price: 16500, tags: [], custom: true, protein: true, img: IMG("photo-1619096252214-ef06c45683e3") },
+    ],
+  },
+  {
+    id: "papas",
+    name: "Porción de papas",
+    kicker: "Para acompañar o para no compartir",
+    layout: "cards",
+    items: [
+      { id: "papas", name: "Papas solas", desc: "Crocantes, con nuestro blend de especias.", price: 8000, tags: [], img: IMG("photo-1630384060421-cb20d0e0649d") },
+      { id: "papas-cheddar", name: "Papas con cheddar", desc: "Bañadas en cheddar fundido.", price: 9000, tags: [], img: IMG("photo-1573080496219-bb080dd4f877") },
+      { id: "papas-cheddar-panceta", name: "Papas cheddar y panceta", desc: "Cheddar fundido y panceta crocante.", price: 10000, tags: ["TOP"], img: IMG("photo-1541592106381-b31e9677c0e5") },
+      { id: "papas-completas", name: "Papas completas", desc: "Cheddar, panceta y verdeo.", price: 11000, tags: [], img: IMG("photo-1573080496219-bb080dd4f877") },
+    ],
+  },
+  {
+    id: "ensaladas",
+    name: "Ensaladas",
+    kicker: "Frescas, para equilibrar la balanza",
+    layout: "cards",
+    items: [
+      { id: "caesar", name: "Caesar", desc: "Pollo, lechuga, crutones y salsa caesar.", price: 12000, tags: [], img: IMG("photo-1550304943-4f24f54ddde9") },
+      { id: "mediterranea", name: "Mediterránea", desc: "Lechuga, tomates cherry, zanahoria, huevo y aceitunas negras.", price: 10000, tags: [], img: IMG("photo-1512621776951-a57141f2eefd") },
+    ],
+  },
+  {
+    id: "cervezas",
+    name: "Cervezas artesanales",
+    kicker: "Tiradas, de productores independientes · pinta",
+    layout: "taps",
     draft: true,
     items: [
-      { id: "rubia", name: "Rubia / Golden", desc: "Suave, fresca, bien tomable. La de todos los días.", price: 5500, pint: 7500, tags: ["TIRADA"], photo: "beer" },
-      { id: "roja", name: "Roja / Scottish", desc: "Maltosa, caramelo, cuerpo medio.", price: 5800, pint: 7900, tags: ["TIRADA"], photo: "beer" },
-      { id: "negra", name: "Negra / Stout", desc: "Tostada, notas a café y chocolate.", price: 6000, pint: 8200, tags: ["TIRADA"], photo: "beer" },
-      { id: "ipa", name: "IPA", desc: "Lupulada, amarga, aromática. Para los cerveceros.", price: 6200, pint: 8500, tags: ["TIRADA"], photo: "beer" },
+      { id: "rubia", name: "Rubia", brewery: "Chicago", desc: "Suave, fresca, bien tomable. La de todos los días.", price: 5000, hh: 7000, ibu: 17, abv: 5.6, color: "#e7a92a", tags: ["TIRADA"] },
+      { id: "roja", name: "Roja", brewery: "Norecord", desc: "Maltosa, caramelo, cuerpo medio.", price: 5000, hh: 7000, ibu: 17, abv: 5.1, color: "#8a3b1e", tags: ["TIRADA"] },
+      { id: "ipa", name: "American IPA", brewery: "Fuerte al Medio", desc: "Lupulada, amarga, aromática. Para los cerveceros.", price: 7000, hh: 11000, ibu: 65, abv: 6.8, color: "#d98e2b", tags: ["TIRADA"] },
+      { id: "apa", name: "APA", brewery: "Galapa Hops", desc: "Cítrica y balanceada, amargor amable.", price: 5000, hh: 7000, ibu: 35, abv: 5.5, color: "#e0a33a", tags: ["TIRADA"] },
+      { id: "neipa", name: "NEIPA", brewery: "Cuasi Neipa", desc: "Turbia, jugosa, tropical. Poco amargor.", price: 7000, hh: 11000, ibu: 30, abv: 5.1, color: "#e8b64c", tags: ["TIRADA"] },
+      { id: "honey", name: "Honey", brewery: "Monarca", desc: "Con miel, dulzor sutil y final seco.", price: 5000, hh: 7000, ibu: 18, abv: 7.0, color: "#d99e2e", tags: ["TIRADA"] },
+      { id: "negra", name: "Negra", brewery: "Desayuno de Campeones", desc: "Tostada, notas a café y chocolate.", price: 7000, hh: 11000, ibu: 30, abv: 6.3, color: "#241610", tags: ["TIRADA"] },
     ],
   },
   {
-    id: "share",
-    name: "Para compartir",
-    kicker: "Lo que va perfecto con la birra",
+    id: "tragos",
+    name: "Bebida con alcohol",
+    kicker: "Clásicos bien servidos",
+    layout: "list",
     items: [
-      { id: "tabla", name: "Tabla de fritos", desc: "Papas, aros de cebolla, muzza sticks y salchichas. Para la mesa.", price: 16500, tags: ["TOP"], photo: "fries" },
-      { id: "papas", name: "Papas sazonadas", desc: "Con nuestro blend de especias. Pedilas con cheddar y panceta.", price: 8500, tags: [], photo: "fries" },
-      { id: "aros", name: "Aros de cebolla", desc: "Rebozados crocantes con alioli.", price: 7500, tags: [], photo: "fries" },
-      { id: "muzza", name: "Muzzarella sticks", desc: "6 bastones rebozados con salsa de tomate.", price: 8000, tags: [], photo: "fries" },
-      { id: "ribs", name: "Ribs", desc: "Costillas a la BBQ, se deshacen.", price: 18500, tags: [], photo: "ribs" },
+      { id: "vino-copa", name: "Vino copa", desc: "Tinto de la casa.", price: 7000, tags: [] },
+      { id: "vino-botella", name: "Vino botella · Saint Felicien", desc: "Malbec.", price: 23000, tags: [] },
+      { id: "fernet", name: "Fernet", desc: "Con cola, como corresponde.", price: 8000, hh: 12000, tags: [] },
+      { id: "gin-tonic", name: "Gin tonic", desc: "Con tónica y limón.", price: 10000, hh: 14000, tags: [] },
+      { id: "aperol", name: "Aperol spritz", desc: "Aperol, espumante y soda.", price: 10000, tags: [] },
+      { id: "campari", name: "Campari", desc: "Con jugo de naranja o tónica.", price: 8000, hh: 11000, tags: [] },
+      { id: "caipiroska", name: "Caipiroska", desc: "Vodka, lima y azúcar.", price: 11000, tags: [] },
+      { id: "tinto-verano", name: "Tinto de verano", desc: "Vino tinto, gaseosa de lima y hielo.", price: 6000, hh: 10000, tags: [] },
     ],
   },
   {
     id: "drinks",
-    name: "Bebidas",
+    name: "Bebidas sin alcohol",
     kicker: "Para acompañar",
+    layout: "list",
     items: [
-      { id: "gaseosa", name: "Gaseosa línea Coca", desc: "Lata 354ml.", price: 2800, tags: [], photo: "drink" },
-      { id: "agua", name: "Agua / saborizada", desc: "500ml.", price: 2500, tags: [], photo: "drink" },
-      { id: "limonada", name: "Limonada de la casa", desc: "Jengibre y menta. Jarra.", price: 6500, tags: [], photo: "drink" },
+      { id: "gaseosa", name: "Gaseosa línea Coca", desc: "Lata 354 ml.", price: 2800, tags: [] },
+      { id: "agua", name: "Agua / saborizada", desc: "500 ml.", price: 2500, tags: [] },
+      { id: "limonada", name: "Limonada de la casa", desc: "Jengibre y menta.", price: 6500, tags: [] },
     ],
   },
 ];
 
+/* Promo Thomason (viernes) */
+const PROMO_THOMASON = { price: 15000, priceDouble: 18500 };
+
 const FLAT_ITEMS = MENU.flatMap((c) => c.items.map((i) => ({ ...i, cat: c.id, catName: c.name, draft: !!c.draft })));
 const findItem = (id) => FLAT_ITEMS.find((i) => i.id === id);
+const findExtra = (id) => EXTRAS.find((e) => e.id === id);
+const findPapas = (id) => PAPAS_UPGRADES.find((p) => p.id === id);
 
 /* ---- Reseñas de Google (reales en espíritu, editables) ---- */
 const REVIEWS = [
   { name: "Martín G.", stars: 5, when: "hace 2 semanas", text: "Las mejores burgers de Boedo. La Big Brothers es un montón y la cerveza tirada bien fría. Atención de 10." },
-  { name: "Caro P.", stars: 5, when: "hace 1 mes", text: "Pedí por delivery propio y llegó calentito y rapidísimo. La tabla de fritos para compartir es enorme." },
+  { name: "Caro P.", stars: 5, when: "hace 1 mes", text: "Pedí por delivery propio y llegó calentito y rapidísimo. La Oklahoma en pan de molde es otra cosa." },
   { name: "Lucas D.", stars: 4, when: "hace 1 mes", text: "Muy ricas las hamburguesas, ambiente piola para ir con amigos a tomar una pinta. Volvería." },
-  { name: "Sofía R.", stars: 5, when: "hace 3 semanas", text: "La Thomason con huevo y cebolla caramelizada es otra cosa. Encima tienen promo. Recomendadísimo." },
-  { name: "Nico V.", stars: 5, when: "hace 2 meses", text: "Somos clientes hace rato. Siempre la misma calidad. La IPA de canilla está muy buena." },
-  { name: "Aldana M.", stars: 4, when: "hace 1 semana", text: "Buen lugar, porciones generosas y precio justo para lo que es. Las papas sazonadas un viciazo." },
+  { name: "Sofía R.", stars: 5, when: "hace 3 semanas", text: "La Thomason con huevo y cebolla caramelizada es otra cosa. Encima los viernes está en promo. Recomendadísimo." },
+  { name: "Nico V.", stars: 5, when: "hace 2 meses", text: "Somos clientes hace rato. Siempre la misma calidad. La IPA de Fuerte al Medio está muy buena." },
+  { name: "Aldana M.", stars: 4, when: "hace 1 semana", text: "Buen lugar, porciones generosas y precio justo. El happy hour de la tarde es un golazo." },
 ];
 
 /* ============================================================
@@ -159,6 +279,14 @@ const Ic = {
   menu: (p) => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}><path d="M3 6h18M3 12h18M3 18h18"/></svg>),
   logout: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>),
   copy: (p) => (<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>),
+  search: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>),
+  leaf: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M11 20A7 7 0 0 1 4 13c0-6 6-10 16-11-1 10-5 16-11 11z"/><path d="M4 21c4-6 8-9 13-11"/></svg>),
+  sliders: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>),
+  glass: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 3h14l-1.5 9a5.5 5.5 0 0 1-11 0z"/><path d="M12 17v4M8 21h8"/></svg>),
 };
 
-Object.assign(window, { BIZ, MENU, FLAT_ITEMS, findItem, REVIEWS, money, Cloche, Logo, Ic });
+Object.assign(window, {
+  BIZ, MENU, FLAT_ITEMS, findItem, REVIEWS, money, Cloche, Logo, Ic, IMG,
+  EXTRAS, PAPAS_UPGRADES, MEDALLONES, PROTEINAS, DIPS, HAPPY, PROMO_THOMASON,
+  findExtra, findPapas, isOpenNow, isHappyNow,
+});

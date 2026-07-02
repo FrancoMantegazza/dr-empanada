@@ -152,3 +152,146 @@ a{ color:inherit; text-decoration:none; }
 /* focus */
 :focus-visible{ outline:2px solid var(--orange); outline-offset:2px; }
 input:focus, textarea:focus, select:focus{ outline:none; }
+
+/* ============================================================
+   v2 — motion & surface upgrades
+   ============================================================ */
+html{ scroll-behavior:smooth; }
+.display{ text-wrap:balance; }
+
+/* --- Scroll reveal (IntersectionObserver agrega .in) --- */
+.reveal{ opacity:0; transform:translateY(26px); }
+.reveal.in{ opacity:1; transform:none; transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1; transform:none; }
+}
+
+/* --- Grain overlay --- */
+.grain{
+  position:fixed; inset:0; z-index:98; pointer-events:none; opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Card hover lift + image zoom --- */
+.lift{ transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .25s; }
+.lift:hover{ transform:translateY(-5px); box-shadow:0 24px 50px -22px rgba(0,0,0,.7); }
+.zoom{ overflow:hidden; }
+.zoom img{ transition:transform .6s cubic-bezier(.2,.8,.2,1); }
+.zoom:hover img{ transform:scale(1.06); }
+
+/* --- Foto real con fade-in + skeleton shimmer --- */
+.ph{ position:relative; background:#161618; overflow:hidden; }
+.ph::before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.05) 50%, transparent 70%);
+  background-size:200% 100%; animation:ph-shimmer 1.4s infinite;
+}
+.ph img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .5s ease; }
+.ph img.ld{ opacity:1; }
+.ph.ready::before{ animation:none; opacity:0; }
+@keyframes ph-shimmer{ from{ background-position:200% 0; } to{ background-position:-200% 0; } }
+.ph .ph-icon{ position:absolute; inset:0; display:grid; place-items:center; color:#3c3c42; }
+
+/* --- Tap list (cervezas) --- */
+.tap{
+  display:flex; align-items:center; gap:16px; padding:16px 18px;
+  border:1px solid var(--line-dark); border-radius:12px; background:var(--ink-2);
+  transition:border-color .2s, transform .2s;
+}
+.tap:hover{ border-color:var(--beer); transform:translateX(4px); }
+.tap-glass{
+  width:34px; height:44px; border-radius:3px 3px 7px 7px; flex-shrink:0; position:relative;
+  border:2px solid #3a3a40; border-top:none; overflow:hidden;
+}
+.tap-glass::before{ content:""; position:absolute; left:0; right:0; bottom:0; top:22%; background:var(--c, var(--beer)); }
+.tap-glass::after{ content:""; position:absolute; left:0; right:0; top:8%; height:16%; background:var(--foam); border-radius:2px; }
+.meter{ height:5px; border-radius:4px; background:#2c2c30; overflow:hidden; }
+.meter > span{ display:block; height:100%; border-radius:4px; background:var(--beer); }
+
+/* --- Happy hour --- */
+.hh-badge{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:#1a1206; background:var(--beer); padding:6px 12px; border-radius:100px;
+}
+.hh-dot{ width:8px; height:8px; border-radius:50%; background:#1a1206; animation:hh-blink 1.4s infinite; }
+@keyframes hh-blink{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
+
+/* --- Compact list rows (tragos / bebidas) --- */
+.lrow{
+  display:flex; align-items:center; gap:16px; padding:15px 4px;
+  border-bottom:1px dashed var(--line-dark);
+}
+.lrow-dots{ flex:1; border-bottom:2px dotted #3a3a40; margin:0 4px; transform:translateY(6px); min-width:24px; }
+
+/* --- Chip (agregados) --- */
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13.5px; font-weight:600; color:var(--white);
+  padding:8px 13px; border-radius:100px; border:1px solid var(--line-dark); background:var(--ink-2);
+}
+.chip b{ font-family:var(--mono); color:var(--orange); font-weight:700; font-size:12.5px; }
+
+/* --- Customizer modal --- */
+.modal-bg{
+  position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.7); backdrop-filter:blur(3px);
+  display:grid; place-items:center; padding:18px;
+  animation:fadein .2s ease;
+}
+.modal{
+  width:min(560px, 100%); max-height:min(760px, 92dvh); overflow:hidden auto;
+  background:var(--ink); border:1px solid var(--line-dark); border-radius:18px; box-shadow:var(--shadow);
+  animation:modal-in .3s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes fadein{ from{ opacity:0; } }
+@keyframes modal-in{ from{ transform:translateY(26px) scale(.98); opacity:0; } }
+.opt{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+  padding:12px 14px; border-radius:10px; cursor:pointer;
+  border:1.5px solid var(--line-dark); background:var(--ink-2); color:var(--white);
+  transition:border-color .15s, background .15s;
+}
+.opt:hover{ border-color:#4a4a52; }
+.opt.on{ border-color:var(--orange); background:rgba(234,123,27,.08); }
+.opt-check{
+  width:20px; height:20px; border-radius:6px; border:2px solid var(--line-dark);
+  display:grid; place-items:center; color:#1a1206; flex-shrink:0; transition:all .15s;
+}
+.opt.on .opt-check{ background:var(--orange); border-color:var(--orange); }
+.opt-radio{ border-radius:50%; }
+
+/* --- Toast --- */
+.toast{
+  position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:90;
+  display:flex; align-items:center; gap:10px;
+  background:var(--white); color:var(--ink); font-weight:700; font-size:14px;
+  padding:12px 18px; border-radius:12px; box-shadow:var(--shadow);
+  animation:toast-in .3s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes toast-in{ from{ transform:translate(-50%, 20px); opacity:0; } }
+
+/* --- Announcement bar --- */
+.annbar{
+  background:var(--orange); color:#1a1206; overflow:hidden;
+  font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+}
+
+/* --- Hero float --- */
+@keyframes bf-float{ 0%,100%{ transform:translateY(0) rotate(-2deg); } 50%{ transform:translateY(-12px) rotate(-2deg); } }
+.hero-float{ animation:bf-float 5.5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .hero-float{ animation:none; } }
+
+/* --- Outline display text --- */
+.outline-txt{
+  color:transparent; -webkit-text-stroke:1.5px var(--white);
+}
+
+/* --- Cat nav pill --- */
+.catpill{
+  white-space:nowrap; padding:9px 15px; border-radius:100px; font-size:12.5px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; font-family:var(--mono);
+  border:1px solid var(--line-dark); background:transparent; color:var(--white);
+  transition:all .2s;
+}
+.catpill:hover{ border-color:var(--orange); color:var(--orange); }
+.catpill.on{ background:var(--orange); border-color:var(--orange); color:#1a1206; }

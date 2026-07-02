@@ -19,8 +19,7 @@ function CartDrawer({ go }) {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  const variantTxt = (v) => v === "double" ? "Doble" : v === "pint" ? "Pinta 0,5L" : "";
-
+  const lineKey = (l) => l.id + "|" + l.variant + "|" + (l.modsLabel || "");
   const goCheckout = () => { setOpen(false); go("#/checkout"); };
 
   return (
@@ -41,7 +40,7 @@ function CartDrawer({ go }) {
             <h2 className="display" style={{ fontSize: 22, margin: 0 }}>Tu pedido</h2>
             {lines.length > 0 && <span className="tag" style={{ borderColor: "var(--line-dark)" }}>{store.cartCount()} ítems</span>}
           </div>
-          <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: "var(--muted)" }}><Ic.x /></button>
+          <button onClick={() => setOpen(false)} aria-label="Cerrar carrito" style={{ background: "none", border: "none", color: "var(--muted)" }}><Ic.x /></button>
         </div>
 
         {lines.length === 0 ? (
@@ -57,21 +56,22 @@ function CartDrawer({ go }) {
           <>
             <div style={{ flex: 1, overflowY: "auto", padding: "10px 16px" }}>
               {lines.map((l) => (
-                <div key={l.id + l.variant} style={{ display: "flex", gap: 12, padding: "14px 6px", borderBottom: "1px solid var(--line-dark)" }}>
-                  <Photo kind={l.item.photo} style={{ width: 64, height: 64, borderRadius: 9, flexShrink: 0 }} />
+                <div key={lineKey(l)} style={{ display: "flex", gap: 12, padding: "14px 6px", borderBottom: "1px solid var(--line-dark)" }}>
+                  <Photo item={l.item} style={{ width: 64, height: 64, borderRadius: 9, flexShrink: 0 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
                       <div>
                         <div style={{ fontWeight: 700, fontSize: 15 }}>{l.item.name}</div>
-                        {variantTxt(l.variant) && <div className="mono" style={{ fontSize: 11, color: "var(--orange)" }}>{variantTxt(l.variant)}</div>}
+                        {l.variant === "double" && <div className="mono" style={{ fontSize: 11, color: "var(--orange)" }}>Doble</div>}
+                        {l.modsLabel && <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.35 }}>{l.modsLabel}</div>}
                       </div>
-                      <button onClick={() => store.removeLine(l.id, l.variant)} style={{ background: "none", border: "none", color: "var(--muted-d)", flexShrink: 0 }}><Ic.x width={16} height={16} /></button>
+                      <button onClick={() => store.removeLine(l.id, l.variant, l.mods)} aria-label={"Quitar " + l.item.name} style={{ background: "none", border: "none", color: "var(--muted-d)", flexShrink: 0 }}><Ic.x width={16} height={16} /></button>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 0, border: "1px solid var(--line-dark)", borderRadius: 8 }}>
-                        <button onClick={() => store.setQty(l.id, l.variant, l.qty - 1)} style={qtyBtn}><Ic.minus width={14} height={14} /></button>
+                        <button onClick={() => store.setQty(l.id, l.variant, l.qty - 1, l.mods)} aria-label="Menos" style={qtyBtn}><Ic.minus width={14} height={14} /></button>
                         <span className="mono tabular" style={{ width: 30, textAlign: "center", fontWeight: 700 }}>{l.qty}</span>
-                        <button onClick={() => store.setQty(l.id, l.variant, l.qty + 1)} style={qtyBtn}><Ic.plus width={14} height={14} /></button>
+                        <button onClick={() => store.setQty(l.id, l.variant, l.qty + 1, l.mods)} aria-label="Más" style={qtyBtn}><Ic.plus width={14} height={14} /></button>
                       </div>
                       <div className="mono tabular" style={{ fontWeight: 700 }}>{money(l.lineTotal)}</div>
                     </div>
