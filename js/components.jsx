@@ -378,10 +378,13 @@ function Customizer() {
   const [extras, setExtras] = useState([]);
   const [qty, setQty] = useState(1);
 
+  const cbRef = useRef(null);
   useEffect(() => {
     const onOpen = (e) => {
-      const it = findItem(e.detail);
+      const d = typeof e.detail === "string" ? { id: e.detail } : e.detail;
+      const it = findItem(d.id);
       if (!it) return;
+      cbRef.current = d.cb || null; // modo POS: entrega la línea a un callback en vez del carrito
       setItem(it); setSize("single"); setMedallon(MEDALLONES[0]); setProtein(PROTEINAS[0]);
       setPapas("clasicas"); setExtras([]); setQty(1);
     };
@@ -409,6 +412,11 @@ function Customizer() {
   const total = (base + modsTotal(mods)) * qty;
 
   const confirm = () => {
+    if (cbRef.current) {
+      cbRef.current({ id: item.id, variant: size, qty, mods });
+      setItem(null);
+      return;
+    }
     store.add(item.id, size, qty, mods);
     window.dispatchEvent(new CustomEvent("bf-cart-bump"));
     toast(item.name + " agregada al pedido");

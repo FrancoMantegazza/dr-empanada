@@ -1,9 +1,9 @@
 /* ============================================================
-   admin-reports.jsx — Reportes de ventas/costos + gestión de Stock
+   admin-reports.jsx — Reportes de ventas/costos + Stock + Ajustes
    ============================================================ */
 
 /* costo estimado de mercadería por categoría (editable) */
-const COST_RATIO = { burgers: 0.40, draft: 0.22, share: 0.35, drinks: 0.32 };
+const COST_RATIO = { burgers: 0.40, sandwiches: 0.38, papas: 0.30, ensaladas: 0.35, cervezas: 0.25, tragos: 0.25, drinks: 0.32 };
 const itemCat = (id) => (FLAT_ITEMS.find((i) => i.id === id) || {}).cat || "burgers";
 
 /* ---------------- REPORTS ---------------- */
@@ -22,12 +22,15 @@ function Reports() {
   const orders = all.filter(inRange);
 
   // agregados
-  let revenue = 0, cost = 0, units = 0;
-  const byProduct = {}, byCat = {}, byPay = {}, byMode = { delivery: 0, takeaway: 0 };
+  let revenue = 0, cost = 0, units = 0, collected = 0, uncollected = 0;
+  const byProduct = {}, byCat = {}, byPay = {}, byMode = { salon: 0, delivery: 0, takeaway: 0 }, byHour = {};
   orders.forEach((o) => {
     revenue += o.total;
     byMode[o.mode] = (byMode[o.mode] || 0) + o.total;
-    byPay[o.pay] = (byPay[o.pay] || 0) + o.total;
+    if (o.paid) { collected += o.total; byPay[o.payMethod] = (byPay[o.payMethod] || 0) + o.total; }
+    else uncollected += o.total;
+    const h = new Date(o.createdAt).getHours();
+    byHour[h] = (byHour[h] || 0) + o.total;
     o.lines.forEach((l) => {
       const cat = itemCat(l.id);
       const c = l.lineTotal * (COST_RATIO[cat] || 0.35);
@@ -54,34 +57,36 @@ function Reports() {
   }
   const maxDay = Math.max(...days.map((d) => d.total), 1);
 
-  const payLabels = { transferencia: "Transferencia", mp: "Mercado Pago", sena: "Seña + efvo", efectivo: "Efectivo" };
-  const catLabels = { burgers: "Hamburguesas", draft: "Cervezas", share: "Para compartir", drinks: "Bebidas" };
-  const catColors = { burgers: "var(--orange)", draft: "var(--beer)", share: "#5aa9ff", drinks: "#9b7bff" };
+  // ventas por hora (franja 11–00, incluye medianoche)
+  const hours = [];
+  for (let h = 11; h <= 23; h++) hours.push({ h, total: byHour[h] || 0 });
+  hours.push({ h: 0, total: byHour[0] || 0 });
+  const maxHour = Math.max(...hours.map((x) => x.total), 1);
+
+  const catLabels = { burgers: "Hamburguesas", sandwiches: "Sandwiches", papas: "Papas", ensaladas: "Ensaladas", cervezas: "Cervezas", tragos: "Tragos", drinks: "Bebidas s/alc" };
+  const catColors = { burgers: "var(--orange)", sandwiches: "#5aa9ff", papas: "#e9b949", ensaladas: "var(--ok)", cervezas: "var(--beer)", tragos: "#9b7bff", drinks: "#8d8d96" };
+  const modeLabel = { salon: "Salón", delivery: "Delivery", takeaway: "Mostrador / Take away" };
 
   return (
     <div style={{ padding: "26px 28px 60px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 14, marginBottom: 22 }}>
         <div>
           <h1 className="display" style={{ fontSize: 36, margin: 0 }}>Reportes</h1>
-          <p className="mono" style={{ fontSize: 12.5, color: "var(--muted)", margin: "6px 0 0" }}>Ventas, costos y márgenes</p>
+          <p className="mono" style={{ fontSize: 12.5, color: "var(--muted)", margin: "6px 0 0" }}>Ventas, costos, márgenes y canales</p>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           {[["hoy", "Hoy"], ["7d", "7 días"], ["todo", "Todo"]].map(([id, l]) => (
-            <button key={id} onClick={() => setRange(id)} className="mono" style={{
-              padding: "9px 16px", borderRadius: 100, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em",
-              border: "1px solid " + (range === id ? "var(--orange)" : "var(--line-dark)"),
-              background: range === id ? "var(--orange)" : "transparent", color: range === id ? "#1a1206" : "var(--white)",
-            }}>{l}</button>
+            <button key={id} onClick={() => setRange(id)} className={"catpill" + (range === id ? " on" : "")}>{l}</button>
           ))}
         </div>
       </div>
 
       {/* KPIs */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 16 }} className="bf-metrics">
-        <KPI label="Ingresos" value={money(revenue)} sub={orders.length + " pedidos"} accent />
-        <KPI label="Costo mercadería" value={money(Math.round(cost))} sub="estimado" />
-        <KPI label="Margen bruto" value={money(Math.round(margin))} sub={marginPct + "% sobre ventas"} good />
-        <KPI label="Ticket promedio" value={avg ? money(avg) : "—"} sub={units + " ítems vendidos"} />
+        <KPI label="Ingresos" value={money(revenue)} sub={orders.length + " pedidos · " + units + " ítems"} accent />
+        <KPI label="Cobrado" value={money(collected)} sub={uncollected ? money(uncollected) + " por cobrar" : "todo cobrado"} good />
+        <KPI label="Margen bruto" value={money(Math.round(margin))} sub={marginPct + "% s/ventas · costo " + money(Math.round(cost))} />
+        <KPI label="Ticket promedio" value={avg ? money(avg) : "—"} sub={"por pedido"} />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16, marginBottom: 16 }} className="bf-rep-grid">
@@ -99,70 +104,84 @@ function Reports() {
           </div>
         </div>
 
-        {/* margen donut-ish */}
+        {/* canales + composición */}
         <div style={card}>
-          <div style={repHead}>Composición</div>
-          <div style={{ marginTop: 18, display: "grid", gap: 16 }}>
-            <BarLine label="Costo mercadería" value={cost} total={revenue} color="var(--muted-d)" money />
-            <BarLine label="Margen bruto" value={margin} total={revenue} color="var(--ok)" money />
-            <div style={{ borderTop: "1px solid var(--line-dark)", paddingTop: 14, marginTop: 2 }}>
-              <div className="mono" style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: ".08em" }}>Modalidad</div>
-              <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-                <ModeChip icon={Ic.truck} label="Delivery" value={byMode.delivery || 0} />
-                <ModeChip icon={Ic.bag} label="Take away" value={byMode.takeaway || 0} />
-              </div>
+          <div style={repHead}>Canales de venta</div>
+          <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
+            {Object.entries(byMode).filter(([, v]) => v > 0 || true).map(([k, v]) => (
+              <BarLine key={k} label={modeLabel[k] || k} value={v} total={revenue} color={k === "salon" ? "#5aa9ff" : k === "delivery" ? "var(--orange)" : "var(--beer)"} money />
+            ))}
+            <div style={{ borderTop: "1px solid var(--line-dark)", paddingTop: 12, display: "grid", gap: 12 }}>
+              <BarLine label="Costo mercadería" value={cost} total={revenue} color="var(--muted-d)" money />
+              <BarLine label="Margen bruto" value={margin} total={revenue} color="var(--ok)" money />
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 16, marginBottom: 16 }} className="bf-rep-grid">
-        {/* top productos */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16, marginBottom: 16 }} className="bf-rep-grid">
+        {/* ventas por hora */}
         <div style={card}>
-          <div style={repHead}>Productos más vendidos</div>
-          <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
-            {topProducts.length === 0 && <Empty />}
-            {topProducts.map(([name, d], i) => (
-              <div key={name}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-                  <span style={{ fontSize: 14 }}><span className="mono" style={{ color: "var(--orange)", marginRight: 8 }}>{String(i + 1).padStart(2, "0")}</span>{name}</span>
-                  <span className="mono tabular" style={{ fontSize: 13, color: "var(--muted)" }}>{d.qty}u · {money(d.rev)}</span>
-                </div>
-                <div style={{ height: 7, background: "var(--ink-3)", borderRadius: 10, overflow: "hidden" }}>
-                  <div style={{ width: `${(d.rev / maxRev) * 100}%`, height: "100%", background: "var(--orange)", borderRadius: 10 }} />
-                </div>
+          <div style={repHead}>Ventas por hora</div>
+          <p className="mono" style={{ fontSize: 11, color: "var(--muted-d)", margin: "4px 0 0" }}>Para planificar personal y compras</p>
+          <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 130, marginTop: 16 }}>
+            {hours.map((x) => (
+              <div key={x.h} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, height: "100%", justifyContent: "flex-end" }}>
+                <div style={{ width: "100%", maxWidth: 30, height: `${Math.max((x.total / maxHour) * 100, 2)}%`, background: x.total ? "var(--beer)" : "var(--ink-3)", borderRadius: "4px 4px 0 0", minHeight: 3 }} />
+                <div className="mono" style={{ fontSize: 9.5, color: "var(--muted-d)" }}>{x.h}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ventas por categoría + pago */}
+        {/* por categoría + pago */}
         <div style={{ display: "grid", gap: 16 }}>
           <div style={card}>
             <div style={repHead}>Por categoría</div>
             <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
               {Object.keys(catLabels).map((c) => {
-                const d = byCat[c] || { rev: 0 };
+                const d = byCat[c];
+                if (!d) return null;
                 return (
                   <div key={c} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: catColors[c] }} />{catLabels[c]}</span>
-                    <span className="mono tabular" style={{ fontSize: 13 }}>{money(d.rev)}</span>
+                    <span className="mono tabular" style={{ fontSize: 13 }}>{money(Math.round(d.rev))}</span>
                   </div>
                 );
               })}
+              {!Object.keys(byCat).length && <Empty />}
             </div>
           </div>
           <div style={card}>
-            <div style={repHead}>Métodos de pago</div>
+            <div style={repHead}>Cobros por método</div>
             <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
               {Object.keys(byPay).length === 0 && <Empty />}
               {Object.entries(byPay).map(([k, v]) => (
                 <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5 }}>
-                  <span>{payLabels[k] || k}</span><span className="mono tabular">{money(v)}</span>
+                  <span>{PAY_LABEL[k] || k}</span><span className="mono tabular">{money(v)}</span>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* top productos */}
+      <div style={{ ...card, marginBottom: 16 }}>
+        <div style={repHead}>Productos más vendidos</div>
+        <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
+          {topProducts.length === 0 && <Empty />}
+          {topProducts.map(([name, d], i) => (
+            <div key={name}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+                <span style={{ fontSize: 14 }}><span className="mono" style={{ color: "var(--orange)", marginRight: 8 }}>{String(i + 1).padStart(2, "0")}</span>{name}</span>
+                <span className="mono tabular" style={{ fontSize: 13, color: "var(--muted)" }}>{d.qty}u · {money(d.rev)}</span>
+              </div>
+              <div style={{ height: 7, background: "var(--ink-3)", borderRadius: 10, overflow: "hidden" }}>
+                <div style={{ width: `${(d.rev / maxRev) * 100}%`, height: "100%", background: "var(--orange)", borderRadius: 10 }} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -173,25 +192,24 @@ function Reports() {
           <span className="mono" style={{ fontSize: 11.5, color: "var(--muted)" }}>{orders.length} operaciones</span>
         </div>
         <div style={{ overflowX: "auto", marginTop: 14 }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
             <thead>
               <tr style={{ textAlign: "left" }}>
-                {["Orden", "Hora", "Cliente", "Modalidad", "Pago", "Costo", "Margen", "Total"].map((h, i) => (
+                {["Orden", "Hora", "Cliente / mesa", "Canal", "Cobro", "Margen", "Total"].map((h, i) => (
                   <th key={h} className="mono" style={{ fontSize: 10.5, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--muted)", padding: "8px 10px", borderBottom: "1px solid var(--line-dark)", textAlign: i >= 5 ? "right" : "left" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {orders.slice(0, 12).map((o) => {
+              {orders.slice(0, 14).map((o) => {
                 const oc = o.lines.reduce((s, l) => s + l.lineTotal * (COST_RATIO[itemCat(l.id)] || 0.35), 0);
                 return (
                   <tr key={o.id}>
                     <td style={td}><span className="mono" style={{ color: "var(--orange)", fontWeight: 700 }}>{o.id}</span></td>
                     <td style={{ ...td, color: "var(--muted)" }} className="mono">{new Date(o.createdAt).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}</td>
                     <td style={td}>{o.name}</td>
-                    <td style={{ ...td, color: "var(--muted)" }}>{o.mode === "delivery" ? "Delivery" : "Take away"}</td>
-                    <td style={{ ...td, color: "var(--muted)" }}>{payLabels[o.pay] || o.pay}</td>
-                    <td style={{ ...td, textAlign: "right", color: "var(--muted)" }} className="mono tabular">{money(Math.round(oc))}</td>
+                    <td style={{ ...td, color: "var(--muted)" }}>{modeLabel[o.mode] || o.mode}</td>
+                    <td style={{ ...td, color: o.paid ? "var(--ok)" : "var(--warn)" }}>{o.paid ? (PAY_LABEL[o.payMethod] || o.payMethod) : "Pendiente"}</td>
                     <td style={{ ...td, textAlign: "right", color: "var(--ok)" }} className="mono tabular">{money(Math.round(o.total - oc))}</td>
                     <td style={{ ...td, textAlign: "right", fontWeight: 700 }} className="mono tabular">{money(o.total)}</td>
                   </tr>
@@ -233,14 +251,6 @@ function BarLine({ label, value, total, color, money: m }) {
     </div>
   );
 }
-function ModeChip({ icon: Icon, label, value }) {
-  return (
-    <div style={{ flex: 1, border: "1px solid var(--line-dark)", borderRadius: 10, padding: "10px 12px" }}>
-      <span style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--muted)", fontSize: 12 }}><Icon width={15} height={15} /> {label}</span>
-      <div className="mono tabular" style={{ fontSize: 16, fontWeight: 700, marginTop: 4 }}>{money(value)}</div>
-    </div>
-  );
-}
 
 /* ---------------- STOCK MANAGER ---------------- */
 function StockManager() {
@@ -248,8 +258,7 @@ function StockManager() {
   const stock = store.getStock();
   const [q, setQ] = React.useState("");
 
-  const cats = MENU.filter((c) => !c.draft); // stock real para comida; bebidas/compartir/burgers
-  const lowItems = FLAT_ITEMS.filter((i) => !i.draft && (stock[i.id] ?? 0) <= 8);
+  const lowItems = FLAT_ITEMS.filter((i) => !i.draft && (stock[i.id] ?? 0) <= 8 && (stock[i.id] ?? 0) < 900);
 
   return (
     <div style={{ padding: "26px 28px 60px" }}>
@@ -292,7 +301,7 @@ function StockRow({ item, draft }) {
   const out = !unlimited && n <= 0;
   return (
     <div style={{ background: "var(--ink-2)", border: "1px solid " + (out ? "var(--danger)" : low ? "var(--warn)" : "var(--line-dark)"), borderRadius: 12, padding: 14, display: "flex", alignItems: "center", gap: 12 }}>
-      <Photo kind={item.photo} style={{ width: 48, height: 48, borderRadius: 8, flexShrink: 0 }} />
+      <Photo item={item} style={{ width: 48, height: 48, borderRadius: 8, flexShrink: 0 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontWeight: 700, fontSize: 14 }}>{item.name}</div>
         <div className="mono" style={{ fontSize: 11, color: out ? "var(--danger)" : low ? "var(--warn)" : "var(--muted)" }}>
@@ -313,4 +322,105 @@ function StockRow({ item, draft }) {
 }
 const qtyBtnA = { width: 30, height: 32, display: "grid", placeItems: "center", background: "none", border: "none", color: "var(--white)", cursor: "pointer" };
 
-Object.assign(window, { Reports, StockManager });
+/* ---------------- AJUSTES (solo dueño) ---------------- */
+function AdminSettings({ auth }) {
+  const store = useStore();
+  const users = store.getUsers();
+  const [nu, setNu] = React.useState({ name: "", user: "", pass: "", role: "cajero" });
+  const [msg, setMsg] = React.useState("");
+  const [editPass, setEditPass] = React.useState(null); // user en edición
+  const [newPass, setNewPass] = React.useState("");
+
+  const addUser = (e) => {
+    e.preventDefault();
+    if (!nu.name || !nu.user || !nu.pass) { setMsg("Completá nombre, usuario y contraseña."); return; }
+    if (!store.addUser({ ...nu, user: nu.user.toLowerCase().trim() })) { setMsg("Ese usuario ya existe."); return; }
+    setNu({ name: "", user: "", pass: "", role: "cajero" }); setMsg("");
+    toast("Usuario creado");
+  };
+  const savePass = (u) => {
+    if (newPass.length < 4) { setMsg("La contraseña debe tener al menos 4 caracteres."); return; }
+    store.setUserPass(u, newPass); setEditPass(null); setNewPass(""); setMsg("");
+    toast("Contraseña actualizada");
+  };
+
+  return (
+    <div style={{ padding: "26px 28px 60px", maxWidth: 900 }}>
+      <div style={{ marginBottom: 22 }}>
+        <h1 className="display" style={{ fontSize: 36, margin: 0 }}>Ajustes</h1>
+        <p className="mono" style={{ fontSize: 12.5, color: "var(--muted)", margin: "6px 0 0" }}>Usuarios, salón y datos</p>
+      </div>
+
+      {/* usuarios */}
+      <div style={{ ...card, marginBottom: 16 }}>
+        <div style={repHead}>Usuarios del panel</div>
+        <p style={{ color: "var(--muted)", fontSize: 13, margin: "4px 0 16px" }}>El dueño ve todo; el cajero ve salón, pedidos, caja y stock.</p>
+        {users.map((u) => (
+          <div key={u.user} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderBottom: "1px solid var(--line-dark)", flexWrap: "wrap" }}>
+            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ink-3)", display: "grid", placeItems: "center", color: u.role === "dueño" ? "var(--orange)" : "var(--muted)" }}><Ic.user width={17} height={17} /></div>
+            <div style={{ flex: 1, minWidth: 140 }}>
+              <div style={{ fontWeight: 700, fontSize: 14.5 }}>{u.name} {u.user === auth.user && <span className="mono" style={{ fontSize: 10, color: "var(--muted-d)" }}>(vos)</span>}</div>
+              <div className="mono" style={{ fontSize: 11.5, color: "var(--muted)" }}>@{u.user} · {u.role}</div>
+            </div>
+            {editPass === u.user ? (
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input type="password" value={newPass} onChange={(e) => setNewPass(e.target.value)} placeholder="Nueva contraseña" style={{ ...inp, width: 180, padding: "9px 12px" }} autoFocus />
+                <button className="btn btn-orange btn-sm" onClick={() => savePass(u.user)}>Guardar</button>
+                <button className="btn btn-ghost btn-sm" onClick={() => { setEditPass(null); setNewPass(""); }}>✕</button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: 8 }}>
+                <button className="btn btn-ghost btn-sm" onClick={() => { setEditPass(u.user); setNewPass(""); }}><Ic.lock width={13} height={13} /> Cambiar clave</button>
+                {u.user !== auth.user && (
+                  <button className="btn btn-ghost btn-sm" style={{ color: "var(--danger)", borderColor: "var(--line-dark)" }}
+                    onClick={() => { if (!store.removeUser(u.user)) setMsg("Tiene que quedar al menos un dueño."); else toast("Usuario eliminado"); }}>
+                    <Ic.x width={13} height={13} />
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+
+        <form onSubmit={addUser} style={{ marginTop: 18, display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr auto auto", gap: 10, alignItems: "end" }} className="bf-two">
+          <Field label="Nombre"><input style={inp} value={nu.name} onChange={(e) => setNu({ ...nu, name: e.target.value })} placeholder="Ana García" /></Field>
+          <Field label="Usuario"><input style={inp} value={nu.user} onChange={(e) => setNu({ ...nu, user: e.target.value })} placeholder="ana" autoCapitalize="none" /></Field>
+          <Field label="Contraseña"><input style={inp} value={nu.pass} onChange={(e) => setNu({ ...nu, pass: e.target.value })} placeholder="••••" /></Field>
+          <Field label="Rol">
+            <select value={nu.role} onChange={(e) => setNu({ ...nu, role: e.target.value })} style={{ ...inp, padding: "12px 10px" }}>
+              <option value="cajero">Cajero</option>
+              <option value="dueño">Dueño</option>
+            </select>
+          </Field>
+          <button className="btn btn-orange" style={{ height: 45 }}><Ic.plus width={15} height={15} /> Agregar</button>
+        </form>
+        {msg && <p style={{ color: "var(--danger)", fontSize: 13, margin: "10px 0 0" }}>{msg}</p>}
+      </div>
+
+      {/* salón */}
+      <div style={{ ...card, marginBottom: 16 }}>
+        <div style={repHead}>Salón</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 14 }}>
+          <span style={{ fontSize: 14, color: "var(--muted)", flex: 1 }}>Cantidad de mesas del local</span>
+          <div style={{ display: "flex", alignItems: "center", border: "1px solid var(--line-dark)", borderRadius: 8 }}>
+            <button onClick={() => store.setSetting("tables", Math.max(1, store.tableCount() - 1))} style={qtyBtnA}><Ic.minus width={14} height={14} /></button>
+            <span className="mono tabular" style={{ width: 40, textAlign: "center", fontWeight: 700 }}>{store.tableCount()}</span>
+            <button onClick={() => store.setSetting("tables", store.tableCount() + 1)} style={qtyBtnA}><Ic.plus width={14} height={14} /></button>
+          </div>
+        </div>
+      </div>
+
+      {/* datos */}
+      <div style={card}>
+        <div style={repHead}>Datos de demo</div>
+        <p style={{ color: "var(--muted)", fontSize: 13, margin: "4px 0 14px" }}>Borra todas las órdenes y vuelve a cargar los pedidos de ejemplo. Útil para demostraciones.</p>
+        <button className="btn btn-ghost" style={{ color: "var(--danger)" }}
+          onClick={() => { if (confirm("¿Borrar todas las órdenes y recargar la demo?")) { localStorage.removeItem("bf_orders_v1"); localStorage.removeItem("bf_seq_v1"); Store.seedDemo(); toast("Datos de demo recargados"); } }}>
+          Reiniciar órdenes de demo
+        </button>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { Reports, StockManager, AdminSettings });

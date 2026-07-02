@@ -42,6 +42,9 @@
     section[style*="grid-template-columns: 1.15fr"],
     section[style*="grid-template-columns: 1fr 1fr"] { }
   }
+  @media (max-width: 1000px) {
+    .bf-pos { grid-template-columns: 1fr !important; height: auto !important; min-height: 100vh; }
+  }
   @media (max-width: 640px) {
     .wrap { padding-left: 18px; padding-right: 18px; }
     .bf-grid-3 { grid-template-columns: 1fr !important; }
@@ -80,6 +83,7 @@
 <script type="text/babel" src="js/menu.jsx"></script>
 <script type="text/babel" src="js/about-contact.jsx"></script>
 <script type="text/babel" src="js/checkout.jsx"></script>
+<script type="text/babel" src="js/admin-pos.jsx"></script>
 <script type="text/babel" src="js/admin.jsx"></script>
 <script type="text/babel" src="js/admin-reports.jsx"></script>
 <script type="text/babel" src="js/tweaks-panel.jsx"></script>

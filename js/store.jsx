@@ -9,8 +9,10 @@ const LS = {
   cart: "bf_cart_v2",
   orders: "bf_orders_v1",
   stock: "bf_stock_v2",
-  auth: "bf_auth_v1",
+  auth: "bf_auth_v2",
   seq: "bf_seq_v1",
+  users: "bf_users_v1",
+  settings: "bf_settings_v1",
 };
 
 const bus = new EventTarget();
@@ -96,34 +98,83 @@ const Store = {
   /* ---------- ORDERS ---------- */
   getOrders() { return read(LS.orders, []); },
   nextSeq() { const n = (read(LS.seq, 0) || 0) + 1; write(LS.seq, n); return n; },
-  placeOrder(payload) {
-    const lines = this.cartLines().map((l) => ({
-      id: l.id, name: l.item.name, variant: l.variant, qty: l.qty, unit: l.unit,
-      lineTotal: l.lineTotal, mods: l.modsLabel || "",
-    }));
-    const subtotal = this.cartTotal();
+  // rawLines: [{id, variant, qty, mods}] → líneas con precio resuelto
+  _buildLines(raw) {
+    return raw.map((l) => {
+      const it = findItem(l.id);
+      if (!it) return null;
+      const unit = (l.variant === "double" ? (it.priceDouble || it.price) : it.price) + modsTotal(l.mods);
+      return { id: l.id, name: it.name, variant: l.variant || "single", qty: l.qty, unit, lineTotal: unit * l.qty, mods: modsLabel(l.mods) };
+    }).filter(Boolean);
+  },
+  _discountStock(lines) {
+    const stock = this.getStock();
+    lines.forEach((l) => { if (stock[l.id] != null && stock[l.id] < 900) stock[l.id] = Math.max(0, stock[l.id] - l.qty); });
+    write(LS.stock, stock);
+  },
+  // crea una orden desde líneas crudas (web checkout o POS de salón)
+  createOrder(rawLines, payload) {
+    const lines = this._buildLines(rawLines);
+    const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
     const shipping = payload.mode === "delivery" ? 2500 : 0;
-    const total = subtotal + shipping;
     const seq = this.nextSeq();
     const order = {
       id: "BF-" + String(seq).padStart(4, "0"),
       seq,
       createdAt: Date.now(),
       status: "recibido",
-      lines, subtotal, shipping, total,
+      paid: false,
+      lines, subtotal, shipping, total: subtotal + shipping,
       ...payload,
     };
     write(LS.orders, [order, ...this.getOrders()]);
-    // descontar stock
-    const stock = this.getStock();
-    lines.forEach((l) => { if (stock[l.id] != null && stock[l.id] < 900) stock[l.id] = Math.max(0, stock[l.id] - l.qty); });
-    write(LS.stock, stock);
-    this.clearCart();
+    this._discountStock(lines);
     emit();
     return order;
   },
+  placeOrder(payload) {
+    const order = this.createOrder(this.getCart(), payload);
+    this.clearCart();
+    return order;
+  },
+  // agrega ítems a una orden abierta (mesa que sigue pidiendo) → vuelve a cocina
+  appendLines(id, rawLines) {
+    const add = this._buildLines(rawLines);
+    if (!add.length) return;
+    write(LS.orders, this.getOrders().map((o) => {
+      if (o.id !== id) return o;
+      const lines = [...o.lines, ...add];
+      const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
+      return { ...o, lines, subtotal, total: subtotal + (o.shipping || 0), status: "recibido", updatedAt: Date.now() };
+    }));
+    this._discountStock(add);
+    emit();
+  },
+  // cobra una orden: descuento %, método, vuelto si es efectivo
+  charge(id, { method, discount = 0, cashReceived = 0 }) {
+    let charged = null;
+    write(LS.orders, this.getOrders().map((o) => {
+      if (o.id !== id) return o;
+      const finalTotal = Math.round((o.subtotal + (o.shipping || 0)) * (1 - discount / 100));
+      charged = {
+        ...o, paid: true, payMethod: method, discount, total: finalTotal,
+        cashReceived: method === "efectivo" ? cashReceived : 0,
+        change: method === "efectivo" ? Math.max(0, cashReceived - finalTotal) : 0,
+        paidAt: Date.now(),
+      };
+      return charged;
+    }));
+    emit();
+    return charged;
+  },
   updateStatus(id, status) {
     write(LS.orders, this.getOrders().map((o) => o.id === id ? { ...o, status, updatedAt: Date.now() } : o)); emit();
+  },
+  /* ---------- SALÓN / MESAS ---------- */
+  tableCount() { return this.getSetting("tables", 10); },
+  // orden abierta (sin cobrar) de una mesa
+  tableOrder(n) {
+    return this.getOrders().find((o) => o.mode === "salon" && o.table === n && !o.paid && o.status !== "cancelado") || null;
   },
   STATUS_FLOW: ["recibido", "preparacion", "listo", "camino", "entregado"],
   STATUS_LABEL: {
@@ -139,18 +190,44 @@ const Store = {
   },
   setStock(id, n) { const s = this.getStock(); s[id] = Math.max(0, n); write(LS.stock, s); emit(); },
 
-  /* ---------- AUTH (simulado) ---------- */
+  /* ---------- USUARIOS ---------- */
+  getUsers() {
+    let u = read(LS.users, null);
+    if (!u || !u.length) {
+      u = [
+        { user: "dueño", pass: "1234", role: "dueño", name: "Dueño" },
+        { user: "cajero", pass: "1234", role: "cajero", name: "Cajero" },
+      ];
+      write(LS.users, u);
+    }
+    return u;
+  },
+  addUser(data) {
+    const users = this.getUsers();
+    if (users.some((u) => u.user === data.user)) return false;
+    write(LS.users, [...users, data]); emit(); return true;
+  },
+  removeUser(user) {
+    const users = this.getUsers().filter((u) => u.user !== user);
+    if (!users.some((u) => u.role === "dueño")) return false; // siempre debe quedar un dueño
+    write(LS.users, users); emit(); return true;
+  },
+  setUserPass(user, pass) {
+    write(LS.users, this.getUsers().map((u) => u.user === user ? { ...u, pass } : u)); emit();
+  },
+
+  /* ---------- AUTH ---------- */
   getAuth() { return read(LS.auth, null); },
   login(user, pass) {
-    const USERS = {
-      admin: { pass: "1234", role: "admin", name: "Encargado" },
-      cajero: { pass: "1234", role: "cajero", name: "Cajero" },
-    };
-    const u = USERS[user];
-    if (u && u.pass === pass) { write(LS.auth, { user, role: u.role, name: u.name, at: Date.now() }); emit(); return true; }
+    const u = this.getUsers().find((x) => x.user.toLowerCase() === String(user).toLowerCase().trim());
+    if (u && u.pass === pass) { write(LS.auth, { user: u.user, role: u.role, name: u.name, at: Date.now() }); emit(); return true; }
     return false;
   },
   logout() { localStorage.removeItem(LS.auth); emit(); },
+
+  /* ---------- SETTINGS (mesas, caja, etc.) ---------- */
+  getSetting(k, def) { const s = read(LS.settings, {}); return s[k] != null ? s[k] : def; },
+  setSetting(k, v) { const s = read(LS.settings, {}); s[k] = v; write(LS.settings, s); emit(); },
 
   subscribe(fn) {
     bus.addEventListener("change", fn);
@@ -162,7 +239,7 @@ const Store = {
   /* ---- demo seed para que el panel no arranque vacío ---- */
   seedDemo() {
     if (this.getOrders().length) return;
-    const mk = (mins, status, name, rawLines, mode, pay) => {
+    const mk = (mins, status, name, rawLines, mode, pay, extra = {}) => {
       const lines = rawLines.filter(Boolean);
       const seq = this.nextSeq();
       const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
@@ -171,9 +248,11 @@ const Store = {
         id: "BF-" + String(seq).padStart(4, "0"), seq,
         createdAt: Date.now() - mins * 60000, status,
         lines, subtotal, shipping, total: subtotal + shipping,
-        mode, pay, name, phone: "11 5555-" + (1000 + seq),
+        mode, pay, name, phone: mode === "salon" ? "" : "11 5555-" + (1000 + seq),
         address: mode === "delivery" ? "Av. Boedo " + (1400 + seq * 7) : "",
         bell: mode === "delivery" ? String(2 + (seq % 6)) : "", notes: "",
+        paid: false,
+        ...extra,
       };
     };
     const L = (id, variant, qty, mods) => {
@@ -181,13 +260,17 @@ const Store = {
       const unit = (variant === "double" ? (it.priceDouble || it.price) : it.price) + modsTotal(mods);
       return { id, name: it.name, variant, qty, unit, lineTotal: unit * qty, mods: modsLabel(mods) };
     };
+    const paidAgo = (mins, method, extra = {}) => ({ paid: true, payMethod: method, paidAt: Date.now() - mins * 60000, ...extra });
     const demo = [
       mk(4, "recibido", "Julián Pérez", [L("big-brothers", "double", 1, { extras: ["panceta"] }), L("papas-cheddar", "single", 1), L("rubia", "single", 2)], "delivery", "mp"),
-      mk(11, "preparacion", "Mesa / Local", [L("thomason", "single", 2), L("papas", "single", 1)], "takeaway", "efectivo"),
+      mk(8, "preparacion", "Mesa 3", [L("crispy", "double", 1), L("clasica", "single", 1), L("ipa", "single", 2)], "salon", "efectivo", { table: 3, by: "cajero" }),
+      mk(11, "preparacion", "Mostrador", [L("thomason", "single", 2), L("papas", "single", 1)], "takeaway", "efectivo"),
       mk(19, "camino", "Romina Díaz", [L("crispy", "single", 1), L("ipa", "single", 1)], "delivery", "transferencia"),
-      mk(42, "entregado", "Franco S.", [L("clasica", "double", 1), L("negra", "single", 1), L("papas-completas", "single", 1)], "takeaway", "transferencia"),
-      mk(70, "entregado", "Belén M.", [L("big-brothers", "single", 2), L("gaseosa", "single", 2)], "delivery", "mp"),
-      mk(95, "entregado", "Diego R.", [L("bondiola", "single", 1), L("papas", "single", 1), L("roja", "single", 2)], "takeaway", "efectivo"),
+      mk(24, "listo", "Mesa 7", [L("oklahoma", "single", 2), L("rubia", "single", 2), L("papas-cheddar-panceta", "single", 1)], "salon", "efectivo", { table: 7, by: "cajero" }),
+      mk(42, "entregado", "Franco S.", [L("clasica", "double", 1), L("negra", "single", 1), L("papas-completas", "single", 1)], "takeaway", "transferencia", paidAgo(38, "transferencia")),
+      mk(55, "entregado", "Mesa 2", [L("big-brothers", "single", 2), L("caesar", "single", 1), L("apa", "single", 2)], "salon", "efectivo", { table: 2, by: "cajero", ...paidAgo(20, "efectivo", { cashReceived: 70000, change: 5500 }) }),
+      mk(70, "entregado", "Belén M.", [L("big-brothers", "single", 2), L("gaseosa", "single", 2)], "delivery", "mp", paidAgo(60, "mp")),
+      mk(95, "entregado", "Diego R.", [L("bondiola", "single", 1), L("papas", "single", 1), L("roja", "single", 2)], "takeaway", "efectivo", paidAgo(90, "efectivo", { cashReceived: 40000, change: 3300 })),
     ];
     write(LS.orders, demo);
     emit();
