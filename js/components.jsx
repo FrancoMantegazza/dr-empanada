@@ -257,7 +257,12 @@ function Footer({ go }) {
           <div className="mono" style={{ fontSize: 12, color: "var(--beer)", marginTop: 10 }}>★ Happy hour · {HAPPY.when.toLowerCase()}</div>
         </div>
       </div>
-      <div className="wrap" style={{ padding: "18px 24px", borderTop: "1px solid var(--line-dark)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+      <div className="wrap" style={{ padding: "0 24px 8px" }}>
+        <p className="mono" style={{ fontSize: 11, color: "var(--muted-d)", margin: 0, lineHeight: 1.5 }}>
+          +18 · Beber con moderación. Prohibida la venta de bebidas alcohólicas a menores de 18 años (Ley Nacional 24.788).
+        </p>
+      </div>
+      <div className="wrap" style={{ padding: "12px 24px 18px", borderTop: "1px solid var(--line-dark)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)" }}>© {new Date().getFullYear()} Brothers Food.lst · Boedo, CABA</span>
         <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)" }}>Hecho con hambre 🍔</span>
       </div>
