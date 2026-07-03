@@ -91,6 +91,22 @@
     .bf-promo { grid-template-columns: 1fr !important; }
     .bf-two { grid-template-columns: 1fr !important; }
   }
+
+  /* form & interaction polish */
+  input, textarea, select { transition: border-color .15s ease, box-shadow .15s ease; }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--orange) !important;
+    box-shadow: 0 0 0 3px rgba(234,123,27,.18);
+  }
+  input::placeholder, textarea::placeholder { color: #8a8578; opacity: 1; }
+  .btn { transition: transform .12s cubic-bezier(.23,1,.32,1), filter .15s ease, background .15s ease; }
+  .btn:active:not(:disabled) { transform: scale(.98); }
+  button:disabled { cursor: not-allowed; }
+  @media (prefers-reduced-motion: reduce) {
+    input, textarea, select, .btn { transition: none; }
+    .btn:active:not(:disabled) { transform: none; }
+  }
 </style>
 </head>
 <body>

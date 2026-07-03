@@ -264,7 +264,10 @@ function Footer({ go }) {
       </div>
       <div className="wrap" style={{ padding: "12px 24px 18px", borderTop: "1px solid var(--line-dark)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)" }}>© {new Date().getFullYear()} Brothers Food.lst · Boedo, CABA</span>
-        <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)" }}>Hecho con hambre 🍔</span>
+        <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)", display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <a href="#/privacidad" style={{ color: "var(--muted)" }}>Política de privacidad</a>
+          <span>Hecho con hambre 🍔</span>
+        </span>
       </div>
     </footer>
   );

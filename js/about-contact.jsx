@@ -196,4 +196,66 @@ function Field({ label, children }) {
   );
 }
 
-Object.assign(window, { Nosotros, Contacto, GoogleReviewsSection, InfoRow, Field, inp });
+/* ===================== PRIVACIDAD ===================== */
+function Privacidad({ go }) {
+  const block = { border: "1px solid var(--line-dark)", borderRadius: 14, padding: 24, background: "var(--ink-2)", marginBottom: 16 };
+  return (
+    <div className="fadeup">
+      <section style={{ borderBottom: "1px solid var(--line-dark)" }}>
+        <div className="wrap" style={{ padding: "54px 24px 30px" }}>
+          <div className="eyebrow" style={{ marginBottom: 14 }}>Legales</div>
+          <h1 className="display" style={{ fontSize: "clamp(40px,6vw,80px)", margin: 0 }}>Política de privacidad</h1>
+          <p className="mono" style={{ fontSize: 12.5, color: "var(--muted-d)", marginTop: 14 }}>Última actualización: julio 2026</p>
+        </div>
+      </section>
+
+      <div className="wrap" style={{ padding: "40px 24px 70px", maxWidth: 820 }}>
+        <p style={{ fontSize: 17, color: "var(--muted)", lineHeight: 1.6, marginBottom: 28 }}>
+          En Brothers Food.lst cuidamos tus datos tanto como nuestras hamburguesas. Acá te contamos qué información pedimos, para qué la usamos y qué derechos tenés.
+        </p>
+
+        <div style={block}>
+          <h2 className="display" style={{ fontSize: 22, margin: "0 0 10px" }}>Qué datos recopilamos</h2>
+          <p style={{ color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
+            Cuando hacés un pedido te pedimos únicamente lo necesario para prepararlo y entregarlo: <b style={{ color: "var(--white)" }}>nombre</b>, <b style={{ color: "var(--white)" }}>teléfono / WhatsApp</b>, <b style={{ color: "var(--white)" }}>dirección</b> (solo si elegís delivery) y las notas que agregues al pedido.
+          </p>
+        </div>
+
+        <div style={block}>
+          <h2 className="display" style={{ fontSize: 22, margin: "0 0 10px" }}>Para qué los usamos</h2>
+          <p style={{ color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
+            Usamos tus datos exclusivamente para procesar tu pedido, coordinar el pago y la entrega, y avisarte el estado por WhatsApp. Nada más. No los usamos para publicidad ni los vendemos o cedemos a terceros con fines comerciales.
+          </p>
+        </div>
+
+        <div style={block}>
+          <h2 className="display" style={{ fontSize: 22, margin: "0 0 10px" }}>Dónde se guardan</h2>
+          <p style={{ color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
+            El pedido se arma en tu propio navegador y se coordina con nosotros por WhatsApp. Conservamos los datos de tu pedido solo el tiempo necesario para gestionarlo y por temas administrativos o fiscales.
+          </p>
+        </div>
+
+        <div style={block}>
+          <h2 className="display" style={{ fontSize: 22, margin: "0 0 10px" }}>Servicios de terceros</h2>
+          <p style={{ color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
+            Para coordinar pagos y entregas podemos usar plataformas de terceros como WhatsApp y Mercado Pago, que tienen sus propias políticas de privacidad. El sitio se aloja en Cloudflare y usa fuentes de Google Fonts.
+          </p>
+        </div>
+
+        <div style={block}>
+          <h2 className="display" style={{ fontSize: 22, margin: "0 0 10px" }}>Tus derechos</h2>
+          <p style={{ color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
+            Podés pedirnos acceder, corregir o eliminar tus datos cuando quieras. Escribinos por WhatsApp al <b style={{ color: "var(--white)" }}>{BIZ.phoneDisplay}</b> y lo resolvemos. Conforme a la Ley 25.326 de Protección de Datos Personales de Argentina.
+          </p>
+        </div>
+
+        <div style={{ display: "flex", gap: 12, marginTop: 26, flexWrap: "wrap" }}>
+          <a className="btn btn-orange" href={waLink("¡Hola Brothers! Tengo una consulta sobre mis datos 🔒")} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> Escribinos</a>
+          <button className="btn btn-ghost" onClick={() => go("#/")}>Volver al inicio</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { Nosotros, Contacto, Privacidad, GoogleReviewsSection, InfoRow, Field, inp });

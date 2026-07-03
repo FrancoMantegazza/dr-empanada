@@ -79,6 +79,7 @@ function Checkout({ go }) {
                     textAlign: "left", padding: 16, borderRadius: 12, cursor: "pointer",
                     border: "1.5px solid " + (form.mode === val ? "var(--orange)" : "var(--line-dark)"),
                     background: form.mode === val ? "rgba(234,123,27,.08)" : "var(--ink)", color: "var(--white)",
+                    transition: "border-color .15s ease, background .15s ease",
                   }}>
                     <span style={{ color: form.mode === val ? "var(--orange)" : "var(--muted)" }}><Icon width={22} height={22} /></span>
                     <div style={{ fontWeight: 700, fontSize: 16, marginTop: 8 }}>{t}</div>
@@ -118,6 +119,7 @@ function Checkout({ go }) {
                     display: "flex", alignItems: "center", gap: 14, textAlign: "left", padding: 16, borderRadius: 12, cursor: "pointer",
                     border: "1.5px solid " + (form.pay === val ? "var(--orange)" : "var(--line-dark)"),
                     background: form.pay === val ? "rgba(234,123,27,.08)" : "var(--ink)", color: "var(--white)",
+                    transition: "border-color .15s ease, background .15s ease",
                   }}>
                     <span style={{ width: 42, height: 42, borderRadius: 10, display: "grid", placeItems: "center", background: form.pay === val ? "var(--orange)" : "var(--ink-3)", color: form.pay === val ? "#1a1206" : "var(--muted)", flexShrink: 0 }}><Icon width={20} height={20} /></span>
                     <div style={{ flex: 1 }}>

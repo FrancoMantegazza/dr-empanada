@@ -37,6 +37,7 @@ function App() {
   else if (path === "#/menu") page = <MenuPage go={go} />;
   else if (path === "#/nosotros") page = <Nosotros go={go} />;
   else if (path === "#/contacto") page = <Contacto go={go} />;
+  else if (path === "#/privacidad") page = <Privacidad go={go} />;
   else if (path === "#/checkout") page = <Checkout go={go} />;
   else if (isAdmin) page = <Admin go={go} />;
   else page = <Home go={go} variant={variantNum} />;
