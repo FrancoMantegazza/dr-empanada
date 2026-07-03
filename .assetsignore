@@ -1,0 +1,12 @@
+.git
+.gitignore
+.thumbnail
+screenshots
+uploads
+.agents
+skills-lock.json
+squirrel.toml
+AUDITORIA.md
+.claude
+.wrangler
+.assetsignore

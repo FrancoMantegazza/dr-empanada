@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brothers Food.lst · Burgers y cerveza artesanal tirada · Boedo</title>
-<meta name="description" content="Smash burgers caseras con papas, sandwiches, 7 canillas de cerveza artesanal y happy hour de martes a domingo. Delivery propio y take away en Av. Boedo 1600, CABA." />
+<meta name="description" content="Smash burgers caseras, papas y 7 canillas de cerveza artesanal con happy hour. Delivery propio y take away en Av. Boedo 1600, Boedo · CABA." />
+<link rel="canonical" href="https://brothers-food-lst.pages.dev/" />
 <meta property="og:title" content="Brothers Food.lst · Burgers y cerveza artesanal · Boedo" />
 <meta property="og:description" content="Smash burgers con papas, cerveza artesanal tirada y happy hour. Pedí online: delivery propio o take away." />
 <meta property="og:type" content="website" />
@@ -14,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://images.unsplash.com" />
+<link rel="preconnect" href="https://unpkg.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Oswald:wght@500;600;700&family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/brand.css?v=3" />
 <style>
@@ -60,7 +62,53 @@
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><!-- Contenido base para buscadores y navegadores sin JS. React lo reemplaza al montar la app. -->
+<div class="bf-fallback" style="max-width:1000px;margin:0 auto;padding:44px 24px;color:#f7f4ec;font-family:'Barlow',system-ui,-apple-system,sans-serif;line-height:1.55">
+  <header>
+    <p style="letter-spacing:.2em;text-transform:uppercase;color:#ea7b1b;font-size:13px;margin:0 0 10px">Av. Boedo 1600 · Boedo · CABA · Delivery &amp; Take away</p>
+    <h1 style="font-size:clamp(30px,5vw,44px);margin:0 0 14px;line-height:1.08">Brothers Food.lst — Hamburguesas smash y cerveza artesanal tirada en Boedo</h1>
+    <p style="font-size:18px;color:#c9c4bb;max-width:660px;margin:0 0 16px">Hamburguesas caseras estilo smash con papas, sandwiches y 7 canillas de cerveza artesanal tirada de productores independientes. Happy hour de martes a domingo, de 13 a 21 hs. Pedí online con delivery propio o take away. 4.7★ con 353 reseñas en Google.</p>
+    <p style="margin:0 0 8px"><a href="#/menu" style="color:#ea7b1b;font-weight:700">Ver el menú y pedir online →</a></p>
+  </header>
+
+  <section>
+    <h2>Hamburguesas</h2>
+    <p style="color:#c9c4bb">Todos los combos vienen con papas. Opción de medallón NotCo (plant based) o veggie de lentejas casero al mismo precio.</p>
+    <ul style="color:#c9c4bb">
+      <li><strong style="color:#f7f4ec">Big Brothers</strong> — cheddar, lechuga, cebolla, pepinillos y salsa brother.</li>
+      <li><strong style="color:#f7f4ec">Crispy Brothers</strong> — cebolla crispy, pepinillos, cheddar, panceta y salsa brothers.</li>
+      <li><strong style="color:#f7f4ec">Thomason</strong> — cheddar, panceta, huevo y cebolla caramelizada (promo los viernes).</li>
+      <li><strong style="color:#f7f4ec">Oklahoma</strong> — carne y cebolla smash con cheddar en pan de molde.</li>
+      <li><strong style="color:#f7f4ec">Cheese</strong> y <strong style="color:#f7f4ec">Clásica</strong> — las que nunca fallan.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Sandwiches, papas y ensaladas</h2>
+    <p style="color:#c9c4bb">Bondiola desmechada, pollo caesar, milanesa tucumano o americano. Porciones de papas con cheddar y panceta. Ensaladas caesar y mediterránea.</p>
+  </section>
+
+  <section>
+    <h2>Cervezas artesanales tiradas</h2>
+    <p style="color:#c9c4bb">Rubia, Roja, APA, American IPA, NEIPA, Honey y Negra — de cervecerías independientes (Chicago, Norecord, Fuerte al Medio, Galapa Hops). Happy hour de martes a domingo, de 13 a 21 hs.</p>
+  </section>
+
+  <section>
+    <h2>Dónde estamos</h2>
+    <p style="color:#c9c4bb">
+      <strong style="color:#f7f4ec">Dirección:</strong> Av. Boedo 1600, Boedo · CABA<br />
+      <strong style="color:#f7f4ec">Horarios:</strong> Lunes cerrado · Martes a sábado 09:00–00:00 · Domingo 19:00–00:00<br />
+      <strong style="color:#f7f4ec">WhatsApp:</strong> <a href="https://wa.me/5491161953406" style="color:#ea7b1b">11 6195-3406</a><br />
+      <strong style="color:#f7f4ec">Instagram:</strong> <a href="https://instagram.com/brothersfood.lst" style="color:#ea7b1b">@brothersfood.lst</a>
+    </p>
+    <nav>
+      <a href="#/menu" style="color:#ea7b1b;margin-right:18px">Menú</a>
+      <a href="#/nosotros" style="color:#ea7b1b;margin-right:18px">Nosotros</a>
+      <a href="#/contacto" style="color:#ea7b1b">Contacto</a>
+    </nav>
+  </section>
+</div>
+</div>
 
 <template id="__bundler_thumbnail">
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -71,8 +119,8 @@
   </svg>
 </template>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script type="text/babel" src="js/data.jsx"></script>
