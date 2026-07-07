@@ -41,6 +41,11 @@
   --maxw: 1200px;
   --shadow: 0 18px 50px -20px rgba(0,0,0,.55);
   --shadow-sm: 0 6px 18px -8px rgba(0,0,0,.5);
+
+  /* --- Motion (curvas fuertes, estilo emil) --- */
+  --ease-out:    cubic-bezier(.23,1,.32,1);
+  --ease-in-out: cubic-bezier(.77,0,.175,1);
+  --ease-drawer: cubic-bezier(.32,.72,0,1);
 }
 
 *{ box-sizing:border-box; }
@@ -55,6 +60,7 @@ body{
 img{ display:block; max-width:100%; }
 button{ font-family:inherit; cursor:pointer; }
 a{ color:inherit; text-decoration:none; }
+p{ text-wrap:pretty; }
 ::selection{ background:var(--orange); color:#1a1206; }
 
 /* Scrollbar */
@@ -97,14 +103,14 @@ a{ color:inherit; text-decoration:none; }
   font-family:var(--mono); font-weight:700; letter-spacing:.06em; text-transform:uppercase;
   font-size:13px; line-height:1;
   padding:14px 22px; border-radius:var(--r-sm); border:2px solid transparent;
-  transition:transform .12s ease, background .15s ease, color .15s ease, border-color .15s;
+  transition:transform .18s var(--ease-out), background .15s ease, color .15s ease, border-color .15s, box-shadow .2s ease;
   white-space:nowrap;
 }
-.btn:active{ transform:translateY(1px) scale(.99); }
+.btn:active{ transform:translateY(1px) scale(.98); }
 .btn-orange{ background:var(--orange); color:#1a1206; }
-.btn-orange:hover{ background:#ff8e2a; }
+.btn-orange:hover:not(:active){ background:#ff8e2a; transform:translateY(-1px); box-shadow:0 12px 26px -14px rgba(234,123,27,.7); }
 .btn-white{ background:var(--white); color:var(--ink); }
-.btn-white:hover{ background:#fff; }
+.btn-white:hover:not(:active){ background:#fff; transform:translateY(-1px); box-shadow:0 12px 26px -16px rgba(0,0,0,.6); }
 .btn-ghost{ background:transparent; color:var(--white); border-color:var(--line-dark); }
 .btn-ghost:hover{ border-color:var(--orange); color:var(--orange); }
 .btn-dark{ background:var(--ink); color:var(--white); }
@@ -161,7 +167,7 @@ html{ scroll-behavior:smooth; }
 
 /* --- Scroll reveal (IntersectionObserver agrega .in) --- */
 .reveal{ opacity:0; transform:translateY(26px); }
-.reveal.in{ opacity:1; transform:none; transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+.reveal.in{ opacity:1; transform:none; transition:opacity .6s ease, transform .6s var(--ease-out); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; }
 }
@@ -173,8 +179,8 @@ html{ scroll-behavior:smooth; }
 }
 
 /* --- Card hover lift + image zoom --- */
-.lift{ transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .25s; }
-.lift:hover{ transform:translateY(-5px); box-shadow:0 24px 50px -22px rgba(0,0,0,.7); }
+.lift{ transition:transform .3s var(--ease-out), border-color .3s, box-shadow .3s; }
+.lift:hover{ transform:translateY(-5px); border-color:var(--line-dark); box-shadow:0 26px 52px -22px rgba(0,0,0,.72); }
 .zoom{ overflow:hidden; }
 .zoom img{ transition:transform .6s cubic-bezier(.2,.8,.2,1); }
 .zoom:hover img{ transform:scale(1.06); }
@@ -295,3 +301,109 @@ html{ scroll-behavior:smooth; }
 }
 .catpill:hover{ border-color:var(--orange); color:var(--orange); }
 .catpill.on{ background:var(--orange); border-color:var(--orange); color:#1a1206; }
+
+/* ============================================================
+   v3 — vibrant overhaul (rediseño Fase 3)
+   ============================================================ */
+
+/* --- Nav links: subrayado animado (hover + activo) --- */
+.navlink{ position:relative; }
+.navlink::after{
+  content:""; position:absolute; left:14px; right:14px; bottom:4px; height:2px; border-radius:2px;
+  background:var(--orange); transform:scaleX(0); transform-origin:left;
+  transition:transform .22s var(--ease-out);
+}
+.navlink:hover::after, .navlink.on::after{ transform:scaleX(1); }
+
+/* --- CTA principal: barrido de brillo al hover (una vez, rápido) --- */
+.btn-orange{ position:relative; overflow:hidden; }
+.btn-orange::after{
+  content:""; position:absolute; top:0; bottom:0; left:-45%; width:36%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.38), transparent);
+  transform:skewX(-18deg); opacity:0; pointer-events:none;
+}
+.btn-orange:hover::after{ animation:btn-sheen .55s var(--ease-out); }
+@keyframes btn-sheen{
+  from{ opacity:1; transform:skewX(-18deg) translateX(0); }
+  to{ opacity:0; transform:skewX(-18deg) translateX(420%); }
+}
+
+/* --- Canillas: el vaso se llena al hover --- */
+.tap-glass::before{ transition:top .5s var(--ease-out); }
+.tap-glass::after{ transition:top .5s var(--ease-out); }
+.tap:hover .tap-glass::before{ top:10%; }
+.tap:hover .tap-glass::after{ top:1%; }
+
+/* --- Cards: glow naranja sutil al hover (sobre .lift) --- */
+.lift:hover{
+  box-shadow:
+    0 26px 52px -22px rgba(0,0,0,.72),
+    0 18px 60px -30px rgba(234,123,27,.35);
+}
+
+/* --- Happy hour deals: feedback al hover --- */
+.hh-deal{ transition:border-color .2s ease, transform .2s var(--ease-out); }
+.hh-deal:hover{ border-color:var(--beer); transform:translateY(-2px); }
+
+/* --- Hero: reveal cinético línea por línea (estilo awwwards) --- */
+.hline{ display:block; overflow:hidden; }
+.hline > span{ display:block; transform:translateY(112%); animation:hline-in .8s var(--ease-out) forwards; }
+.hline:nth-child(1) > span{ animation-delay:.1s; }
+.hline:nth-child(2) > span{ animation-delay:.22s; }
+.hline:nth-child(3) > span{ animation-delay:.34s; }
+@keyframes hline-in{ to{ transform:translateY(0); } }
+
+/* --- Ghost type: palabra gigante outline de fondo --- */
+.ghost-word{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  font-family:var(--display); text-transform:uppercase; line-height:1;
+  font-size:clamp(120px, 24vw, 340px); letter-spacing:.02em;
+  color:transparent; -webkit-text-stroke:1px rgba(247,244,236,.07);
+  pointer-events:none; user-select:none; white-space:nowrap;
+}
+
+/* --- Reseñas: tilt polaroid (se endereza al hover) --- */
+.tilt-a{ transform:rotate(-1.4deg); }
+.tilt-b{ transform:rotate(1.1deg); }
+.tilt-a, .tilt-b{ transition:transform .3s var(--ease-out), border-color .3s, box-shadow .3s; }
+.tilt-a:hover, .tilt-b:hover{ transform:rotate(0deg) translateY(-5px); }
+
+/* ============================================================
+   Panel admin — usabilidad
+   ============================================================ */
+.adm-nav{ background:transparent; color:var(--white); transition:background .15s ease, color .15s ease; }
+.adm-nav:not(.on):hover{ background:var(--ink-3); }
+.adm-nav.on{ background:var(--orange); color:#1a1206; }
+.adm-help:hover{ border-color:var(--orange); color:var(--orange); }
+.adm-next{ transition:filter .15s ease; }
+.adm-next:hover{ filter:brightness(1.12); }
+.adm-cancel{ transition:background .15s ease; }
+.adm-cancel:hover{ background:rgba(216,83,60,.14); }
+
+/* --- Tour de ayuda (spotlight + tarjeta) --- */
+.tour-spot{
+  border-radius:12px; pointer-events:none;
+  border:2px solid var(--orange);
+  box-shadow:0 0 0 9999px rgba(0,0,0,.76), 0 0 24px rgba(234,123,27,.35);
+  transition:left .35s var(--ease-out), top .35s var(--ease-out), width .35s var(--ease-out), height .35s var(--ease-out);
+}
+.tour-card{
+  background:var(--ink-2); border:1px solid var(--line-dark); border-radius:14px;
+  padding:20px 22px; box-shadow:var(--shadow); z-index:1;
+  animation:tour-card-in .3s var(--ease-out);
+}
+@keyframes tour-card-in{ from{ opacity:0; transform:translateY(10px); } }
+.tour-card[style*="translate(-50%"]{ animation:tour-card-in-c .3s var(--ease-out); }
+@keyframes tour-card-in-c{ from{ opacity:0; transform:translate(-50%,-50%) scale(.97); } }
+
+/* --- Reduced motion para lo nuevo --- */
+@media (prefers-reduced-motion: reduce){
+  .btn-orange:hover::after{ animation:none; }
+  .tap-glass::before, .tap-glass::after{ transition:none; }
+  .hh-deal, .hh-deal:hover{ transform:none; transition:none; }
+  .navlink::after{ transition:none; }
+  .hline > span{ transform:none; animation:none; }
+  .tilt-a, .tilt-b, .tilt-a:hover, .tilt-b:hover{ transform:none; transition:none; }
+  .tour-spot{ transition:none; }
+  .tour-card{ animation:none; }
+}

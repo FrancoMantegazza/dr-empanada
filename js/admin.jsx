@@ -53,6 +53,17 @@ function AdminShell({ go, auth }) {
   const [detail, setDetail] = React.useState(null);
   const [payOrder, setPayOrder] = React.useState(null);
   const [sound, setSound] = React.useState(true);
+  const [tour, setTour] = React.useState(false);
+
+  // hint de primera visita → invita al recorrido de ayuda
+  React.useEffect(() => {
+    try {
+      if (!localStorage.getItem("bf_tour_hint_v1")) {
+        localStorage.setItem("bf_tour_hint_v1", "1");
+        setTimeout(() => toast("¿Primera vez en el panel? Tocá Ayuda para un recorrido guiado"), 900);
+      }
+    } catch (e) {}
+  }, []);
   const orders = store.getOrders();
   const prevCount = React.useRef(orders.length);
   const [flash, setFlash] = React.useState(false);
@@ -87,9 +98,8 @@ function AdminShell({ go, auth }) {
         <div style={{ padding: "20px 18px", borderBottom: "1px solid var(--line-dark)" }}><a href="#/"><Logo size={0.78} /></a></div>
         <nav style={{ padding: 12, display: "grid", gap: 4, flex: 1, alignContent: "start" }}>
           {nav.map(([id, label, Icon, badge]) => (
-            <button key={id} onClick={() => setTab(id)} style={{
+            <button key={id} onClick={() => setTab(id)} data-tour={"nav-" + id} className={"adm-nav" + (tab === id ? " on" : "")} style={{
               display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 10, border: "none", cursor: "pointer",
-              background: tab === id ? "var(--orange)" : "transparent", color: tab === id ? "#1a1206" : "var(--white)",
               fontFamily: "var(--mono)", fontSize: 13, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", textAlign: "left",
             }}>
               <Icon width={18} height={18} /> {label}
@@ -100,7 +110,10 @@ function AdminShell({ go, auth }) {
           ))}
         </nav>
         <div style={{ padding: 12, borderTop: "1px solid var(--line-dark)" }}>
-          <button onClick={() => setSound((s) => !s)} className="mono" style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "transparent", color: sound ? "var(--orange)" : "var(--muted)", fontSize: 12, fontWeight: 700, marginBottom: 10, cursor: "pointer" }}>
+          <button onClick={() => setTour(true)} className="mono adm-help" style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "transparent", color: "var(--white)", fontSize: 12, fontWeight: 700, marginBottom: 8, cursor: "pointer" }}>
+            <Ic.help width={16} height={16} /> Ayuda · recorrido
+          </button>
+          <button onClick={() => setSound((s) => !s)} data-tour="sound" className="mono" style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "transparent", color: sound ? "var(--orange)" : "var(--muted)", fontSize: 12, fontWeight: 700, marginBottom: 10, cursor: "pointer" }}>
             <Ic.bell width={16} height={16} /> Sonido {sound ? "ON" : "OFF"}
           </button>
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 4px" }}>
@@ -131,6 +144,7 @@ function AdminShell({ go, auth }) {
 
       {detail && <OrderDetail order={detail} onClose={() => setDetail(null)} onPay={(o) => { setDetail(null); setPayOrder(o); }} />}
       {payOrder && <PayModal order={payOrder} onClose={() => setPayOrder(null)} />}
+      {tour && <AdminTour isOwner={isOwner} setTab={setTab} onClose={() => setTour(false)} />}
       <Customizer />
       <Toaster />
     </div>
@@ -195,14 +209,14 @@ function OrdersBoard({ onDetail, onPay }) {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 24 }} className="bf-metrics">
+      <div data-tour="metrics" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 24 }} className="bf-metrics">
         <Metric label="Ventas de hoy" value={money(sales)} accent />
         <Metric label="Pedidos hoy" value={today.length} />
         <Metric label="Ticket promedio" value={avg ? money(avg) : "—"} />
         <Metric label="En curso" value={orders.filter((o) => !["entregado", "cancelado"].includes(o.status)).length} />
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
+      <div data-tour="filters" style={{ display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
         {[["activas", "Activas"], ["salon", "Salón"], ["acobrar", "A cobrar"], ["recibido", "Recibidos"], ["preparacion", "En prep."], ["camino", "En camino"], ["todas", "Todas"]].map(([id, l]) => (
           <button key={id} onClick={() => setFilter(id)} className={"catpill" + (filter === id ? " on" : "")}>{l}</button>
         ))}
@@ -214,7 +228,7 @@ function OrdersBoard({ onDetail, onPay }) {
           No hay pedidos en esta vista.
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 16 }}>
+        <div data-tour="cards" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 16 }}>
           {filtered.map((o) => <OrderCard key={o.id} order={o} onDetail={onDetail} onPay={onPay} />)}
         </div>
       )}
@@ -300,10 +314,10 @@ function OrderCard({ order, onDetail, onPay }) {
 
       <div style={{ display: "flex", gap: 0, borderTop: "1px solid var(--line-dark)" }}>
         {active && (
-          <button onClick={() => store.updateStatus(order.id, "cancelado")} title="Cancelar" style={{ padding: "12px", background: "none", border: "none", borderRight: "1px solid var(--line-dark)", color: "var(--danger)", cursor: "pointer", display: "grid", placeItems: "center" }}><Ic.x width={16} height={16} /></button>
+          <button onClick={() => store.updateStatus(order.id, "cancelado")} title="Cancelar" className="adm-cancel" style={{ padding: "12px", background: "none", border: "none", borderRight: "1px solid var(--line-dark)", color: "var(--danger)", cursor: "pointer", display: "grid", placeItems: "center" }}><Ic.x width={16} height={16} /></button>
         )}
         {next ? (
-          <button onClick={() => store.updateStatus(order.id, next)} className="mono" style={{ flex: 1, padding: "12px", background: "var(--orange)", border: "none", color: "#1a1206", fontWeight: 700, fontSize: 12.5, letterSpacing: ".04em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+          <button onClick={() => store.updateStatus(order.id, next)} className="mono adm-next" style={{ flex: 1, padding: "12px", background: "var(--orange)", border: "none", color: "#1a1206", fontWeight: 700, fontSize: 12.5, letterSpacing: ".04em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
             <Ic.arrow width={15} height={15} /> Pasar a {STATUS_META[next].label}
           </button>
         ) : (
@@ -319,6 +333,11 @@ function OrderCard({ order, onDetail, onPay }) {
 /* ---------------- ORDER DETAIL DRAWER ---------------- */
 function OrderDetail({ order, onClose, onPay }) {
   const store = useStore();
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   const live = store.getOrders().find((o) => o.id === order.id) || order;
   const meta = STATUS_META[live.status];
   const payLabel = live.paid ? (PAY_LABEL[live.payMethod] || live.payMethod) : (PAY_LABEL[live.pay] || live.pay);

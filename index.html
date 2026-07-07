@@ -49,7 +49,7 @@
 <link rel="preconnect" href="https://images.unsplash.com" />
 <link rel="preconnect" href="https://unpkg.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Oswald:wght@500;600;700&family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/brand.css?v=3" />
+<link rel="stylesheet" href="css/brand.css?v=5" />
 <style>
   /* keyframes */
   @keyframes bf-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -92,7 +92,22 @@
     .bf-two { grid-template-columns: 1fr !important; }
   }
 
-  /* form & interaction polish */
+  /* curtain de carga: tapa la compilación de Babel y sale solo (CSS puro, sin JS) */
+  #bf-curtain {
+    position: fixed; inset: 0; z-index: 200; background: #ea7b1b;
+    display: grid; place-items: center;
+    animation: bf-curtain-up .65s cubic-bezier(.77,0,.175,1) 1.25s forwards;
+  }
+  #bf-curtain svg { animation: bf-curtain-logo 1.1s ease .1s both; }
+  @keyframes bf-curtain-up { to { transform: translateY(-101%); } }
+  @keyframes bf-curtain-logo { from { opacity: 0; transform: translateY(14px); } }
+  @media (prefers-reduced-motion: reduce) {
+    #bf-curtain { animation: bf-curtain-fade .3s ease 1s forwards; }
+    #bf-curtain svg { animation: none; }
+    @keyframes bf-curtain-fade { to { opacity: 0; visibility: hidden; } }
+  }
+
+  /* form polish (los botones los maneja brand.css) */
   input, textarea, select { transition: border-color .15s ease, box-shadow .15s ease; }
   input:focus, textarea:focus, select:focus {
     outline: none;
@@ -100,16 +115,21 @@
     box-shadow: 0 0 0 3px rgba(234,123,27,.18);
   }
   input::placeholder, textarea::placeholder { color: #8a8578; opacity: 1; }
-  .btn { transition: transform .12s cubic-bezier(.23,1,.32,1), filter .15s ease, background .15s ease; }
-  .btn:active:not(:disabled) { transform: scale(.98); }
-  button:disabled { cursor: not-allowed; }
   @media (prefers-reduced-motion: reduce) {
-    input, textarea, select, .btn { transition: none; }
-    .btn:active:not(:disabled) { transform: none; }
+    input, textarea, select { transition: none; }
   }
 </style>
 </head>
 <body>
+<div id="bf-curtain" aria-hidden="true">
+  <svg width="86" height="62" viewBox="0 0 100 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="13" r="4.5" fill="#1a1206" />
+    <path d="M14 52 C14 32 30 20 50 20 C70 20 86 32 86 52" stroke="#1a1206" stroke-width="5.5" fill="none" stroke-linecap="round" />
+    <line x1="50" y1="20" x2="50" y2="17" stroke="#1a1206" stroke-width="5.5" stroke-linecap="round" />
+    <rect x="9" y="54" width="82" height="6" rx="3" fill="#1a1206" />
+    <line x1="20" y1="66" x2="80" y2="66" stroke="#1a1206" stroke-width="4" stroke-linecap="round" opacity=".6" />
+  </svg>
+</div>
 <div id="root"><!-- Contenido base para buscadores y navegadores sin JS. React lo reemplaza al montar la app. -->
 <div class="bf-fallback" style="max-width:1000px;margin:0 auto;padding:44px 24px;color:#f7f4ec;font-family:'Barlow',system-ui,-apple-system,sans-serif;line-height:1.55">
   <header>
@@ -182,6 +202,7 @@
 <script type="text/babel" src="js/admin-pos.jsx"></script>
 <script type="text/babel" src="js/admin.jsx"></script>
 <script type="text/babel" src="js/admin-reports.jsx"></script>
+<script type="text/babel" src="js/admin-help.jsx"></script>
 <script type="text/babel" src="js/tweaks-panel.jsx"></script>
 <script type="text/babel" src="js/app.jsx"></script>
 </body>

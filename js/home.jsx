@@ -20,19 +20,10 @@ function Home({ go, variant = 1 }) {
 
 /* ---------- Variante 1: Bold dark, titular gigante + foto flotante ---------- */
 function HeroBold({ go }) {
-  const imgRef = React.useRef(null);
-  React.useEffect(() => {
-    const onScroll = () => {
-      if (imgRef.current) imgRef.current.style.transform = `translateY(${window.scrollY * 0.08}px)`;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <section style={{ position: "relative", overflow: "hidden", borderBottom: "1px solid var(--line-dark)" }}>
       {/* glow + damero de fondo */}
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 78% 30%, rgba(234,123,27,.2), transparent 55%)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 78% 30%, rgba(234,123,27,.28), transparent 58%), radial-gradient(circle at 8% 92%, rgba(231,169,42,.12), transparent 40%)" }} />
       <div className="damero thin" style={{ position: "absolute", top: 0, left: 0, right: 0, opacity: .35 }} />
 
       <div className="wrap bf-two" style={{ position: "relative", display: "grid", gridTemplateColumns: "1.15fr .85fr", gap: 40, alignItems: "center", padding: "76px 24px 70px" }}>
@@ -43,11 +34,11 @@ function HeroBold({ go }) {
               {isHappyNow() && <span className="hh-badge"><span className="hh-dot" /> Happy hour activo</span>}
             </div>
           </Reveal>
-          <Reveal delay={80}>
-            <h1 className="display" style={{ fontSize: "clamp(52px, 8vw, 108px)", margin: 0, lineHeight: .86 }}>
-              Burgers<br /><span className="outline-txt">que te hacen</span><br /><span style={{ color: "var(--orange)" }}>feliz.</span>
-            </h1>
-          </Reveal>
+          <h1 className="display" style={{ fontSize: "clamp(52px, 8vw, 96px)", margin: 0, lineHeight: .88 }}>
+            <span className="hline"><span>Burgers</span></span>
+            <span className="hline"><span className="outline-txt">que te hacen</span></span>
+            <span className="hline"><span style={{ color: "var(--orange)" }}>feliz.</span></span>
+          </h1>
           <Reveal delay={160}>
             <p style={{ fontSize: 19, color: "var(--muted)", maxWidth: 460, marginTop: 22, lineHeight: 1.45 }}>
               Smash burgers caseras con papas incluidas y <b style={{ color: "var(--white)" }}>cerveza artesanal tirada</b> en el corazón de Boedo. Somos brothers y somos riquísimos.
@@ -68,7 +59,7 @@ function HeroBold({ go }) {
           </Reveal>
         </div>
 
-        <div style={{ position: "relative" }} ref={imgRef}>
+        <div style={{ position: "relative" }}>
           <div className="hero-float" style={{ position: "relative", borderRadius: 20, overflow: "hidden", border: "1px solid var(--line-dark)", aspectRatio: "3/4", boxShadow: "var(--shadow)" }}>
             <Photo src={IMG("photo-1586190848861-99aa4a171e90", 1100)} alt="Smash burger Brothers Food" style={{ position: "absolute", inset: 0 }} />
           </div>
@@ -95,7 +86,7 @@ function HeroFullBleed({ go }) {
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(8,8,8,.96) 8%, rgba(8,8,8,.4) 55%, rgba(8,8,8,.7))" }} />
       <div className="wrap" style={{ position: "relative", padding: "120px 24px 64px" }}>
         <div className="tag orange" style={{ marginBottom: 18 }}>★ {BIZ.rating} en Google · {BIZ.reviewsCount} reseñas</div>
-        <h1 className="display" style={{ fontSize: "clamp(54px, 10vw, 132px)", margin: 0, lineHeight: .84, maxWidth: 900 }}>
+        <h1 className="display" style={{ fontSize: "clamp(54px, 9vw, 96px)", margin: 0, lineHeight: .86, maxWidth: 900 }}>
           Boedo come<br /><span style={{ color: "var(--orange)" }}>Brothers.</span>
         </h1>
         <p style={{ fontSize: 20, color: "#d8d4c9", maxWidth: 520, marginTop: 20 }}>
@@ -140,16 +131,15 @@ function HeroEditorial({ go }) {
   );
 }
 
-/* ---------- Marquee strip ---------- */
+/* ---------- Word band (estática — el marquee vive en el annbar) ---------- */
 function MarqueeStrip() {
-  const words = ["Smash burgers", "Cerveza artesanal tirada", "Happy hour 13–21", "Delivery propio", "Take away", "Opción NotCo y veggie", "Combos con papas", "Boedo"];
-  const row = [...words, ...words];
+  const words = ["Smash burgers", "Birra tirada", "Happy hour", "Delivery propio", "Boedo"];
   return (
-    <div style={{ background: "var(--orange)", color: "#1a1206", overflow: "hidden", borderBottom: "1px solid var(--orange-deep)" }}>
-      <div style={{ display: "flex", gap: 0, whiteSpace: "nowrap", animation: "bf-marquee 28s linear infinite", padding: "12px 0", width: "max-content" }}>
-        {row.map((w, i) => (
-          <span key={i} className="display" style={{ fontSize: 16, padding: "0 22px", display: "inline-flex", alignItems: "center", gap: 22 }}>
-            {w} <span style={{ opacity: .5 }}>✦</span>
+    <div style={{ background: "var(--orange)", color: "#1a1206", borderBottom: "1px solid var(--orange-deep)", padding: "15px 24px" }}>
+      <div className="wrap" style={{ display: "flex", justifyContent: "center", alignItems: "center", flexWrap: "wrap", columnGap: 24, rowGap: 4 }}>
+        {words.map((w, i) => (
+          <span key={w} className="display" style={{ fontSize: "clamp(15px, 2vw, 21px)", display: "inline-flex", alignItems: "center", gap: 24 }}>
+            {w}{i < words.length - 1 && <span style={{ opacity: .45, fontSize: 13 }}>✦</span>}
           </span>
         ))}
       </div>
@@ -225,7 +215,7 @@ function HappyHourBand({ go }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           {HAPPY.deals.map((d, i) => (
             <Reveal key={d.name} delay={i * 70}>
-              <div style={{ border: "1px solid rgba(231,169,42,.35)", background: "rgba(12,12,13,.72)", borderRadius: 12, padding: "14px 16px", backdropFilter: "blur(4px)" }}>
+              <div className="hh-deal" style={{ border: "1px solid rgba(231,169,42,.35)", background: "rgba(12,12,13,.85)", borderRadius: 12, padding: "14px 16px" }}>
                 <div style={{ fontWeight: 700, fontSize: 14.5, lineHeight: 1.25 }}>{d.name}</div>
                 <div className="mono tabular" style={{ color: "var(--beer)", fontWeight: 700, marginTop: 6 }}>
                   2 × {money(d.price)}
@@ -245,6 +235,7 @@ function BeerBand({ go }) {
   return (
     <section style={{ background: "#0a0a0a", borderBottom: "1px solid var(--line-dark)", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 85% 50%, rgba(231,169,42,.14), transparent 55%)" }} />
+      <span className="ghost-word" aria-hidden="true">Birra</span>
       <div className="wrap bf-two" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 50, alignItems: "center", padding: "70px 24px" }}>
         <div>
           <Reveal><div className="tag beer" style={{ marginBottom: 18 }}><Ic.beer width={14} height={14} /> 7 canillas</div></Reveal>
@@ -331,7 +322,7 @@ function ReviewsPreview({ go }) {
           </div>
         </Reveal>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }} className="bf-grid-3">
-          {r.map((rv, i) => <Reveal key={i} delay={i * 90}><ReviewCard r={rv} /></Reveal>)}
+          {r.map((rv, i) => <Reveal key={i} delay={i * 90}><div className={i % 2 ? "tilt-b" : "tilt-a"}><ReviewCard r={rv} /></div></Reveal>)}
         </div>
       </div>
     </section>
@@ -368,24 +359,29 @@ function GoogleG({ size = 34 }) {
   );
 }
 
-/* ---------- Final CTA ---------- */
+/* ---------- Final CTA — drench naranja (estilo KFC/awwwards) ---------- */
 function FinalCTA({ go }) {
   return (
-    <section className="wrap" style={{ padding: "20px 24px 80px" }}>
-      <Reveal>
-        <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", border: "1px solid var(--line-dark)", textAlign: "center", padding: "64px 24px", background: "linear-gradient(145deg, var(--ink-2), var(--ink))" }}>
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 0%, rgba(234,123,27,.2), transparent 60%)" }} />
-          <div style={{ position: "relative" }}>
-            <Cloche size={48} color="var(--orange)" />
-            <h2 className="display" style={{ fontSize: "clamp(36px,6vw,68px)", margin: "16px 0 0" }}>¿Tenés hambre?</h2>
-            <p style={{ fontSize: 18, color: "var(--muted)", margin: "12px auto 28px", maxWidth: 460 }}>Hacé tu pedido online en 2 minutos. Lo preparamos al toque.</p>
+    <section style={{ position: "relative" }}>
+      <div className="damero thin" />
+      <div style={{ position: "relative", overflow: "hidden", background: "linear-gradient(160deg, #ff8e2a 0%, var(--orange) 45%, var(--orange-deep) 100%)" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 12% 12%, rgba(255,255,255,.16), transparent 45%)" }} />
+        <div className="wrap" style={{ position: "relative", padding: "84px 24px 90px", textAlign: "center", color: "#1a1206" }}>
+          <Reveal><div style={{ display: "flex", justifyContent: "center" }}><Cloche size={52} color="#1a1206" /></div></Reveal>
+          <Reveal delay={70}>
+            <h2 className="display" style={{ fontSize: "clamp(44px,7vw,96px)", margin: "14px 0 0", lineHeight: .88, color: "#1a1206" }}>¿Tenés<br />hambre?</h2>
+          </Reveal>
+          <Reveal delay={140}>
+            <p style={{ fontSize: 18, fontWeight: 600, color: "rgba(26,18,6,.78)", margin: "16px auto 30px", maxWidth: 440 }}>Hacé tu pedido online en 2 minutos. Lo preparamos al toque.</p>
+          </Reveal>
+          <Reveal delay={210}>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <button className="btn btn-orange btn-lg" onClick={() => go("#/menu")}>Pedir online <Ic.arrow /></button>
-              <a className="btn btn-ghost btn-lg" href={waLink("¡Hola Brothers! Quería hacer un pedido 🍔")} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> WhatsApp</a>
+              <button className="btn btn-dark btn-lg" onClick={() => go("#/menu")}>Pedir online <Ic.arrow /></button>
+              <a className="btn btn-white btn-lg" href={waLink("¡Hola Brothers! Quería hacer un pedido 🍔")} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> WhatsApp</a>
             </div>
-          </div>
+          </Reveal>
         </div>
-      </Reveal>
+      </div>
     </section>
   );
 }

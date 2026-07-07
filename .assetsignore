@@ -10,3 +10,6 @@ AUDITORIA.md
 .claude
 .wrangler
 .assetsignore
+package.json
+package-lock.json
+node_modules

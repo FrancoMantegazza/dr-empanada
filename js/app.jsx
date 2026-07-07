@@ -28,6 +28,15 @@ function App() {
     document.documentElement.style.setProperty("--display", `"${t.displayFont}", "Arial Narrow", sans-serif`);
   }, [t.accent, t.displayFont]);
 
+  // remover el curtain de carga (la animación CSS lo saca visualmente;
+  // esto garantiza que el nodo no quede tapando si la animación se pausó)
+  React.useEffect(() => {
+    const c = document.getElementById("bf-curtain");
+    if (!c) return;
+    const t = setTimeout(() => c.remove(), 2100);
+    return () => clearTimeout(t);
+  }, []);
+
   const path = route.split("?")[0];
   const isAdmin = path.startsWith("#/admin");
   const variantNum = { Bold: 1, "Foto full": 2, Editorial: 3 }[t.homeVariant] || 1;
@@ -64,6 +73,7 @@ function App() {
 
   return (
     <>
+      <div id="bf-top-sentinel" aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1 }} />
       <Header route={path} go={go} />
       {page}
       <Footer go={go} />

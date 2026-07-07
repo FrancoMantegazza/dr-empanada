@@ -129,9 +129,12 @@ function Header({ route, go }) {
     ["#/", "Inicio"], ["#/menu", "Menú"], ["#/nosotros", "Nosotros"], ["#/contacto", "Contacto"],
   ];
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    window.addEventListener("scroll", onScroll); onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    // IO sobre un sentinel en el tope del documento (evita listener de scroll)
+    const s = document.getElementById("bf-top-sentinel");
+    if (!s) return;
+    const io = new IntersectionObserver(([e]) => setScrolled(!e.isIntersecting), { rootMargin: "12px 0px 0px 0px" });
+    io.observe(s);
+    return () => io.disconnect();
   }, []);
   useEffect(() => { setOpen(false); }, [route]);
   useEffect(() => {
@@ -156,18 +159,12 @@ function Header({ route, go }) {
             {links.map(([href, label]) => {
               const active = route === href;
               return (
-                <a key={href} href={href} className="mono" style={{
-                  position: "relative",
+                <a key={href} href={href} className={"mono navlink" + (active ? " on" : "")} style={{
                   fontSize: 13, letterSpacing: ".08em", textTransform: "uppercase", fontWeight: 700,
                   padding: "9px 14px", borderRadius: 6, color: active ? "var(--orange)" : "var(--white)",
                   transition: "color .2s",
                 }}>
                   {label}
-                  <span style={{
-                    position: "absolute", left: 14, right: 14, bottom: 4, height: 2, borderRadius: 2,
-                    background: "var(--orange)", transform: active ? "scaleX(1)" : "scaleX(0)",
-                    transformOrigin: "left", transition: "transform .25s",
-                  }} />
                 </a>
               );
             })}
