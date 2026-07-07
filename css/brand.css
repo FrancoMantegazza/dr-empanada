@@ -369,6 +369,73 @@ html{ scroll-behavior:smooth; }
 .tilt-a:hover, .tilt-b:hover{ transform:rotate(0deg) translateY(-5px); }
 
 /* ============================================================
+   Sticker system — home variante "Stickers" (kraft claro)
+   ============================================================ */
+/* texto con borde de calcomanía (stroke blanco por detrás del fill) */
+.stk-stroke{
+  -webkit-text-stroke:.14em #fff;
+  paint-order:stroke fill;
+  text-shadow:0 6px 24px rgba(26,18,6,.18);
+}
+/* tarjeta calcomanía: borde blanco grueso + sombra suave */
+.stk-card{
+  background:#fff; border-radius:16px;
+  box-shadow:0 10px 30px -10px rgba(26,18,6,.28);
+  border:1px solid rgba(26,18,6,.06);
+}
+/* foto calcomanía (polaroid) — el hover usa `scale` (propiedad aparte)
+   para no pisar la animación de flotación que vive en `transform` */
+.stk-photo{
+  border:8px solid #fff; border-radius:14px;
+  box-shadow:0 16px 40px -16px rgba(26,18,6,.35);
+  overflow:hidden;
+  transition:scale .3s var(--ease-out), box-shadow .3s;
+}
+.stk-photo:hover{ scale:1.05; box-shadow:0 22px 50px -18px rgba(26,18,6,.45); }
+/* etiqueta pill rotada */
+.stk-label{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  padding:8px 14px; border-radius:100px; border:3px solid #fff;
+  box-shadow:0 8px 22px -10px rgba(26,18,6,.35);
+}
+/* flotación suave */
+@keyframes stk-wobble{ 0%,100%{ transform:rotate(var(--rot,-3deg)) translateY(0); } 50%{ transform:rotate(calc(var(--rot,-3deg) + 2deg)) translateY(-7px); } }
+.stk-float{ animation:stk-wobble 6s ease-in-out infinite; }
+
+/* palabras que convergen al entrar (word-stack cinético) */
+.reveal.rev-left{ transform:translateX(-90px); }
+.reveal.rev-right{ transform:translateX(90px); }
+.reveal.rev-left.in, .reveal.rev-right.in{ transform:none; }
+
+/* burbuja sticker (etiqueta gorda estilo globo) */
+.stk-bubble{
+  display:inline-block; font-family:var(--display); text-transform:uppercase;
+  font-size:clamp(16px,2.4vw,24px); letter-spacing:.04em;
+  color:#fff; background:var(--orange-deep); padding:10px 20px; border-radius:100px;
+  border:4px solid #fff; box-shadow:0 10px 26px -10px rgba(26,18,6,.35);
+  transform:rotate(-3deg);
+}
+
+/* CTA ovalada gigante (estilo póster) */
+.stk-oval{
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.04em;
+  font-size:clamp(20px,3vw,30px); color:#f7f4ec;
+  background:var(--orange-deep); padding:22px 52px; border-radius:50%;
+  border:4px solid #fff; box-shadow:0 16px 40px -14px rgba(26,18,6,.4);
+  cursor:pointer; transition:scale .25s var(--ease-out), box-shadow .25s;
+}
+.stk-oval:hover{ scale:1.06; box-shadow:0 22px 48px -14px rgba(26,18,6,.45); }
+.stk-oval:active{ scale:.97; }
+
+@media (prefers-reduced-motion: reduce){
+  .stk-float{ animation:none; }
+  .stk-photo:hover, .stk-oval:hover{ scale:none; }
+  .reveal.rev-left, .reveal.rev-right{ transform:none; }
+}
+
+/* ============================================================
    Panel admin — usabilidad
    ============================================================ */
 .adm-nav{ background:transparent; color:var(--white); transition:background .15s ease, color .15s ease; }

@@ -2,7 +2,7 @@
    app.jsx — router + montaje
    ============================================================ */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "homeVariant": "Bold",
+  "homeVariant": "Stickers",
   "accent": "#ea7b1b",
   "displayFont": "Anton"
 }/*EDITMODE-END*/;
@@ -39,7 +39,7 @@ function App() {
 
   const path = route.split("?")[0];
   const isAdmin = path.startsWith("#/admin");
-  const variantNum = { Bold: 1, "Foto full": 2, Editorial: 3 }[t.homeVariant] || 1;
+  const variantNum = { Bold: 1, "Foto full": 2, Editorial: 3, Stickers: 4 }[t.homeVariant] || 4;
 
   let page;
   if (path === "#/" || path === "") page = <Home go={go} variant={variantNum} />;
@@ -55,7 +55,7 @@ function App() {
     <TweaksPanel title="Tweaks">
       <TweakSection label="Inicio" />
       <TweakRadio label="Variante de Home" value={t.homeVariant}
-        options={["Bold", "Foto full", "Editorial"]}
+        options={["Stickers", "Bold", "Foto full", "Editorial"]}
         onChange={(v) => setTweak("homeVariant", v)} />
       <TweakSection label="Marca" />
       <TweakColor label="Color de acento" value={t.accent}

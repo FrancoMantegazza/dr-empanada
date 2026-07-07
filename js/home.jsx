@@ -2,6 +2,23 @@
    home.jsx — Inicio. 3 variantes de hero (tweakable).
    ============================================================ */
 function Home({ go, variant = 1 }) {
+  if (variant === 4) {
+    // Variante "Stickers": página clara kraft, autocontenida
+    return (
+      <div className="fadeup">
+        <SectionTitles />
+        <HeroSticker go={go} />
+        <WordStack />
+        <StickerShowcase go={go} />
+        <WaveDrench go={go} />
+        <HappyHourBand go={go} />
+        <IngredientBlast />
+        <ReviewsSticker />
+        <BrandBlast />
+        <FinalCTA go={go} />
+      </div>
+    );
+  }
   return (
     <div className="fadeup">
       {variant === 1 && <HeroBold go={go} />}
@@ -386,4 +403,293 @@ function FinalCTA({ go }) {
   );
 }
 
-Object.assign(window, { Home, GoogleG, ReviewCard, FinalCTA });
+/* ---------- Variante 4: Stickers — kraft claro, calcomanías (ejecución propia BF) ---------- */
+function HeroSticker({ go }) {
+  return (
+    <section className="kraft" style={{ position: "relative", overflow: "hidden", color: "var(--ink)", borderBottom: "1px solid var(--line-light)" }}>
+      <div className="wrap" style={{ position: "relative", padding: "48px 24px 56px", textAlign: "center" }}>
+
+        {/* logo BF como calcomanía */}
+        <Reveal>
+          <div className="stk-card stk-float" style={{ display: "inline-block", padding: "16px 26px 12px", "--rot": "-3deg", transform: "rotate(-3deg)" }}>
+            <Logo size={1.1} light stacked />
+          </div>
+        </Reveal>
+
+        {/* titular gigante con la foto del producto solapada */}
+        <div style={{ position: "relative", marginTop: 10 }}>
+          <h1 className="display stk-stroke" style={{ fontSize: "clamp(58px, 12vw, 96px)", lineHeight: .92, margin: 0, color: "var(--orange)", position: "relative", zIndex: 1 }}>
+            Burgers<br />que te hacen<br />feliz.
+          </h1>
+          <div className="stk-photo stk-float" style={{ "--rot": "3deg", transform: "rotate(3deg)", position: "absolute", zIndex: 2, width: "min(250px, 34vw)", aspectRatio: "1", left: "50%", top: "62%", marginLeft: "calc(min(250px, 34vw) / -2)", marginTop: "calc(min(250px, 34vw) / -2)" }}>
+            <Photo src="assets/promo-thomason.jpg" alt="La Thomason de Brothers Food" style={{ position: "absolute", inset: 0 }} />
+          </div>
+          {/* etiquetas calcomanía alrededor */}
+          <span className="stk-label" style={{ position: "absolute", zIndex: 3, left: "8%", top: "6%", transform: "rotate(-7deg)", background: "var(--orange)", color: "#1a1206" }}>Smash & gourmet</span>
+          <span className="stk-label" style={{ position: "absolute", zIndex: 3, right: "6%", top: "18%", transform: "rotate(5deg)", background: "var(--beer)", color: "#1a1206" }}><Ic.beer width={14} height={14} /> 7 canillas</span>
+          <span className="stk-label" style={{ position: "absolute", zIndex: 3, right: "12%", bottom: "2%", transform: "rotate(-4deg)", background: "#fff", color: "var(--ink)" }}>Happy hour 13–21</span>
+        </div>
+
+        <Reveal delay={120}>
+          <p style={{ fontSize: 18, fontWeight: 600, color: "#5d5647", maxWidth: 460, margin: "26px auto 0", lineHeight: 1.5 }}>
+            Smash burgers caseras con papas incluidas y cerveza artesanal tirada, en el corazón de Boedo.
+          </p>
+        </Reveal>
+        <Reveal delay={200}>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 26 }}>
+            <button className="btn btn-orange btn-lg" onClick={() => go("#/menu")}>Pedir online <Ic.arrow /></button>
+            <button className="btn btn-dark btn-lg" onClick={() => go("#/menu")}><Ic.beer /> Ver cervezas</button>
+          </div>
+        </Reveal>
+        <Reveal delay={280}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "center", marginTop: 24, flexWrap: "wrap" }}>
+            <Stars value={BIZ.rating} />
+            <span className="mono" style={{ fontSize: 13, color: "#7a7060" }}><b style={{ color: "var(--ink)" }}>{BIZ.rating}</b> · {BIZ.reviewsCount} reseñas en Google</span>
+            <OpenBadge compact />
+          </div>
+        </Reveal>
+
+        {/* micro-copy en dos columnas */}
+        <Reveal delay={340}>
+          <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30, maxWidth: 860, margin: "44px auto 0", textAlign: "left" }}>
+            <p style={{ fontSize: 15.5, fontWeight: 600, color: "#5d5647", lineHeight: 1.5, margin: 0 }}>
+              Smash a la plancha bien caliente: el medallón sella su jugo bajo una costra caramelizada.
+            </p>
+            <p style={{ fontSize: 15.5, fontWeight: 600, color: "#5d5647", lineHeight: 1.5, margin: 0, textAlign: "right" }}>
+              Cheddar fundido y nuestra salsa brother, hechos para calmar el antojo desde Boedo.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+      <div className="damero thin" />
+    </section>
+  );
+}
+
+/* ---------- Word stack cinético: palabras que convergen al scroll ---------- */
+function WordStack() {
+  const words = [
+    { t: "Doble", c: "var(--orange)", dir: "rev-left", size: 1 },
+    { t: "smash", c: "var(--orange-deep)", dir: "rev-right", size: 1 },
+    { t: "bien cargada", c: "#d8533c", dir: "rev-left", size: .62 },
+  ];
+  return (
+    <section className="kraft" style={{ color: "var(--ink)", borderBottom: "1px solid var(--line-light)", overflow: "hidden" }}>
+      <div className="wrap" style={{ padding: "64px 24px 60px", textAlign: "center" }}>
+        <Reveal><span className="stk-bubble">La Big Brothers</span></Reveal>
+        <div style={{ marginTop: 18 }}>
+          {words.map((w) => (
+            <Reveal key={w.t} className={w.dir} as="div">
+              <div className="display stk-stroke" style={{ fontSize: `calc(clamp(52px, 11vw, 96px) * ${w.size})`, lineHeight: .96, color: w.c }}>{w.t}</div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={140}>
+          <p style={{ fontSize: 17, fontWeight: 600, color: "#5d5647", maxWidth: 520, margin: "30px auto 0", lineHeight: 1.55 }}>
+            Cheddar, lechuga, cebolla picada, pepinillos y salsa brother. Con papas incluidas, como todos nuestros combos.
+          </p>
+        </Reveal>
+        <Reveal delay={220}>
+          <button className="stk-oval" style={{ marginTop: 34 }} onClick={() => window.location.hash = "#/menu"}>Pedir online</button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Onda + drench naranja con statement y producto asomando ---------- */
+function WaveDrench({ go }) {
+  return (
+    <section style={{ position: "relative", overflow: "hidden" }}>
+      {/* onda de transición kraft → naranja profundo */}
+      <div style={{ background: "var(--paper)" }}>
+        <svg viewBox="0 0 1440 110" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 90 }} aria-hidden="true">
+          <path d="M0,70 C260,10 520,105 780,60 C1020,20 1240,90 1440,45 L1440,110 L0,110 Z" fill="#d86a10" />
+        </svg>
+      </div>
+      <div style={{ background: "linear-gradient(178deg, #d86a10 0%, var(--orange-deep) 45%, #a04e08 100%)", position: "relative" }}>
+        {/* stickers de marca en las esquinas */}
+        <div className="stk-card stk-float" style={{ "--rot": "-9deg", transform: "rotate(-9deg)", position: "absolute", left: "5%", top: 90, padding: "12px 14px 8px", animationDelay: ".5s" }}>
+          <Cloche size={40} color="#1a1206" />
+        </div>
+        <div className="stk-card stk-float" style={{ "--rot": "7deg", transform: "rotate(7deg)", position: "absolute", right: "6%", top: 180, padding: "12px 14px", color: "var(--orange-deep)", animationDelay: "1.6s" }}>
+          <Ic.beer width={34} height={34} />
+        </div>
+
+        <div className="wrap" style={{ position: "relative", padding: "70px 24px 0", textAlign: "center" }}>
+          <div className="mono" style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,244,236,.7)", marginBottom: 50 }}>
+            <span>Delivery propio</span><span>Est. Boedo</span>
+          </div>
+          <Reveal>
+            <span className="stk-bubble">La experiencia Brothers</span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h2 className="display" style={{ fontSize: "clamp(48px,9vw,96px)", lineHeight: .92, margin: "26px 0 0", color: "#f7f4ec", textShadow: "0 4px 20px rgba(26,18,6,.25)" }}>
+              Somos brothers<br />y somos<br />riquísimos.
+            </h2>
+          </Reveal>
+          <Reveal delay={160}>
+            <button className="btn btn-white btn-lg" style={{ marginTop: 34 }} onClick={() => go("#/menu")}>Pedir online <Ic.arrow /></button>
+          </Reveal>
+          {/* producto asomando: se recorta limpio contra el borde de la sección */}
+          <Reveal delay={240}>
+            <div className="stk-photo stk-float" style={{ "--rot": "-2deg", transform: "rotate(-2deg)", width: "min(380px, 64vw)", aspectRatio: "4/3", margin: "70px auto -90px", position: "relative" }}>
+              <Photo kind="burger" alt="Smash burger asomando" style={{ position: "absolute", inset: 0 }} />
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Ingredientes flotando sobre tipografía gigante (kraft) ---------- */
+function IngredientBlast() {
+  return (
+    <section className="kraft" style={{ color: "var(--ink)", borderBottom: "1px solid var(--line-light)", overflow: "hidden" }}>
+      <div className="wrap" style={{ padding: "70px 24px 76px", textAlign: "center", position: "relative" }}>
+        <Reveal><span className="stk-bubble" style={{ background: "var(--ok)", transform: "rotate(3deg)" }}>Pura calidad</span></Reveal>
+        <div style={{ position: "relative", marginTop: 24 }}>
+          <Reveal delay={80}>
+            <h2 className="display stk-stroke" style={{ fontSize: "clamp(44px,9vw,96px)", lineHeight: .92, margin: 0, color: "var(--orange)" }}>
+              Cada capa<br />con lo mejor
+            </h2>
+          </Reveal>
+          {/* mini fotos redondas flotando sobre el titular */}
+          <div className="stk-photo stk-float" style={{ "--rot": "-6deg", transform: "rotate(-6deg)", position: "absolute", left: "6%", top: "-12%", width: "clamp(70px,10vw,120px)", aspectRatio: "1", borderRadius: "50%", animationDelay: ".4s" }}>
+            <Photo kind="fries" alt="Papas" style={{ position: "absolute", inset: 0 }} />
+          </div>
+          <div className="stk-photo stk-float" style={{ "--rot": "5deg", transform: "rotate(5deg)", position: "absolute", right: "5%", top: "16%", width: "clamp(76px,11vw,130px)", aspectRatio: "1", borderRadius: "50%", animationDelay: "1.9s" }}>
+            <Photo kind="promo" alt="La Thomason" style={{ position: "absolute", inset: 0 }} />
+          </div>
+          <div className="stk-photo stk-float" style={{ "--rot": "-4deg", transform: "rotate(-4deg)", position: "absolute", left: "18%", bottom: "-24%", width: "clamp(64px,9vw,110px)", aspectRatio: "1", borderRadius: "50%", animationDelay: "3.1s" }}>
+            <Photo kind="cheers" alt="Brindis" style={{ position: "absolute", inset: 0 }} />
+          </div>
+        </div>
+        <Reveal delay={160}>
+          <p style={{ fontSize: 17, fontWeight: 600, color: "#5d5647", maxWidth: 480, margin: "48px auto 0", lineHeight: 1.55 }}>
+            Pan de papa, medallones smash de carne, NotCo o lentejas, y cerveza de productores independientes. Nada recalentado, nada de vueltas.
+          </p>
+        </Reveal>
+      </div>
+      {/* onda dorada de salida (guiño a la birra) */}
+      <svg viewBox="0 0 1440 70" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 54 }} aria-hidden="true">
+        <path d="M0,40 C280,0 560,70 840,35 C1080,8 1280,55 1440,25 L1440,70 L0,70 Z" fill="var(--beer)" />
+      </svg>
+      <div style={{ background: "var(--beer)", padding: "10px 24px 26px", textAlign: "center" }}>
+        <span className="stk-label" style={{ background: "#fff", color: "var(--ink)", transform: "rotate(-2deg)" }}><Ic.beer width={14} height={14} /> ¿Y la birra? Bien fría, siempre.</span>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Reseñas en clave sticker (kraft claro) ---------- */
+function ReviewsSticker() {
+  const r = REVIEWS.slice(0, 3);
+  return (
+    <section className="kraft" style={{ color: "var(--ink)", borderBottom: "1px solid var(--line-light)" }}>
+      <div className="wrap" style={{ padding: "60px 24px 66px" }}>
+        <Reveal>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 34, flexWrap: "wrap" }}>
+            <GoogleG size={30} />
+            <h2 className="display stk-stroke" style={{ fontSize: "clamp(30px,5vw,52px)", margin: 0, color: "var(--orange-deep)" }}>Boedo opina</h2>
+            <span className="stk-label" style={{ background: "var(--beer)", color: "#1a1206", transform: "rotate(3deg)" }}>★ {BIZ.rating} · {BIZ.reviewsCount} reseñas</span>
+          </div>
+        </Reveal>
+        <div className="bf-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 26 }}>
+          {r.map((rv, i) => (
+            <Reveal key={i} delay={i * 100}>
+              <div className="stk-card" style={{ padding: "20px 22px", transform: `rotate(${i % 2 ? 1.5 : -2}deg)` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <div className="display" style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--orange)", color: "#1a1206", display: "grid", placeItems: "center", fontSize: 17 }}>{rv.name[0]}</div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)" }}>{rv.name}</div>
+                    <Stars value={rv.stars} size={12} />
+                  </div>
+                </div>
+                <p style={{ color: "#5d5647", fontSize: 13.5, lineHeight: 1.5, margin: 0 }}>{rv.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Cierre: wordmark gigante ---------- */
+function BrandBlast() {
+  return (
+    <section className="kraft" style={{ color: "var(--ink)", overflow: "hidden" }}>
+      <div className="wrap" style={{ padding: "48px 24px 30px" }}>
+        <div className="mono" style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#9a8e76", marginBottom: 10 }}>
+          <span>Smash burgers</span><span>Birra tirada</span><span>Boedo · CABA</span>
+        </div>
+        <Reveal>
+          <div className="display stk-stroke" style={{ fontSize: "clamp(52px, 12.5vw, 96px)", lineHeight: .88, textAlign: "center", color: "var(--orange)", whiteSpace: "nowrap" }}>
+            Brothers<br />Food<span style={{ color: "var(--orange-deep)" }}>.lst</span>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Título de pestaña dinámico por sección (easter egg) ---------- */
+function SectionTitles() {
+  React.useEffect(() => {
+    const original = document.title;
+    const labels = ["A la plancha", "Bien cargada", "Recién tirada", "¿Con hambre?"];
+    let i = 0;
+    const t = setInterval(() => { document.title = "Brothers Food.lst · " + labels[i % labels.length]; i++; }, 3500);
+    return () => { clearInterval(t); document.title = original; };
+  }, []);
+  return null;
+}
+
+/* ---------- Showcase: polaroids solapadas + logo sticker (kraft) ---------- */
+function StickerShowcase({ go }) {
+  const shots = [
+    { kind: "burger", cap: "La Big Brothers", rot: "-4deg", top: 26, z: 1 },
+    { kind: "combo", cap: "Combos con papas", rot: "2deg", top: 0, z: 2 },
+    { kind: "beer", cap: "Recién tirada", rot: "-2.5deg", top: 34, z: 1 },
+  ];
+  return (
+    <section className="kraft" style={{ color: "var(--ink)", borderBottom: "1px solid var(--line-light)", overflow: "hidden" }}>
+      <div className="wrap" style={{ padding: "56px 24px 70px", position: "relative" }}>
+        <Reveal>
+          <h2 className="display stk-stroke" style={{ fontSize: "clamp(34px,6vw,64px)", textAlign: "center", margin: "0 0 44px", color: "var(--orange-deep)" }}>
+            Hecho a mano, comido con ganas
+          </h2>
+        </Reveal>
+
+        {/* logo BF como calcomanía junto al trío (acá iba la marca del sitio original) */}
+        <Reveal delay={60}>
+          <div className="stk-card stk-float" style={{ "--rot": "-8deg", transform: "rotate(-8deg)", position: "absolute", left: "max(8px, 4vw)", top: 120, zIndex: 3, padding: "14px 18px 10px", animationDelay: ".8s" }}>
+            <Logo size={0.85} light stacked />
+          </div>
+        </Reveal>
+
+        <div className="bf-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, maxWidth: 940, margin: "0 auto" }}>
+          {shots.map((s, i) => (
+            <Reveal key={s.kind} delay={i * 100}>
+              <div style={{ textAlign: "center", position: "relative", zIndex: s.z, marginTop: s.top }}>
+                <div className="stk-photo stk-float" style={{ "--rot": s.rot, transform: `rotate(${s.rot})`, aspectRatio: "4/5", position: "relative", animationDelay: `${i * 1.3}s` }}>
+                  <Photo kind={s.kind} alt={s.cap} style={{ position: "absolute", inset: 0 }} />
+                </div>
+                <span className="stk-label" style={{ background: "#fff", color: "var(--ink)", marginTop: 20, transform: `rotate(calc(${s.rot} * -1))` }}>{s.cap}</span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={160}>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 46 }}>
+            <button className="btn btn-dark btn-lg" onClick={() => go("#/menu")}>Ver toda la carta <Ic.arrow /></button>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { Home, GoogleG, ReviewCard, FinalCTA, HeroSticker, StickerShowcase, WordStack, WaveDrench, IngredientBlast, ReviewsSticker, BrandBlast, SectionTitles });
