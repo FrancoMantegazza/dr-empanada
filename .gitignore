@@ -17,3 +17,6 @@ squirrel.toml
 
 # Artefactos de skills en .claude
 .claude/skills/
+
+# Artefactos de verificación con browser
+.playwright-mcp/

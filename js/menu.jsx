@@ -1,24 +1,31 @@
 /* ============================================================
-   menu.jsx — Menú completo: buscador, anclas por categoría,
-   layouts cards / taps / list, agregados y dips.
+   menu.jsx — Menú completo estilo cartoon (nivel crav):
+   hero gigante, buscador pill, pills sticky, cards blancas
+   sticker, birras con medidores, listas claras. Mantiene toda
+   la funcionalidad de pedido (carrito, customizer, stock).
    ============================================================ */
 function MenuPage({ go }) {
   const store = useStore();
   const [active, setActive] = React.useState(MENU[0].id);
   const [query, setQuery] = React.useState("");
   const refs = React.useRef({});
+  const heroRef = React.useRef(null);
+  React.useEffect(() => (window.FX ? FX.bind(heroRef.current) : undefined), []);
 
   React.useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.dataset.cat); });
-    }, { rootMargin: "-160px 0px -65% 0px" });
+    }, { rootMargin: "-170px 0px -65% 0px" });
     Object.values(refs.current).forEach((el) => el && obs.observe(el));
     return () => obs.disconnect();
   }, [query]);
 
   const jump = (id) => {
     const el = refs.current[id];
-    if (el) window.scrollTo({ top: el.offsetTop - 150, behavior: "smooth" });
+    if (!el) return;
+    const y = el.offsetTop - 150;
+    if (window.FX && FX.lenis) FX.lenis.scrollTo(y, { duration: .9 });
+    else window.scrollTo({ top: y, behavior: "smooth" });
   };
 
   const q = query.trim().toLowerCase();
@@ -26,45 +33,41 @@ function MenuPage({ go }) {
   const visible = MENU.map((c) => ({ ...c, items: c.items.filter(matches) })).filter((c) => c.items.length);
 
   return (
-    <div className="fadeup">
+    <main className="bfx">
       {/* hero */}
-      <section style={{ borderBottom: "1px solid var(--line-dark)", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 80% -10%, rgba(234,123,27,.18), transparent 55%)" }} />
-        <div className="wrap" style={{ position: "relative", padding: "54px 24px 34px" }}>
-          <div className="eyebrow" style={{ marginBottom: 14 }}>La carta completa</div>
-          <h1 className="display" style={{ fontSize: "clamp(46px,7vw,92px)", margin: 0 }}>Menú</h1>
-          <div style={{ display: "flex", gap: 14, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
-            <p style={{ color: "var(--muted)", fontSize: 17, margin: 0, maxWidth: 460 }}>
-              Sumá lo que quieras al carrito y pedí online. Delivery propio o take away.
-            </p>
-            {isHappyNow() && <span className="hh-badge"><span className="hh-dot" /> Happy hour activo</span>}
-          </div>
-          {/* buscador */}
-          <div style={{ position: "relative", maxWidth: 420, marginTop: 22 }}>
-            <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--muted-d)", display: "grid" }}><Ic.search /></span>
-            <input
-              value={query} onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar en el menú… (IPA, thomason, milanesa)"
-              aria-label="Buscar en el menú"
-              style={{
-                width: "100%", padding: "13px 40px 13px 44px", borderRadius: 12,
-                border: "1px solid var(--line-dark)", background: "var(--ink-2)", color: "var(--white)",
-                fontFamily: "var(--body)", fontSize: 15,
-              }} />
-            {query && (
-              <button onClick={() => setQuery("")} aria-label="Limpiar búsqueda" style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--muted)", display: "grid" }}>
-                <Ic.x width={17} height={17} />
-              </button>
-            )}
+      <section ref={heroRef} className="bfx-page-hero" aria-label="La carta">
+        <div className="wrap" style={{ position: "relative" }}>
+          <Sticker name="burger" size={120} data-pop data-idle style={{ position: "absolute", left: "2%", top: -10, "--rot": "-12deg" }} />
+          <Sticker name="fries" size={100} data-pop data-idle style={{ position: "absolute", right: "3%", top: 40, "--rot": "10deg" }} />
+          <div className="bfx-kicker" data-pop>★ LA CARTA COMPLETA ★</div>
+          <h1 className="bfx-giant bfx-giant--lg" style={{ marginTop: 14 }}>
+            <span data-split="chars" style={{ display: "block" }}>COMÉ COMO</span>
+            <span data-split="chars" style={{ display: "block" }}><span className="ylw">SE DEBE.</span></span>
+          </h1>
+          <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "22px auto 0" }}>
+            Sumá lo que quieras al carrito y pedí online: delivery propio o take away. Todos los combos vienen con papas.
+          </p>
+          <div style={{ marginTop: 24, display: "flex", justifyContent: "center", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+            <div style={{ position: "relative" }}>
+              <input className="bfx-searchbox" value={query} onChange={(e) => setQuery(e.target.value)}
+                placeholder="Buscá… (IPA, thomason, milanesa)" aria-label="Buscar en el menú" />
+              {query && (
+                <button onClick={() => setQuery("")} aria-label="Limpiar búsqueda"
+                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--bfx-red)", display: "grid", cursor: "pointer" }}>
+                  <Ic.x width={19} height={19} />
+                </button>
+              )}
+            </div>
+            {isHappyNow() && <span className="bfx-badge bfx-badge--green" style={{ "--rot": "-4deg", fontSize: 15 }}>HAPPY HOUR ACTIVO</span>}
           </div>
         </div>
       </section>
 
-      {/* sticky category nav */}
-      <div style={{ position: "sticky", top: 72, zIndex: 30, background: "rgba(12,12,13,.92)", backdropFilter: "blur(10px)", borderBottom: "1px solid var(--line-dark)" }}>
+      {/* pills sticky */}
+      <div className="bfx-catbar">
         <div className="wrap" style={{ display: "flex", gap: 8, padding: "12px 24px", overflowX: "auto" }}>
           {visible.map((c) => (
-            <button key={c.id} onClick={() => jump(c.id)} className={"catpill" + (active === c.id ? " on" : "")}>
+            <button key={c.id} onClick={() => jump(c.id)} className={"bfx-catpill" + (active === c.id ? " on" : "")}>
               {c.name}
             </button>
           ))}
@@ -72,44 +75,43 @@ function MenuPage({ go }) {
       </div>
 
       {/* categorías */}
-      <div className="wrap" style={{ padding: "20px 24px 80px" }}>
+      <div className="wrap" style={{ padding: "10px 24px 80px" }}>
         {visible.length === 0 && (
-          <div style={{ padding: "70px 0", textAlign: "center" }}>
-            <div style={{ opacity: .3, display: "flex", justifyContent: "center", marginBottom: 14 }}><Ic.search width={44} height={44} /></div>
-            <p className="display" style={{ fontSize: 28, margin: "0 0 8px" }}>Sin resultados para “{query}”</p>
-            <p style={{ color: "var(--muted)", margin: "0 0 20px" }}>Probá con otra palabra, o mirá la carta completa.</p>
-            <button className="btn btn-orange" onClick={() => setQuery("")}>Ver todo el menú</button>
+          <div style={{ padding: "80px 0", textAlign: "center" }}>
+            <Sticker name="pickle" size={90} style={{ position: "relative", margin: "0 auto 16px" }} />
+            <p className="bfx-bubble" style={{ fontSize: 34, margin: "0 0 8px" }}>Nada con “{query}”</p>
+            <p className="bfx-copy" style={{ margin: "0 0 22px" }}>Probá con otra palabra, o mirá la carta completa.</p>
+            <button className="bfx-blob" style={{ fontSize: 20 }} onClick={() => setQuery("")}>Ver todo el menú</button>
           </div>
         )}
-        {visible.map((cat) => (
-          <section key={cat.id} data-cat={cat.id} ref={(el) => (refs.current[cat.id] = el)} style={{ paddingTop: 44 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 6, flexWrap: "wrap" }}>
-              {cat.draft && <span className="tag beer"><Ic.beer width={13} height={13} /> Tirada</span>}
-              <h2 className="display" style={{ fontSize: "clamp(30px,4.5vw,46px)", margin: 0 }}>{cat.name}</h2>
-              <span className="mono" style={{ fontSize: 12, color: "var(--muted-d)" }}>{cat.items.length} {cat.items.length === 1 ? "opción" : "opciones"}</span>
-            </div>
-            <p className="mono" style={{ color: "var(--muted-d)", fontSize: 13, letterSpacing: ".04em", margin: "0 0 22px" }}>{cat.kicker}</p>
 
+        {visible.map((cat) => (
+          <section key={cat.id} data-cat={cat.id} ref={(el) => (refs.current[cat.id] = el)} style={{ paddingTop: 54 }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 16, flexWrap: "wrap" }}>
+              <h2 className="bfx-giant bfx-giant--md" style={{ fontSize: "clamp(34px,4.6vw,64px)" }}>{cat.name}</h2>
+              <span className="bfx-hand" style={{ fontSize: 17, letterSpacing: ".1em", textTransform: "uppercase", opacity: .55 }}>
+                {cat.items.length} {cat.items.length === 1 ? "opción" : "opciones"}
+              </span>
+            </div>
+            <p className="bfx-hand" style={{ fontSize: 19, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--bfx-red)", margin: "6px 0 6px" }}>{cat.kicker}</p>
             {cat.note && (
-              <p style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--muted)", fontSize: 14, margin: "0 0 22px", maxWidth: 640 }}>
-                <Ic.leaf style={{ color: "var(--ok)", flexShrink: 0 }} /> {cat.note}
+              <p className="bfx-copy" style={{ fontSize: 18, margin: "0 0 10px", maxWidth: 640, display: "flex", gap: 8, alignItems: "center" }}>
+                <Ic.leaf style={{ color: "var(--bfx-green)", flexShrink: 0 }} /> {cat.note}
               </p>
             )}
 
             {cat.layout === "cards" && (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }} className="bf-grid-3">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22, marginTop: 18 }} className="bf-grid-3">
                 {cat.items.map((item, i) => (
                   <Reveal key={item.id} delay={(i % 3) * 70} style={{ display: "grid" }}>
-                    <ProductCard item={item} />
+                    <MenuCard item={item} rot={((i % 3) - 1) * 1.2} />
                   </Reveal>
                 ))}
               </div>
             )}
+            {cat.layout === "taps" && <BeerGrid items={cat.items} />}
+            {cat.layout === "list" && <LightList items={cat.items} />}
 
-            {cat.layout === "taps" && <TapList items={cat.items} />}
-            {cat.layout === "list" && <CompactList items={cat.items} />}
-
-            {/* extras contextuales */}
             {cat.id === "burgers" && !q && <ExtrasPanel />}
             {cat.id === "sandwiches" && !q && <DipsPanel />}
             {cat.id === "cervezas" && !q && <HappyBanner go={go} />}
@@ -117,13 +119,64 @@ function MenuPage({ go }) {
         ))}
       </div>
 
+      <AntojoCTA go={go} />
       <MobileCartBar go={go} />
+    </main>
+  );
+}
+
+/* ---------- Card de producto (clara, estilo sticker) ---------- */
+function MenuCard({ item, rot = 0 }) {
+  const store = useStore();
+  const stock = store.getStock()[item.id] ?? 99;
+  const out = stock <= 0;
+  const quickAdd = () => {
+    if (out) return;
+    store.add(item.id, "single");
+    window.dispatchEvent(new CustomEvent("bf-cart-bump"));
+    toast(item.name + " agregada al pedido");
+  };
+  const customize = () => { if (!out) window.dispatchEvent(new CustomEvent("bf-customize", { detail: item.id })); };
+  const TAG_CLS = { TOP: "bfx-minitag", TIRADA: "bfx-minitag--ylw", "PROMO VIERNES": "bfx-minitag--green" };
+  return (
+    <div className="bfx-menucard" style={{ opacity: out ? .55 : 1, rotate: rot + "deg" }}>
+      <div className="photo">
+        <img src={(item.img) || IMG("photo-1586190848861-99aa4a171e90")} alt={item.name} loading="lazy" />
+        <div style={{ position: "absolute", top: 10, left: 10, display: "flex", gap: 6 }}>
+          {item.tags.map((t) => (
+            <span key={t} className={"bfx-minitag " + (TAG_CLS[t] || "")}>{t === "TOP" ? "★ TOP" : t}</span>
+          ))}
+        </div>
+        {out && (
+          <div style={{ position: "absolute", inset: 0, background: "rgba(43,20,3,.55)", display: "grid", placeItems: "center" }}>
+            <span className="bfx-minitag" style={{ transform: "rotate(-4deg)", fontSize: 16 }}>SIN STOCK</span>
+          </div>
+        )}
+      </div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 }}>
+        <div className="name">{item.name}</div>
+        <div style={{ display: "flex", gap: 8 }}>
+          {item.custom && (
+            <button className="bfx-addbtn ghost" disabled={out} onClick={customize} aria-label={"Personalizar " + item.name}>
+              <Ic.sliders width={17} height={17} />
+            </button>
+          )}
+          <button className="bfx-addbtn" disabled={out} onClick={item.custom ? customize : quickAdd} aria-label={"Sumar " + item.name}>
+            <Ic.plus width={19} height={19} />
+          </button>
+        </div>
+      </div>
+      <div className="desc">{item.desc}</div>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+        <span className="price">{money(item.price)}{item.priceDouble && <span style={{ fontSize: 15, opacity: .55 }}> simple</span>}</span>
+        {item.priceDouble && <span className="bfx-hand" style={{ fontSize: 16, opacity: .6 }}>Doble {money(item.priceDouble)}</span>}
+      </div>
     </div>
   );
 }
 
-/* ---------- Tap list (cervezas con IBU / ABV) ---------- */
-function TapList({ items }) {
+/* ---------- Birras (grid claro con medidores) ---------- */
+function BeerGrid({ items }) {
   const store = useStore();
   const happy = isHappyNow();
   const add = (b) => {
@@ -132,39 +185,25 @@ function TapList({ items }) {
     toast(b.name + " agregada al pedido");
   };
   return (
-    <div style={{ display: "grid", gap: 10 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: 20, marginTop: 18 }}>
       {items.map((b, i) => (
-        <Reveal key={b.id} delay={i * 50}>
-          <div className="tap">
-            <span className="tap-glass" style={{ "--c": b.color }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
-                <span className="display" style={{ fontSize: 19 }}>{b.name}</span>
-                <span className="mono" style={{ fontSize: 11, color: "var(--muted-d)", letterSpacing: ".06em" }}>{b.brewery}</span>
-              </div>
-              <p style={{ color: "var(--muted)", fontSize: 13, margin: "4px 0 8px", lineHeight: 1.35 }}>{b.desc}</p>
-              <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, maxWidth: 340 }}>
-                <div>
-                  <div className="mono" style={{ fontSize: 10, color: "var(--muted-d)", marginBottom: 4 }}>IBU {b.ibu}</div>
-                  <div className="meter"><span style={{ width: Math.min(100, (b.ibu / 80) * 100) + "%" }} /></div>
-                </div>
-                <div>
-                  <div className="mono" style={{ fontSize: 10, color: "var(--muted-d)", marginBottom: 4 }}>ABV {b.abv}%</div>
-                  <div className="meter"><span style={{ width: Math.min(100, (b.abv / 9) * 100) + "%", background: "var(--orange)" }} /></div>
-                </div>
+        <Reveal key={b.id} delay={(i % 4) * 60} style={{ display: "grid" }}>
+          <div className="bfx-beercard" style={{ "--rot": "0deg", boxShadow: "0 18px 40px -18px rgba(43,20,3,.28)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ width: 20, height: 30, borderRadius: "3px 3px 6px 6px", background: b.color, border: "2px solid #efdcbc", flexShrink: 0 }} />
+              <div>
+                <div className="name">{b.name}</div>
+                <div className="brew">{b.brewery}</div>
               </div>
             </div>
-            <div style={{ textAlign: "right", flexShrink: 0 }}>
-              <div className="mono tabular" style={{ color: "var(--beer)", fontWeight: 700, fontSize: 17 }}>{money(b.price)}</div>
-              {b.hh && (
-                <div className="mono tabular" style={{ fontSize: 11, color: happy ? "var(--ok)" : "var(--muted-d)", marginTop: 2 }}>
-                  HH 2×{money(b.hh)}
-                </div>
-              )}
-              <button className="btn btn-orange btn-sm" style={{ marginTop: 8 }} onClick={() => add(b)}>
-                <Ic.plus width={14} height={14} /> Sumar
-              </button>
+            <p className="bfx-hand" style={{ margin: 0, fontSize: 16, lineHeight: 1.3, opacity: .75, letterSpacing: ".02em" }}>{b.desc}</p>
+            <div className="row"><span>Amargor</span><span>{b.ibu} IBU · {b.abv}%</span></div>
+            <div className="bfx-meter"><span style={{ width: Math.min(100, (b.ibu / 70) * 100) + "%" }} /></div>
+            <div className="row">
+              <span className="price">{money(b.price)}</span>
+              <span className="hh" style={{ color: happy ? "var(--bfx-green)" : "rgba(43,20,3,.45)" }}>HH: 2 × {money(b.hh)}</span>
             </div>
+            <button className="bfx-blob" style={{ fontSize: 15, padding: ".7em 1.4em .55em", alignSelf: "flex-start" }} onClick={() => add(b)}>+ Sumar</button>
           </div>
         </Reveal>
       ))}
@@ -172,8 +211,8 @@ function TapList({ items }) {
   );
 }
 
-/* ---------- Lista compacta (tragos / bebidas) ---------- */
-function CompactList({ items }) {
+/* ---------- Lista clara (tragos / bebidas sin alcohol) ---------- */
+function LightList({ items }) {
   const store = useStore();
   const happy = isHappyNow();
   const add = (it) => {
@@ -182,23 +221,23 @@ function CompactList({ items }) {
     toast(it.name + " agregado al pedido");
   };
   return (
-    <div style={{ maxWidth: 720 }}>
+    <div style={{ maxWidth: 740, marginTop: 8 }}>
       {items.map((it, i) => (
         <Reveal key={it.id} delay={i * 40}>
-          <div className="lrow">
+          <div className="bfx-lrow">
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontWeight: 700, fontSize: 16 }}>{it.name}</div>
-              {it.desc && <div style={{ color: "var(--muted)", fontSize: 13, marginTop: 2 }}>{it.desc}</div>}
+              <div style={{ fontSize: 21 }}>{it.name}</div>
+              {it.desc && <div style={{ fontSize: 16, opacity: .6 }}>{it.desc}</div>}
               {it.hh && (
-                <div className="mono" style={{ fontSize: 11, color: happy ? "var(--ok)" : "var(--muted-d)", marginTop: 3 }}>
+                <div style={{ fontSize: 15, color: happy ? "var(--bfx-green)" : "rgba(43,20,3,.45)" }}>
                   Happy hour · 2 × {money(it.hh)}
                 </div>
               )}
             </div>
-            <span className="lrow-dots" />
-            <span className="mono tabular" style={{ fontWeight: 700, fontSize: 16 }}>{money(it.price)}</span>
-            <button className="btn btn-ghost btn-sm" aria-label={"Sumar " + it.name} onClick={() => add(it)}>
-              <Ic.plus width={15} height={15} />
+            <span className="dots" />
+            <span style={{ fontSize: 21 }}>{money(it.price)}</span>
+            <button className="bfx-addbtn" style={{ width: 38, height: 38 }} aria-label={"Sumar " + it.name} onClick={() => add(it)}>
+              <Ic.plus width={16} height={16} />
             </button>
           </div>
         </Reveal>
@@ -207,21 +246,18 @@ function CompactList({ items }) {
   );
 }
 
-/* ---------- Agregados (informativo, se eligen al personalizar) ---------- */
+/* ---------- Agregados ---------- */
 function ExtrasPanel() {
   return (
     <Reveal>
-      <div style={{ marginTop: 26, border: "1px dashed var(--line-dark)", borderRadius: 14, padding: "20px 22px", background: "rgba(255,255,255,.015)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <Ic.sliders style={{ color: "var(--orange)" }} />
-          <h3 className="display" style={{ fontSize: 20, margin: 0 }}>Agregados para burgers y sandwiches</h3>
-        </div>
-        <p style={{ color: "var(--muted)", fontSize: 13.5, margin: "4px 0 14px" }}>
-          Los sumás al personalizar tu burger — tocá <b style={{ color: "var(--white)" }}>Sumar</b> en cualquiera y armala a tu gusto.
+      <div className="bfx-panel" style={{ marginTop: 28 }}>
+        <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 4px" }}>Agregados</h3>
+        <p className="bfx-copy" style={{ fontSize: 17, margin: "4px 0 14px", opacity: .75 }}>
+          Los elegís al personalizar tu burga: tocá el <b>+</b> en cualquiera y armala a tu gusto.
         </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {EXTRAS.map((e) => (
-            <span key={e.id} className="chip">{e.name} <b>+{money(e.price)}</b></span>
+            <span key={e.id} className="bfx-chip2">{e.name} <b>+{money(e.price)}</b></span>
           ))}
         </div>
       </div>
@@ -229,49 +265,44 @@ function ExtrasPanel() {
   );
 }
 
-/* ---------- Dips / salsas ---------- */
+/* ---------- Dips ---------- */
 function DipsPanel() {
   return (
     <Reveal>
-      <div style={{ marginTop: 26, border: "1px dashed var(--line-dark)", borderRadius: 14, padding: "20px 22px", background: "rgba(255,255,255,.015)" }}>
+      <div className="bfx-panel" style={{ marginTop: 28 }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
-          <h3 className="display" style={{ fontSize: 20, margin: 0 }}>Dips & salsas</h3>
-          <span className="mono tabular" style={{ color: "var(--orange)", fontWeight: 700 }}>{money(DIPS.price)} c/u</span>
+          <h3 className="bfx-bubble" style={{ fontSize: 24, margin: 0 }}>Dips & salsas</h3>
+          <span className="bfx-hand" style={{ fontSize: 19, color: "var(--bfx-red)" }}>{money(DIPS.price)} c/u</span>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
-          {DIPS.items.map((d) => <span key={d} className="chip">{d}</span>)}
+          {DIPS.items.map((d) => <span key={d} className="bfx-chip2">{d}</span>)}
         </div>
-        <p className="mono" style={{ color: "var(--muted-d)", fontSize: 11.5, margin: "12px 0 0" }}>{DIPS.note}</p>
+        <p className="bfx-hand" style={{ fontSize: 15, opacity: .5, margin: "12px 0 0", letterSpacing: ".04em" }}>{DIPS.note}</p>
       </div>
     </Reveal>
   );
 }
 
-/* ---------- Happy hour banner (dentro del menú) ---------- */
+/* ---------- Happy hour banner ---------- */
 function HappyBanner({ go }) {
   const active = isHappyNow();
   return (
     <Reveal>
-      <div style={{
-        marginTop: 26, borderRadius: 14, padding: "20px 22px",
-        border: "1px solid rgba(231,169,42,.4)",
-        background: "linear-gradient(120deg, rgba(231,169,42,.12), rgba(231,169,42,.03))",
-        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap",
-      }}>
+      <div className="bfx-panel" style={{ marginTop: 28, background: "var(--bfx-mustard)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <h3 className="display" style={{ fontSize: 22, margin: 0, color: "var(--beer)" }}>Happy hour</h3>
-            {active
-              ? <span className="hh-badge"><span className="hh-dot" /> Activo ahora</span>
-              : <span className="mono" style={{ fontSize: 11.5, color: "var(--muted)" }}>{HAPPY.when}</span>}
+            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "#fff" }}>Happy hour</h3>
+            <span className="bfx-minitag" style={{ transform: "rotate(-3deg)", background: active ? "var(--bfx-green)" : "var(--bfx-red)" }}>
+              {active ? "ACTIVO AHORA" : HAPPY.when.toUpperCase()}
+            </span>
           </div>
-          <p style={{ color: "var(--muted)", fontSize: 13.5, margin: "6px 0 0", maxWidth: 480 }}>
-            2 unidades a precio especial en birras y tragos. {HAPPY.where}.
+          <p className="bfx-hand" style={{ color: "#4a2c00", fontSize: 18, margin: "8px 0 0", maxWidth: 480, letterSpacing: ".02em" }}>
+            2 unidades a precio especial en birras y tragos · {HAPPY.where}
           </p>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {HAPPY.deals.slice(0, 3).map((d) => (
-            <span key={d.name} className="chip" style={{ borderColor: "rgba(231,169,42,.4)" }}>{d.name} <b style={{ color: "var(--beer)" }}>2×{money(d.price)}</b></span>
+            <span key={d.name} className="bfx-chip2" style={{ background: "#fff", borderColor: "transparent" }}>{d.name} <b>2×{money(d.price)}</b></span>
           ))}
         </div>
       </div>
@@ -279,7 +310,7 @@ function HappyBanner({ go }) {
   );
 }
 
-/* barra inferior con total — útil en mobile mientras se arma el pedido */
+/* ---------- barra inferior mobile con total ---------- */
 function MobileCartBar({ go }) {
   const store = useStore();
   const count = store.cartCount();
@@ -287,12 +318,14 @@ function MobileCartBar({ go }) {
   return (
     <div className="bf-mobcart" style={{
       position: "fixed", left: 16, right: 16, bottom: 16, zIndex: 55,
-      background: "var(--orange)", color: "#1a1206", borderRadius: 12, padding: "12px 16px",
-      display: "none", alignItems: "center", justifyContent: "space-between", boxShadow: "var(--shadow)",
+      background: "var(--bfx-red)", color: "#fff", borderRadius: 100, padding: "13px 20px",
+      border: "3px solid #fff", boxShadow: "0 16px 40px -12px rgba(43,20,3,.5)",
+      display: "none", alignItems: "center", justifyContent: "space-between",
+      fontFamily: "var(--bfx-mouse)", fontSize: 18, letterSpacing: ".04em",
       cursor: "pointer",
     }} onClick={() => window.dispatchEvent(new Event("bf-open-cart"))}>
-      <span className="mono" style={{ fontWeight: 700 }}>{count} {count === 1 ? "ítem" : "ítems"} · {money(store.cartTotal())}</span>
-      <span className="btn btn-dark btn-sm">Ver pedido <Ic.arrow /></span>
+      <span>{count} {count === 1 ? "ítem" : "ítems"} · {money(store.cartTotal())}</span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Ver pedido <Ic.arrow /></span>
     </div>
   );
 }

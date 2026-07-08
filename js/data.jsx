@@ -229,6 +229,24 @@ function Cloche({ size = 34, color = "#f7f4ec" }) {
   );
 }
 
+/* Logo original (cuadrado negro + cloche + BROTHERS FOOD.LST apilado),
+   recreado en vector para que escale sin pixelarse. El tamaño se controla
+   con font-size (width/border/textos usan em en fx.css). */
+function LogoBadge({ fontSize = 8, rot = 0, className = "", style, ...rest }) {
+  return (
+    <span className={"bfx-logobadge " + className} aria-label="Brothers Food.lst" {...rest}
+      style={{ fontSize, "--rot": rot + "deg", transform: rot ? `rotate(${rot}deg)` : undefined, ...style }}>
+      <svg viewBox="0 0 100 72" fill="none" aria-hidden="true">
+        <circle cx="50" cy="13" r="4.5" fill="#fff" />
+        <path d="M14 52 C14 32 30 20 50 20 C70 20 86 32 86 52" stroke="#fff" strokeWidth="5.5" fill="none" strokeLinecap="round" />
+        <line x1="50" y1="20" x2="50" y2="17" stroke="#fff" strokeWidth="5.5" strokeLinecap="round" />
+        <rect x="9" y="54" width="82" height="6" rx="3" fill="#fff" />
+      </svg>
+      <span className="t">BROTHERS<br />FOOD.LST</span>
+    </span>
+  );
+}
+
 function Logo({ size = 1, light = false, stacked = false, showTagline = false }) {
   const color = light ? "#0c0c0d" : "#f7f4ec";
   const accent = "var(--orange)";
@@ -287,7 +305,7 @@ const Ic = {
 };
 
 Object.assign(window, {
-  BIZ, MENU, FLAT_ITEMS, findItem, REVIEWS, money, Cloche, Logo, Ic, IMG,
+  BIZ, MENU, FLAT_ITEMS, findItem, REVIEWS, money, Cloche, Logo, LogoBadge, Ic, IMG,
   EXTRAS, PAPAS_UPGRADES, MEDALLONES, PROTEINAS, DIPS, HAPPY, PROMO_THOMASON,
   findExtra, findPapas, isOpenNow, isHappyNow,
 });

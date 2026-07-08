@@ -2,7 +2,6 @@
    app.jsx — router + montaje
    ============================================================ */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "homeVariant": "Stickers",
   "accent": "#ea7b1b",
   "displayFont": "Anton"
 }/*EDITMODE-END*/;
@@ -10,7 +9,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 function useRoute() {
   const [route, setRoute] = React.useState(window.location.hash || "#/");
   React.useEffect(() => {
-    const onHash = () => { setRoute(window.location.hash || "#/"); window.scrollTo({ top: 0 }); };
+    const onHash = () => setRoute(window.location.hash || "#/");
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
@@ -21,6 +20,21 @@ const go = (hash) => { window.location.hash = hash; };
 function App() {
   const route = useRoute();
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const target = route.split("?")[0];
+
+  // path que realmente se renderiza — cambia recién cuando el wipe tapa la
+  // pantalla, así la transición entre páginas se ve y el swap queda oculto.
+  // En el montaje path===target → sin wipe; cada navegación posterior sí lo dispara.
+  const [path, setPath] = React.useState(target);
+  React.useEffect(() => {
+    if (path === target) return;
+    const swap = () => {
+      setPath(target);
+      if (window.FX) FX.toTop(); else window.scrollTo({ top: 0 });
+    };
+    if (window.FX && FX.pageWipe) FX.pageWipe(swap);
+    else swap();
+  }, [target]);
 
   // aplicar tweaks a las CSS vars
   React.useEffect(() => {
@@ -28,35 +42,31 @@ function App() {
     document.documentElement.style.setProperty("--display", `"${t.displayFont}", "Arial Narrow", sans-serif`);
   }, [t.accent, t.displayFont]);
 
-  // remover el curtain de carga (la animación CSS lo saca visualmente;
-  // esto garantiza que el nodo no quede tapando si la animación se pausó)
+  // avisar a fx.js que la app montó → dispara la salida del loader
   React.useEffect(() => {
-    const c = document.getElementById("bf-curtain");
-    if (!c) return;
-    const t = setTimeout(() => c.remove(), 2100);
-    return () => clearTimeout(t);
+    window.dispatchEvent(new Event("bfx-app-ready"));
   }, []);
 
-  const path = route.split("?")[0];
   const isAdmin = path.startsWith("#/admin");
-  const variantNum = { Bold: 1, "Foto full": 2, Editorial: 3, Stickers: 4 }[t.homeVariant] || 4;
+
+  // páginas públicas con tema claro cartoon; checkout/admin mantienen el oscuro
+  const isLight = ["#/", "", "#/menu", "#/nosotros", "#/contacto"].includes(path);
+  React.useEffect(() => {
+    document.body.classList.toggle("bfx-home", isLight);
+  }, [isLight]);
 
   let page;
-  if (path === "#/" || path === "") page = <Home go={go} variant={variantNum} />;
+  if (path === "#/" || path === "") page = <Home go={go} />;
   else if (path === "#/menu") page = <MenuPage go={go} />;
   else if (path === "#/nosotros") page = <Nosotros go={go} />;
   else if (path === "#/contacto") page = <Contacto go={go} />;
   else if (path === "#/privacidad") page = <Privacidad go={go} />;
   else if (path === "#/checkout") page = <Checkout go={go} />;
   else if (isAdmin) page = <Admin go={go} />;
-  else page = <Home go={go} variant={variantNum} />;
+  else page = <Home go={go} />;
 
   const Tweaks = (
     <TweaksPanel title="Tweaks">
-      <TweakSection label="Inicio" />
-      <TweakRadio label="Variante de Home" value={t.homeVariant}
-        options={["Stickers", "Bold", "Foto full", "Editorial"]}
-        onChange={(v) => setTweak("homeVariant", v)} />
       <TweakSection label="Marca" />
       <TweakColor label="Color de acento" value={t.accent}
         options={["#ea7b1b", "#e7a92a", "#d8533c", "#3fae6b", "#5aa9ff"]}
@@ -75,7 +85,7 @@ function App() {
     <>
       <div id="bf-top-sentinel" aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1 }} />
       <Header route={path} go={go} />
-      {page}
+      <div key={path} className="bfx-route-in">{page}</div>
       <Footer go={go} />
       <WhatsAppFAB />
       <CartDrawer go={go} />

@@ -1,0 +1,664 @@
+/* ============================================================
+   FX.CSS — Brothers Food LST · capa "cartoon poster"
+   Home rediseñado estilo sticker/cartoon (crav-level).
+   Prefijo bfx- para no pisar brand.css (menu/admin intactos).
+   ============================================================ */
+
+:root{
+  --bfx-cream:   #f6e8d2;
+  --bfx-cream-2: #efdcbc;
+  --bfx-red:     #e23d16;   /* display naranja-rojo */
+  --bfx-red-2:   #c92f0d;
+  --bfx-mustard: #f4a804;
+  --bfx-yellow:  #ffd750;
+  --bfx-green:   #60a905;
+  --bfx-bordo:   #4c0016;
+  --bfx-deep:    #2b1403;   /* marrón casi negro */
+  --bfx-modak:   "Modak", "Arial Black", system-ui, sans-serif;
+  --bfx-mouse:   "Mouse Memoirs", "Oswald", "Arial Narrow", sans-serif;
+  --bfx-round:   "Baloo 2", system-ui, sans-serif;   /* header / nav / botones */
+}
+
+/* ---------- page scaffolding ---------- */
+body.bfx-home{ background: var(--bfx-cream); color: var(--bfx-deep); }
+body.bfx-home .grain{ opacity:.35; }
+.bfx{ overflow-x: clip; }
+.bfx section{ position: relative; }
+
+/* ---------- type ---------- */
+.bfx-giant{
+  font-family: var(--bfx-mouse);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: .84;
+  letter-spacing: .005em;
+  color: var(--bfx-red);
+  -webkit-text-stroke: .045em #fff;
+  paint-order: stroke fill;
+  text-shadow: 0 .04em 0 rgba(43,20,3,.14);
+  margin: 0;
+}
+.bfx-giant--xl{ font-size: clamp(64px, 12.5vw, 196px); }
+.bfx-giant--lg{ font-size: clamp(48px, 9vw, 140px); }
+.bfx-giant--md{ font-size: clamp(36px, 6vw, 92px); }
+.bfx-giant--cream{ color:#f6e8d2; -webkit-text-stroke:0; text-shadow: .05em .07em 0 rgba(43,20,3,.22); }
+.bfx-giant--outline{
+  color: transparent; -webkit-text-stroke: 2px #fff;
+  text-shadow: none; paint-order: stroke;
+}
+.bfx-bubble{
+  font-family: var(--bfx-modak);
+  font-weight: 400;
+  line-height: .9;
+  color: var(--bfx-red);
+  -webkit-text-stroke: .04em #fff;
+  paint-order: stroke fill;
+  margin: 0;
+}
+.bfx-hand{ font-family: var(--bfx-mouse); }
+.bfx-kicker{
+  font-family: var(--bfx-mouse); font-size: clamp(18px, 2vw, 24px);
+  letter-spacing: .18em; text-transform: uppercase; font-weight: 400;
+  color: var(--bfx-deep); opacity:.85;
+}
+.bfx-copy{
+  font-family: var(--bfx-mouse); font-size: clamp(19px, 1.8vw, 25px);
+  line-height: 1.28; color: var(--bfx-deep); letter-spacing:.02em;
+}
+
+/* palabra secundaria en tinta suave (estilo "feels good") */
+.bfx-giant .soft{ color:#f4b39e; }
+.bfx-giant .ylw{ color: var(--bfx-mustard); }
+
+/* ---------- sticker badges (pills rotadas) ---------- */
+.bfx-badge{
+  display:inline-block;
+  font-family: var(--bfx-modak);
+  font-size: clamp(15px, 1.6vw, 24px);
+  line-height: 1;
+  text-transform: uppercase;
+  color:#fff;
+  background: var(--bfx-mustard);
+  padding: .55em .85em .4em;
+  border-radius: .6em;
+  border: 3px solid #fff;
+  box-shadow: 0 10px 24px -10px rgba(43,20,3,.45);
+  transform: rotate(var(--rot, -6deg));
+  white-space: nowrap;
+}
+.bfx-badge--red{ background: var(--bfx-red); }
+.bfx-badge--green{ background: var(--bfx-green); }
+.bfx-badge--bordo{ background: var(--bfx-bordo); }
+
+/* ---------- blob CTA (Pedir online) ---------- */
+.bfx-blob{
+  position: relative;
+  display: inline-flex; align-items:center; justify-content:center;
+  font-family: var(--bfx-modak); text-transform: uppercase;
+  font-size: clamp(20px, 2.4vw, 30px); line-height:1; color:#fff;
+  background: var(--bfx-red);
+  padding: .95em 1.9em .8em;
+  border: 4px solid #fff;
+  border-radius: 49% 51% 47% 53% / 61% 59% 41% 39%;
+  box-shadow: 0 18px 40px -14px rgba(201,47,13,.55);
+  cursor: pointer;
+  transition: border-radius .35s var(--ease-out), scale .25s var(--ease-out), box-shadow .25s;
+}
+.bfx-blob:hover{
+  scale: 1.06;
+  border-radius: 53% 47% 55% 45% / 45% 55% 45% 55%;
+  box-shadow: 0 24px 48px -14px rgba(201,47,13,.6);
+}
+.bfx-blob:active{ scale: .96; }
+.bfx-blob--ylw{ background: var(--bfx-mustard); color:#fff; box-shadow: 0 18px 40px -14px rgba(244,168,4,.55); }
+
+/* ---------- polaroid / foto sticker ---------- */
+.bfx-polaroid{
+  background:#fff;
+  padding: 10px 10px 14px;
+  border-radius: 18px;
+  box-shadow: 0 24px 55px -20px rgba(43,20,3,.45);
+  transform: rotate(var(--rot, -4deg));
+  will-change: transform;
+}
+.bfx-polaroid img{
+  border-radius: 12px; width:100%; height:100%;
+  object-fit: cover; display:block;
+}
+.bfx-polaroid figcaption{
+  font-family: var(--bfx-mouse); text-transform:uppercase; letter-spacing:.06em;
+  display:flex; justify-content:space-between; align-items:center;
+  padding: 10px 6px 0; font-size: 19px; color: var(--bfx-deep);
+}
+.bfx-polaroid figcaption b{ color: var(--bfx-red); font-weight:400; }
+
+/* foto blob (hero) */
+.bfx-blobphoto{
+  position: relative;
+  border-radius: 48% 52% 44% 56% / 56% 46% 54% 44%;
+  border: 9px solid #fff;
+  box-shadow: 0 34px 80px -28px rgba(43,20,3,.5);
+  overflow: hidden;
+  background:#fff;
+}
+.bfx-blobphoto img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* ---------- waves (separadores) ---------- */
+.bfx-wave{ display:block; width:100%; height: clamp(60px, 9vw, 140px); }
+.bfx-wave svg{ display:block; width:100%; height:100%; }
+.bfx-wave--overlap-up{ margin-top: calc(-1 * clamp(60px, 9vw, 140px)); position:relative; z-index:2; }
+
+/* ---------- marquee ---------- */
+.bfx-marquee{
+  overflow:hidden; white-space:nowrap;
+  background: var(--bfx-red); color:#fff;
+  border-top: 3px solid #fff; border-bottom: 3px solid #fff;
+  font-family: var(--bfx-mouse); text-transform:uppercase;
+  font-size: clamp(20px, 2.4vw, 32px); letter-spacing:.06em;
+  padding: 12px 0;
+  transform: rotate(-1.2deg) scale(1.02);
+}
+.bfx-marquee--ylw{ background: var(--bfx-mustard); color:#fff; }
+.bfx-marquee .row{ display:inline-flex; align-items:center; gap: 34px; padding-right:34px; will-change:transform; }
+.bfx-marquee .row .dot{ font-size:.7em; opacity:.8; }
+
+/* ---------- ingredientes sticker (svg) ---------- */
+.bfx-ing{ position:absolute; pointer-events:none; will-change: transform; filter: drop-shadow(0 14px 22px rgba(43,20,3,.28)); }
+.bfx-ing svg{ display:block; width:100%; height:100%; }
+
+/* ---------- ojos googly ---------- */
+.bfx-eyes{ position:absolute; pointer-events:none; }
+
+/* ---------- secciones ---------- */
+.bfx-hero{
+  min-height: 100svh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding: 120px 0 0;
+  overflow: clip;
+}
+.bfx-hero-stage{ position:relative; width:100%; max-width:1500px; margin:0 auto; padding: 0 24px; }
+.bfx-hero-title{ position:relative; z-index:3; text-align:center; user-select:none; }
+/* La burger cuelga POR DEBAJO del título (sobre la palabra gigante), más
+   chica, para no tapar ninguna línea del titular. z-index bajo el título. */
+.bfx-hero-burger{
+  position:absolute; left:50%; top:100%;
+  width: clamp(180px, 20vw, 330px); aspect-ratio: .92;
+  transform: translate(-50%,-14%);
+  z-index:2;
+}
+.bfx-hero-word{
+  position:relative; z-index:1; text-align:center;
+  margin-top: clamp(-20px, -1.5vw, -44px);
+  font-size: clamp(78px, 15vw, 260px);
+  color: var(--bfx-mustard);
+  line-height:.72;
+  user-select:none;
+}
+.bfx-hero-copy{
+  position:relative; z-index:3;
+  display:flex; justify-content:space-between; gap:24px;
+  max-width: 1500px; margin: clamp(120px, 13vw, 210px) auto 0; padding: 10px 34px 34px;
+}
+.bfx-hero-copy p{ max-width: 330px; margin:0; }
+.bfx-hero-copy p:last-child{ text-align:right; }
+
+/* sección roja */
+.bfx-red{ background: var(--bfx-red); color:#f6e8d2; }
+.bfx-red .bfx-copy{ color:#f6e8d2; }
+
+/* chips (badges de features) */
+.bfx-chip{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family: var(--bfx-mouse); font-size: clamp(17px,1.6vw,22px); text-transform:uppercase; letter-spacing:.08em;
+  color:#fff; border: 2.5px solid rgba(255,255,255,.85); border-radius:100px;
+  padding: 9px 18px 7px;
+  background: transparent;
+}
+.bfx-chip--solid{ background:#fff; color: var(--bfx-red); border-color:#fff; }
+
+/* sección mostaza (delivery) */
+.bfx-mustardsec{ background: var(--bfx-mustard); }
+.bfx-citycard{
+  position:relative; width: clamp(180px, 19vw, 300px); aspect-ratio: .8;
+  background:#fff; border-radius: 14px; padding: 8px;
+  box-shadow: 0 24px 55px -20px rgba(43,20,3,.4);
+  transform: rotate(var(--rot, 3deg));
+}
+.bfx-citycard img{ width:100%; height:100%; object-fit:cover; border-radius:9px; }
+.bfx-citycard .tagname{
+  position:absolute; top:-16px; left:-14px;
+  font-family: var(--bfx-modak); font-size: clamp(18px,2vw,28px); color:#fff;
+  background:var(--bfx-red); padding:.4em .5em .25em; border-radius:.45em;
+  border:3px solid #fff; transform: rotate(-6deg);
+  box-shadow: 0 10px 24px -10px rgba(43,20,3,.45);
+}
+
+/* barra (cervezas) */
+.bfx-bar{ background: var(--bfx-bordo); color:#f6e8d2; }
+.bfx-beercard{
+  background:#fff; color: var(--bfx-deep);
+  border-radius: 16px; padding: 16px 16px 14px;
+  box-shadow: 0 20px 44px -18px rgba(0,0,0,.5);
+  transform: rotate(var(--rot, 0deg));
+  display:flex; flex-direction:column; gap:8px;
+}
+.bfx-beercard .name{ font-family: var(--bfx-modak); font-size:clamp(20px,2vw,27px); color:var(--bfx-red); line-height:1; }
+.bfx-beercard .brew{ font-family: var(--bfx-mouse); text-transform:uppercase; letter-spacing:.1em; font-size:15px; opacity:.65; }
+.bfx-beercard .row{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-family:var(--bfx-mouse); font-size:18px; }
+.bfx-beercard .price{ font-family: var(--bfx-modak); font-size:22px; color: var(--bfx-deep); }
+.bfx-beercard .hh{ color: var(--bfx-green); font-family:var(--bfx-mouse); font-size:16px; }
+.bfx-meter{ height:8px; border-radius:6px; background:#efdcbc; overflow:hidden; }
+.bfx-meter > span{ display:block; height:100%; background: var(--bfx-mustard); border-radius:6px; }
+
+/* footer — overflow-y visible para que los ingredientes que saltan
+   NO se corten al pasar el borde superior del footer */
+.bfx-footer{
+  background: var(--bfx-cream);
+  color: var(--bfx-deep);
+  position:relative;
+  overflow-x: clip;
+  overflow-y: visible;
+  border-top: 2px solid rgba(43,20,3,.1);
+  padding-top: clamp(40px, 6vw, 80px);
+}
+.bfx-footer-main{
+  position:relative; z-index:3;
+  display:grid; grid-template-columns: 1fr; gap: clamp(28px,4vw,48px);
+  align-items:start;
+}
+.bfx-footer-logo{ display:inline-block; }
+.bfx-footer-info{
+  display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px;
+  font-family: var(--bfx-mouse); font-size: clamp(16px,1.5vw,20px); letter-spacing:.02em; line-height:1.4;
+}
+.bfx-footer-info .lbl{
+  display:block; font-size: 13px; letter-spacing:.18em; text-transform:uppercase;
+  color: var(--bfx-red); margin-bottom: 6px;
+}
+.bfx-footer-info a{ transition: color .15s; }
+.bfx-footer-info a:hover{ color: var(--bfx-red); }
+.bfx-footer-legal{
+  position:relative; z-index:4;
+  margin-top: clamp(60px, 8vw, 120px);
+  border-top: 2px solid rgba(43,20,3,.12);
+  background: var(--bfx-cream);
+  font-family: var(--bfx-mouse); font-size: 14.5px; letter-spacing:.04em;
+  color: rgba(43,20,3,.6);
+  text-align:center;
+  padding: 18px 20px 26px;
+}
+.bfx-footer-legal p{ margin: 3px 0; }
+.bfx-footer-legal a{ text-decoration: underline; }
+.bfx-footer-legal a:hover{ color: var(--bfx-red); }
+/* la fuente de ingredientes vive detrás del contenido y por encima solo del fondo */
+.bfx-fountain{ position:absolute; left:0; right:0; top:0; bottom: 0; pointer-events:none; z-index:1; }
+.bfx-fountain .bfx-ing{ bottom: 30px; opacity:0; }
+
+/* ---------- loader ---------- */
+#bfx-loader{
+  position: fixed; inset: 0; z-index: 300;
+  display:grid; place-items:center;
+  background: var(--bfx-cream);
+  overflow:hidden;
+}
+#bfx-loader .stage{ position:relative; text-align:center; }
+#bfx-loader .word{
+  font-family: var(--bfx-modak);
+  font-size: clamp(44px, 9vw, 130px);
+  color: var(--bfx-red);
+  -webkit-text-stroke: .045em #fff;
+  paint-order: stroke fill;
+  line-height: .95;
+  animation: bfx-loader-bob 2.2s ease-in-out infinite;
+}
+#bfx-loader .status{
+  font-family: var(--bfx-mouse); text-transform:uppercase; letter-spacing:.22em;
+  font-size: clamp(13px, 1.4vw, 17px); color: var(--bfx-deep); margin-top: 18px;
+}
+#bfx-loader .bar{
+  width: min(320px, 60vw); height: 10px; margin: 16px auto 0;
+  border-radius: 20px; background: rgba(43,20,3,.12); overflow:hidden;
+  border: 2px solid rgba(43,20,3,.15);
+}
+#bfx-loader .bar > span{
+  display:block; height:100%; width:0%;
+  background: var(--bfx-red); border-radius:20px;
+  animation: bfx-loader-fill 3s cubic-bezier(.3,.6,.4,1) forwards;
+}
+#bfx-loader .pct{
+  font-family: var(--bfx-modak); font-size: 22px; color: var(--bfx-deep);
+  margin-top: 10px; min-height: 26px;
+}
+#bfx-loader .drop{ position:absolute; width:74px; height:74px; filter: drop-shadow(0 12px 18px rgba(43,20,3,.3)); }
+#bfx-loader .curtain{ position:absolute; inset:-1px; z-index:5; pointer-events:none; }
+#bfx-loader .curtain svg{ width:100%; height:100%; display:block; }
+@keyframes bfx-loader-bob{ 0%,100%{ transform: translateY(0) rotate(-1.5deg); } 50%{ transform: translateY(-10px) rotate(1.5deg); } }
+@keyframes bfx-loader-fill{ 0%{ width:0%; } 70%{ width:82%; } 100%{ width:96%; } }
+
+/* ---------- logo badge (logo original en vector) ----------
+   El tamaño se controla con font-size del elemento. */
+.bfx-logobadge{
+  display:inline-flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.32em;
+  width: 7.6em; height: 7.6em; flex-shrink:0;
+  background:#0c0c0d;
+  border-radius: 1.15em;
+  border: .26em solid #fff;
+  box-shadow: 0 .8em 1.8em -0.7em rgba(43,20,3,.5);
+  text-align:center; user-select:none;
+}
+.bfx-logobadge svg{ width: 2.7em; display:block; }
+.bfx-logobadge .t{
+  font-family: var(--display);
+  font-size: .92em; line-height: 1.06; letter-spacing: .04em;
+  color:#fff; text-transform: uppercase;
+  /* anula el stroke/sombra heredados de .bfx-giant cuando vive dentro del hero */
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+/* ============================================================
+   HEADER — estética cartoon con tipografía redonda (Baloo 2)
+   ============================================================ */
+.bfx-head{ position: sticky; top: 0; z-index: 50; }
+.bfx-head-bar{
+  transition: background .25s, border-color .25s, box-shadow .25s;
+}
+/* páginas claras: barra crema con hairline */
+.bfx-header-light .bfx-head-bar{
+  background: rgba(246,232,210,.86) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid rgba(43,20,3,.08) !important;
+}
+.bfx-header-light.is-scrolled .bfx-head-bar{
+  background: rgba(246,232,210,.96) !important;
+  box-shadow: 0 10px 30px -22px rgba(43,20,3,.5);
+}
+
+/* nav links redondos, pill al hover / activo */
+.bfx-navlink{
+  position: relative;
+  font-family: var(--bfx-round);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 100px;
+  color: var(--bfx-deep);
+  transition: color .18s, background .18s;
+}
+.bfx-navlink:hover{ color: var(--bfx-red); background: rgba(226,61,22,.08); }
+.bfx-navlink.on{ color: #fff; background: var(--bfx-red); }
+/* en páginas oscuras (checkout/admin no lo usan, pero por si acaso) */
+header:not(.bfx-header-light) .bfx-navlink{ color: var(--white); }
+header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); background: rgba(234,123,27,.12); }
+
+/* CTA "Pedir online" — pill cartoon */
+.bfx-navcta{
+  font-family: var(--bfx-round); font-weight: 800; font-size: 15px;
+  letter-spacing: .02em; text-transform: uppercase;
+  color: #fff; background: var(--bfx-red);
+  border: 2.5px solid #fff; border-radius: 100px;
+  padding: 9px 20px; white-space: nowrap;
+  box-shadow: 0 10px 22px -10px rgba(226,61,22,.6);
+  transition: scale .18s var(--ease-out), background .15s, box-shadow .2s;
+}
+.bfx-navcta:hover{ scale: 1.05; background: var(--bfx-red-2); box-shadow: 0 14px 28px -10px rgba(226,61,22,.7); }
+.bfx-navcta:active{ scale: .96; }
+
+/* botón carrito / burger — redondos crema */
+.bfx-headbtn{
+  position: relative; display: grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #fff; color: var(--bfx-deep);
+  border: 2.5px solid rgba(43,20,3,.12);
+  transition: scale .18s var(--ease-out), border-color .15s, background .15s;
+  cursor: pointer;
+}
+.bfx-headbtn:hover{ scale: 1.06; border-color: var(--bfx-red); color: var(--bfx-red); }
+.bfx-headbtn:active{ scale: .95; }
+.bfx-headbtn .badge{
+  position: absolute; top: -5px; right: -5px; min-width: 21px; height: 21px; padding: 0 5px;
+  border-radius: 20px; background: var(--bfx-red); color: #fff;
+  font-family: var(--bfx-round); font-weight: 800; font-size: 12px;
+  display: grid; place-items: center; border: 2.5px solid var(--bfx-cream);
+}
+/* estado abierto/cerrado con fuente redonda en el header */
+.bfx-openpill{
+  font-family: var(--bfx-round) !important; font-weight: 700 !important;
+  font-size: 13px !important; letter-spacing: .02em !important;
+}
+
+/* ============================================================
+   WIPE de transición entre páginas (cortina con logo)
+   ============================================================ */
+.bfx-wipe{
+  position: fixed; inset: 0; z-index: 120;
+  background: var(--bfx-red);
+  display: grid; place-items: center;
+  will-change: transform;
+}
+.bfx-wipe .badge{ will-change: transform; }
+
+/* entrada suave del contenido nuevo (además del wipe) */
+@media (prefers-reduced-motion: no-preference){
+  .bfx-route-in{ animation: bfx-route-in .5s var(--ease-out) both; }
+}
+@keyframes bfx-route-in{ from{ opacity:0; transform: translateY(16px); } to{ opacity:1; transform:none; } }
+
+/* ============================================================
+   CARRITO — re-skin cartoon (crema, sticker)
+   ============================================================ */
+.bfx-cart{
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 71;
+  width: min(430px, 94vw);
+  background: var(--bfx-cream);
+  border-left: 3px solid #fff;
+  box-shadow: -20px 0 60px -20px rgba(43,20,3,.5);
+  display: flex; flex-direction: column;
+  transition: transform .35s var(--ease-drawer);
+}
+.bfx-cart-head{
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 18px 20px; background: var(--bfx-red); color: #fff;
+}
+.bfx-cart-head h2{ font-family: var(--bfx-modak); font-size: 26px; margin: 0; line-height: 1; }
+.bfx-cart-head .count{
+  font-family: var(--bfx-round); font-weight: 700; font-size: 13px;
+  background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.6);
+  border-radius: 100px; padding: 3px 10px;
+}
+.bfx-cart-close{
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.16); border: 2px solid rgba(255,255,255,.5); color: #fff;
+  transition: scale .15s, background .15s; cursor: pointer;
+}
+.bfx-cart-close:hover{ scale: 1.08; background: rgba(255,255,255,.28); }
+.bfx-cart-body{ flex: 1; overflow-y: auto; padding: 14px 16px; }
+.bfx-cartline{
+  display: flex; gap: 12px; padding: 12px; margin-bottom: 12px;
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 10px 24px -14px rgba(43,20,3,.3);
+}
+.bfx-cartline .thumb{ width: 66px; height: 66px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: var(--bfx-cream); }
+.bfx-cartline .thumb img{ width: 100%; height: 100%; object-fit: cover; }
+.bfx-cartline .nm{ font-family: var(--bfx-modak); color: var(--bfx-red); font-size: 19px; line-height: 1; }
+.bfx-cartline .sub{ font-family: var(--bfx-mouse); font-size: 15px; letter-spacing: .02em; color: rgba(43,20,3,.6); margin-top: 3px; }
+.bfx-cartline .lt{ font-family: var(--bfx-round); font-weight: 800; font-size: 17px; color: var(--bfx-deep); }
+.bfx-qty{ display: inline-flex; align-items: center; background: var(--bfx-cream); border: 2px solid rgba(43,20,3,.12); border-radius: 100px; }
+.bfx-qty button{ width: 32px; height: 32px; display: grid; place-items: center; background: none; border: none; color: var(--bfx-deep); cursor: pointer; transition: color .15s; }
+.bfx-qty button:hover{ color: var(--bfx-red); }
+.bfx-qty span{ font-family: var(--bfx-round); font-weight: 800; width: 26px; text-align: center; }
+.bfx-cartline .rm{ background: none; border: none; color: rgba(43,20,3,.35); cursor: pointer; transition: color .15s; flex-shrink: 0; }
+.bfx-cartline .rm:hover{ color: var(--bfx-red); }
+.bfx-cart-foot{
+  padding: 18px 20px calc(18px + env(safe-area-inset-bottom, 0px));
+  background: #fff; border-top: 2px dashed rgba(43,20,3,.15);
+}
+.bfx-cart-empty{ flex: 1; display: grid; place-items: center; padding: 30px; text-align: center; }
+
+/* ---------- páginas claras (menú / nosotros / contacto) ---------- */
+.bfx-page-hero{ padding: 120px 0 30px; text-align:center; }
+.bfx-searchbox{
+  width: min(460px, 100%);
+  padding: 15px 46px 13px 22px;
+  border-radius: 100px; border: 3px solid rgba(43,20,3,.15);
+  background: #fff; color: var(--bfx-deep);
+  font-family: var(--bfx-mouse); font-size: 19px; letter-spacing:.03em;
+}
+.bfx-searchbox:focus{ border-color: var(--bfx-red) !important; box-shadow: 0 0 0 3px rgba(226,61,22,.15) !important; }
+.bfx-catbar{
+  position: sticky; top: 71px; z-index: 30;
+  background: rgba(246,232,210,.9); backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(43,20,3,.08);
+}
+.bfx-catpill{
+  white-space:nowrap; padding: 9px 18px 7px; border-radius:100px;
+  font-family: var(--bfx-mouse); font-size: 17px; letter-spacing:.06em; text-transform:uppercase;
+  border: 2.5px solid rgba(43,20,3,.18); background:#fff; color: var(--bfx-deep);
+  transition: all .18s; cursor:pointer;
+}
+.bfx-catpill:hover{ border-color: var(--bfx-red); color: var(--bfx-red); }
+.bfx-catpill.on{ background: var(--bfx-red); border-color: var(--bfx-red); color:#fff; }
+
+/* card de producto (menú) */
+.bfx-menucard{
+  background:#fff; border-radius: 20px; padding: 12px 12px 16px;
+  box-shadow: 0 18px 40px -18px rgba(43,20,3,.28);
+  display:flex; flex-direction:column; gap: 10px;
+  transition: translate .25s var(--ease-out), box-shadow .25s, rotate .25s var(--ease-out);
+}
+.bfx-menucard:hover{ translate: 0 -6px; rotate: -.7deg; box-shadow: 0 26px 52px -20px rgba(43,20,3,.38); }
+.bfx-menucard .photo{ position:relative; border-radius: 13px; overflow:hidden; aspect-ratio: 16/11; }
+.bfx-menucard .photo img{ width:100%; height:100%; object-fit:cover; transition: scale .5s var(--ease-out); }
+.bfx-menucard:hover .photo img{ scale: 1.06; }
+.bfx-menucard .name{ font-family: var(--bfx-modak); color: var(--bfx-red); font-size: 23px; line-height:1; }
+.bfx-menucard .desc{ font-family: var(--bfx-mouse); font-size: 17px; line-height:1.25; color: rgba(43,20,3,.75); letter-spacing:.02em; flex:1; }
+.bfx-menucard .price{ font-family: var(--bfx-mouse); font-size: 24px; color: var(--bfx-deep); }
+.bfx-addbtn{
+  width: 46px; height: 46px; border-radius: 50%; border: 3px solid #fff; flex-shrink:0;
+  background: var(--bfx-yellow); color: var(--bfx-deep);
+  display:grid; place-items:center; cursor:pointer;
+  box-shadow: 0 8px 18px -8px rgba(43,20,3,.4);
+  transition: scale .2s var(--ease-out), background .15s;
+}
+.bfx-addbtn:hover{ scale: 1.12; background: var(--bfx-mustard); }
+.bfx-addbtn:active{ scale: .92; }
+.bfx-addbtn.ghost{ background:#fff; border-color: rgba(43,20,3,.15); }
+.bfx-minitag{
+  display:inline-block; font-family: var(--bfx-modak); font-size: 13px; color:#fff;
+  background: var(--bfx-red); border: 2.5px solid #fff; border-radius: .5em;
+  padding: .4em .55em .25em; transform: rotate(-5deg);
+  box-shadow: 0 6px 14px -6px rgba(43,20,3,.4);
+}
+.bfx-minitag--ylw{ background: var(--bfx-mustard); }
+.bfx-minitag--green{ background: var(--bfx-green); }
+
+/* filas compactas (tragos / bebidas) — claro */
+.bfx-lrow{
+  display:flex; align-items:center; gap:16px; padding: 14px 4px;
+  border-bottom: 2px dashed rgba(43,20,3,.18);
+  font-family: var(--bfx-mouse); letter-spacing:.02em;
+}
+.bfx-lrow .dots{ flex:1; border-bottom: 3px dotted rgba(43,20,3,.25); transform: translateY(6px); min-width: 24px; }
+
+/* panel informativo claro (agregados / dips / happy) */
+.bfx-panel{
+  background:#fff; border-radius: 18px; padding: 22px 24px;
+  box-shadow: 0 16px 36px -18px rgba(43,20,3,.25);
+}
+.bfx-chip2{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family: var(--bfx-mouse); font-size: 16.5px; letter-spacing:.02em;
+  background: var(--bfx-cream); color: var(--bfx-deep);
+  border: 2px solid rgba(43,20,3,.12); border-radius: 100px; padding: 7px 14px 5px;
+}
+.bfx-chip2 b{ color: var(--bfx-red); font-weight: 400; }
+
+/* formulario contacto (sobre rojo) */
+.bfx-input{
+  width: 100%; padding: 15px 20px 13px;
+  border-radius: 16px; border: 3px solid rgba(255,255,255,.9);
+  background: #fff; color: var(--bfx-deep);
+  font-family: var(--bfx-mouse); font-size: 19px; letter-spacing:.03em;
+}
+.bfx-input::placeholder{ color: rgba(43,20,3,.4); }
+.bfx-pill-ylw{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  font-family: var(--bfx-mouse); font-size: 21px; letter-spacing:.14em; text-transform:uppercase;
+  background: var(--bfx-yellow); color: var(--bfx-deep);
+  border: none; border-radius: 100px; padding: 17px 44px 15px;
+  cursor:pointer; box-shadow: 0 14px 30px -12px rgba(43,20,3,.4);
+  transition: scale .2s var(--ease-out), background .15s;
+}
+.bfx-pill-ylw:hover{ scale: 1.04; background: #ffe071; }
+.bfx-pill-ylw:active{ scale: .96; }
+
+/* marco sticker para mapa / fotos grandes */
+.bfx-stickerframe{
+  background:#fff; padding: 10px; border-radius: 20px;
+  box-shadow: 0 24px 55px -20px rgba(43,20,3,.35);
+}
+.bfx-stickerframe > *{ border-radius: 13px; overflow:hidden; display:block; }
+
+/* ---------- cursor follower ---------- */
+.bfx-cursor{ position: fixed; left:0; top:0; z-index: 250; pointer-events:none; }
+.bfx-cursor .trail{
+  position:absolute; left:0; top:0; width: 38px; height:38px; margin: -19px 0 0 -19px;
+  opacity:0; will-change:transform;
+}
+@media (pointer: coarse){ .bfx-cursor{ display:none; } }
+
+/* ---------- header light (home) ---------- */
+.bfx-header-light > div{
+  background: rgba(246,232,210,.82) !important;
+  border-bottom-color: rgba(43,20,3,.08) !important;
+}
+.bfx-header-light .navlink{ color: var(--bfx-deep) !important; }
+.bfx-header-light .navlink.on{ color: var(--bfx-red) !important; }
+.bfx-header-light .navlink::after{ background: var(--bfx-red); }
+.bfx-header-light .bf-cart-btn{
+  background:#fff !important; color: var(--bfx-deep) !important; border-color: rgba(43,20,3,.14) !important;
+}
+.bfx-header-light .bf-burger{
+  background:#fff !important; color: var(--bfx-deep) !important; border-color: rgba(43,20,3,.14) !important;
+}
+.bfx-header-light .bf-mobile-nav{
+  background: var(--bfx-cream) !important; border-top-color: rgba(43,20,3,.1) !important;
+}
+.bfx-header-light .bf-mobile-nav a{ color: var(--bfx-deep); }
+
+/* ---------- helpers de animación ---------- */
+[data-pop]{ opacity:0; }
+[data-split]{ visibility:hidden; }
+[data-split].bfx-split-ready{ visibility:visible; }
+.bfx-line-mask{ overflow:hidden; display:block; }
+/* fallback si GSAP no cargó: mostrar todo el contenido */
+html.bfx-nofx [data-pop]{ opacity:1 !important; }
+html.bfx-nofx [data-split]{ visibility:visible !important; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 860px){
+  .bfx-hero{ padding-top: 92px; }
+  .bfx-hero-burger{ width: 50vw; transform: translate(-50%,-16%); }
+  .bfx-hero-word{ font-size: 23vw; margin-top: 2vw; }
+  .bfx-badge{ font-size: 13px; border-width: 2.5px; }
+  .bfx-hero-copy{ flex-direction:column; gap: 16px; padding-bottom: 26px; margin-top: clamp(110px, 42vw, 240px); }
+  .bfx-hero-copy p, .bfx-hero-copy p:last-child{ max-width: none; text-align:left; }
+  .bfx-polaroid-row{ flex-direction: column; align-items:center; }
+  .bfx-citycard{ width: 64vw; }
+  .bfx-footer-info{ grid-template-columns: 1fr 1fr; gap: 22px; }
+  .bfx-footer-main{ text-align: center; }
+  .bfx-footer-logo{ justify-content: center; }
+  /* nav mobile: reducir un toque el gigante para que no se salga */
+  .bfx-giant--xl{ font-size: clamp(52px, 15vw, 120px); }
+}
+@media (max-width: 480px){
+  .bfx-footer-info{ grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce){
+  #bfx-loader .word{ animation:none; }
+  .bfx-blob:hover{ scale:none; }
+  .bfx-marquee .row{ animation:none !important; }
+}

@@ -1,202 +1,200 @@
 /* ============================================================
-   about-contact.jsx — Nosotros y Contacto
+   about-contact.jsx — Nosotros (estilo "Our Spices" de crav),
+   Contacto (estilo "Contact") y Privacidad (legales, tema oscuro).
    ============================================================ */
 
 /* ===================== NOSOTROS ===================== */
 function Nosotros({ go }) {
+  const ref = React.useRef(null);
+  React.useEffect(() => (window.FX ? FX.bind(ref.current) : undefined), []);
+
+  // historia por capas (estilo "A story in every bite")
+  const story = [
+    { tag: "VERDE Y FRESCO", cls: "bfx-badge--green", img: IMG("photo-1512621776951-a57141f2eefd", 800), rot: 3, txt: "Lechuga y verdura fresca todos los días. Crocante, lavada y cortada en el momento." },
+    { tag: "SMASH AL MOMENTO", cls: "bfx-badge--red", img: IMG("photo-1553979459-d2229ba7433b", 800), rot: -4, txt: "Medallones de carne aplastados bien caliente: costra caramelizada afuera, jugoso adentro." },
+    { tag: "CHEDDAR FUNDIDO", cls: "", img: IMG("photo-1573080496219-bb080dd4f877", 800), rot: 4, txt: "Cheddar de verdad que se estira, se funde y se mete en todas las capas." },
+    { tag: "PAN DE CASA", cls: "bfx-badge--red", img: IMG("photo-1509722747041-616f39b57569", 800), rot: -3, txt: "Pan casero tostado en manteca, hecho para bancar una doble sin desarmarse." },
+    { tag: "BIRRA TIRADA", cls: "bfx-badge--green", img: IMG("photo-1535958636474-b021ee887b13", 800), rot: 5, txt: "7 canillas de productores independientes, siempre frías y con la espuma justa." },
+  ];
+
   return (
-    <div className="fadeup">
-      <section style={{ borderBottom: "1px solid var(--line-dark)", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 15% 0%, rgba(234,123,27,.16), transparent 55%)" }} />
-        <div className="wrap" style={{ position: "relative", padding: "64px 24px 30px" }}>
-          <div className="eyebrow" style={{ marginBottom: 16 }}>Somos brothers</div>
-          <h1 className="display" style={{ fontSize: "clamp(46px,8vw,108px)", margin: 0, lineHeight: .85 }}>
-            Burgers,<br /><span style={{ color: "var(--orange)" }}>birra</span> y barrio.
+    <main ref={ref} className="bfx">
+      {/* hero */}
+      <section className="bfx-page-hero" aria-label="Nuestra historia">
+        <div className="wrap" style={{ position: "relative" }}>
+          <Sticker name="lettuce" size={110} data-pop data-idle style={{ position: "absolute", left: "3%", top: 0, "--rot": "-10deg" }} />
+          <Sticker name="tomato" size={95} data-pop data-idle style={{ position: "absolute", right: "4%", top: 60, "--rot": "12deg" }} />
+          <div className="bfx-kicker" data-pop>★ NUESTRA HISTORIA ★</div>
+          <h1 className="bfx-giant bfx-giant--lg" style={{ marginTop: 14 }}>
+            <span data-split="chars" style={{ display: "block" }}>QUÉ HAY</span>
+            <span data-split="chars" style={{ display: "block" }}><span className="ylw">ADENTRO.</span></span>
           </h1>
-        </div>
-      </section>
-
-      {/* historia */}
-      <section className="wrap bf-two" style={{ padding: "60px 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 50, alignItems: "center" }} >
-        <div className="zoom" style={{ position: "relative", borderRadius: 16, overflow: "hidden", border: "1px solid var(--line-dark)", aspectRatio: "4/5" }}>
-          <Photo src={IMG("photo-1550547660-d9450f859349", 1000)} alt="Burgers Brothers Food" style={{ position: "absolute", inset: 0 }} />
-        </div>
-        <div>
-          <h2 className="display" style={{ fontSize: "clamp(30px,4vw,46px)", margin: "0 0 18px" }}>De Boedo para el mundo</h2>
-          <p style={{ fontSize: 17, color: "var(--muted)", lineHeight: 1.6 }}>
-            Arrancamos como dos hermanos con ganas de hacer la hamburguesa que nos gustaría comer: pan brioche casero, carne de verdad y nada de vueltas. Hoy en <b style={{ color: "var(--white)" }}>Av. Boedo 1600</b> servimos burgers caseras y cerveza tirada bien fría, con delivery propio y take away.
+          <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0" }}>
+            No tenemos una lista larga de ingredientes: tenemos una corta, y somos obsesivos con cada cosa que entra.
+            Dos hermanos de Boedo haciendo la burga que nos gustaría comer.
           </p>
-          <p style={{ fontSize: 17, color: "var(--muted)", lineHeight: 1.6 }}>
-            Tenemos pack fútbol para ver los partidos, promo de cumpleaños y siempre algo nuevo en la canilla. Somos brothers y somos riquísimos.
-          </p>
-          <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-            <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" className="btn btn-ghost"><Ic.ig width={16} height={16} /> Seguinos</a>
-            <button className="btn btn-orange" onClick={() => go("#/menu")}>Ver el menú <Ic.arrow /></button>
-          </div>
-        </div>
-      </section>
-
-      {/* stats */}
-      <section style={{ background: "#0a0a0a", borderTop: "1px solid var(--line-dark)", borderBottom: "1px solid var(--line-dark)" }}>
-        <div className="wrap bf-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, padding: "10px 24px" }}>
-          {[["9.7K", "seguidores en IG"], [BIZ.rating, "estrellas en Google"], ["+5", "años en Boedo"], ["100%", "casero"]].map(([n, l], i) => (
-            <div key={i} style={{ padding: "36px 16px", textAlign: "center", borderLeft: i ? "1px solid var(--line-dark)" : "none" }}>
-              <div className="display" style={{ fontSize: "clamp(34px,5vw,56px)", color: "var(--orange)" }}>{n}</div>
-              <div className="mono" style={{ fontSize: 12, color: "var(--muted)", letterSpacing: ".08em", textTransform: "uppercase", marginTop: 6 }}>{l}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* valores */}
-      <section className="wrap" style={{ padding: "60px 24px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }} className="bf-grid-3">
-          {[
-            [Ic.fire, "Al momento", "Cada burger se arma cuando la pedís. Nada de cosas recalentadas."],
-            [Ic.beer, "Tirada fresca", "Siete estilos artesanales en la canilla, siempre bien fría y con la espuma justa."],
-            [Ic.truck, "Delivery propio", "Lo llevamos nosotros para que llegue como tiene que llegar."],
-          ].map(([Icon, t, d], i) => (
-            <div key={i} style={{ border: "1px solid var(--line-dark)", borderRadius: 14, padding: 26, background: "var(--ink-2)" }}>
-              <div style={{ width: 48, height: 48, borderRadius: 10, background: "rgba(234,123,27,.12)", color: "var(--orange)", display: "grid", placeItems: "center", marginBottom: 16 }}><Icon width={24} height={24} /></div>
-              <h3 className="display" style={{ fontSize: 24, margin: "0 0 8px" }}>{t}</h3>
-              <p style={{ color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>{d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <GoogleReviewsSection />
-      <FinalCTA go={go} />
-    </div>
-  );
-}
-
-/* ===================== GOOGLE REVIEWS (full) ===================== */
-function GoogleReviewsSection() {
-  return (
-    <section style={{ background: "#0a0a0a", borderTop: "1px solid var(--line-dark)" }}>
-      <div className="wrap" style={{ padding: "64px 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap", marginBottom: 30 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-            <GoogleG size={42} />
-            <div>
-              <h2 className="display" style={{ fontSize: "clamp(28px,4vw,42px)", margin: 0 }}>Lo que dicen en Google</h2>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
-                <span className="display" style={{ fontSize: 24, color: "var(--orange)" }}>{BIZ.rating}</span>
-                <Stars value={BIZ.rating} size={16} />
-                <span className="mono" style={{ fontSize: 13, color: "var(--muted)" }}>· {BIZ.reviewsCount} reseñas</span>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 28 }}>
+            {[["+5", "años en Boedo"], ["4.7★", "en Google"], ["9.7K", "en Instagram"], ["100%", "casero"]].map(([n, l], i) => (
+              <div key={l} className="bfx-panel" data-pop data-pop-delay={i * 0.08}
+                style={{ padding: "14px 22px 12px", rotate: ((i % 2 ? 1 : -1) * 2) + "deg", textAlign: "center" }}>
+                <div className="bfx-bubble" style={{ fontSize: 30 }}>{n}</div>
+                <div className="bfx-hand" style={{ fontSize: 15, letterSpacing: ".12em", textTransform: "uppercase", opacity: .6 }}>{l}</div>
               </div>
-            </div>
+            ))}
           </div>
-          <a className="btn btn-ghost" href="https://www.google.com/search?q=brothers+food+lst+boedo" target="_blank" rel="noopener">Ver en Google <Ic.arrow /></a>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }} className="bf-grid-3">
-          {REVIEWS.map((r, i) => <ReviewCard key={i} r={r} />)}
+      </section>
+
+      {/* historia por capas — mostaza estilo crav */}
+      <section className="bfx-mustardsec" style={{ padding: "0 0 clamp(70px,8vw,120px)", overflow: "clip" }} aria-label="Una historia en cada capa">
+        <Wave fill="#f4a804" style={{ background: "var(--bfx-cream)" }} />
+        <div className="wrap" style={{ position: "relative", paddingTop: "clamp(40px,5vw,70px)" }}>
+          <h2 className="bfx-giant bfx-giant--lg bfx-giant--outline" style={{ textAlign: "left" }}>
+            <span data-split="chars" style={{ display: "block" }}>UNA HISTORIA</span>
+            <span data-split="chars" style={{ display: "block" }}>EN CADA CAPA.</span>
+          </h2>
+          <p className="bfx-copy" data-split="lines" style={{ maxWidth: 460, marginTop: 18, color: "#4a2c00" }}>
+            No elegimos ingredientes de una lista: pensamos de dónde vienen, por qué importan y qué le suman a la burga.
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "clamp(40px,5vw,70px)", marginTop: "clamp(40px,5vw,70px)" }}>
+            {story.map((s, i) => (
+              <div key={s.tag} style={{
+                display: "flex", alignItems: "center", gap: "clamp(20px,4vw,60px)",
+                flexDirection: i % 2 ? "row-reverse" : "row", flexWrap: "wrap", justifyContent: "center",
+              }}>
+                <div style={{ position: "relative" }}>
+                  <div className="bfx-stickerframe" data-pop data-inertia style={{ width: "min(380px,84vw)", rotate: s.rot + "deg" }}>
+                    <img src={s.img} alt={s.tag} loading="lazy" style={{ aspectRatio: "1.15", objectFit: "cover", width: "100%" }} />
+                  </div>
+                  <span className={"bfx-badge " + s.cls} data-pop data-pop-delay=".15"
+                    style={{ "--rot": (s.rot > 0 ? -6 : 6) + "deg", position: "absolute", top: -18, left: i % 2 ? "auto" : -14, right: i % 2 ? -14 : "auto" }}>
+                    {s.tag}
+                  </span>
+                </div>
+                <p className="bfx-copy" data-split="lines" style={{ maxWidth: 380, color: "#4a2c00", fontSize: "clamp(20px,2vw,26px)", textAlign: i % 2 ? "right" : "left" }}>
+                  {s.txt}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* de boedo para el barrio */}
+      <section style={{ padding: "clamp(70px,9vw,120px) 0 0", textAlign: "center" }} aria-label="De Boedo">
+        <div className="wrap" style={{ position: "relative" }}>
+          <Sticker name="beer" size={110} data-pop data-idle style={{ position: "absolute", right: "3%", top: -20, "--rot": "10deg" }} />
+          <span className="bfx-badge bfx-badge--red" data-pop data-idle style={{ "--rot": "-6deg" }}>AV. BOEDO 1600</span>
+          <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 18 }}>
+            <span data-split="chars" style={{ display: "block" }}>DE BOEDO,</span>
+            <span data-split="chars" style={{ display: "block" }}><span className="ylw">CON HAMBRE.</span></span>
+          </h2>
+          <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0" }}>
+            Arrancamos con una plancha, un pan casero y cero vueltas. Hoy servimos en el salón, llevamos con delivery propio
+            y tiramos pintas todos los días menos los lunes. Pack fútbol para los partidos, promo Thomason los viernes y
+            happy hour de martes a domingo.
+          </p>
+          <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 30, flexWrap: "wrap" }}>
+            <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" className="bfx-pill-ylw" style={{ fontSize: 18 }}>
+              <Ic.ig width={18} height={18} /> Seguinos
+            </a>
+            <a href="#/menu" className="bfx-blob" style={{ fontSize: 20 }} data-squash>Ver el menú →</a>
+          </div>
+        </div>
+      </section>
+
+      <AntojoCTA go={go} />
+    </main>
   );
 }
 
 /* ===================== CONTACTO ===================== */
 function Contacto({ go }) {
-  const [sent, setSent] = React.useState(false);
+  const ref = React.useRef(null);
+  React.useEffect(() => (window.FX ? FX.bind(ref.current) : undefined), []);
+  const [f, setF] = React.useState({ nombre: "", tel: "", msg: "" });
+  const submit = (e) => {
+    e.preventDefault();
+    const text = `¡Hola Brothers! Soy ${f.nombre}${f.tel ? " (" + f.tel + ")" : ""}. ${f.msg}`;
+    window.open(waLink(text), "_blank", "noopener");
+  };
+  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+
   return (
-    <div className="fadeup">
-      <section style={{ borderBottom: "1px solid var(--line-dark)" }}>
-        <div className="wrap" style={{ padding: "54px 24px 30px" }}>
-          <div className="eyebrow" style={{ marginBottom: 14 }}>Pasá a vernos</div>
-          <h1 className="display" style={{ fontSize: "clamp(46px,7vw,92px)", margin: 0 }}>Contacto</h1>
+    <main ref={ref} className="bfx">
+      {/* hero + form sobre rojo */}
+      <section className="bfx-red" style={{ paddingTop: 110, overflow: "clip" }} aria-label="Contacto">
+        <div className="wrap" style={{ textAlign: "center", position: "relative", paddingBottom: 20 }}>
+          <Sticker name="cheese" size={100} data-pop data-idle style={{ position: "absolute", left: "3%", top: 0, "--rot": "-12deg" }} />
+          <Sticker name="bacon" size={100} data-pop data-idle style={{ position: "absolute", right: "3%", top: 50, "--rot": "10deg" }} />
+          <div className="bfx-kicker" data-pop style={{ color: "#f6e8d2" }}>★ DECÍ HOLA ★</div>
+          <h1 className="bfx-giant bfx-giant--lg bfx-giant--cream" style={{ marginTop: 14 }}>
+            <span data-split="chars" style={{ display: "block" }}>¿SE TE ANTOJA?</span>
+            <span data-split="chars" style={{ display: "block" }}><span className="soft">HABLEMOS.</span></span>
+          </h1>
+          <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "20px auto 0" }}>
+            Eventos, pedidos grandes, cumpleaños o simplemente hambre: escribinos y el mensaje sale directo a nuestro WhatsApp.
+          </p>
+
+          <form onSubmit={submit} style={{ maxWidth: 560, margin: "34px auto 0", display: "grid", gap: 14, textAlign: "left" }}>
+            <input className="bfx-input" required placeholder="Tu nombre" value={f.nombre} onChange={set("nombre")} aria-label="Nombre" />
+            <input className="bfx-input" placeholder="Tu WhatsApp (opcional)" value={f.tel} onChange={set("tel")} aria-label="WhatsApp" />
+            <textarea className="bfx-input" required rows={4} placeholder="Contanos qué se te antoja…" value={f.msg} onChange={set("msg")} aria-label="Mensaje" style={{ resize: "vertical" }} />
+            <div style={{ textAlign: "center", marginTop: 6 }}>
+              <button type="submit" className="bfx-pill-ylw" data-squash>Enviar antojo 🍔</button>
+            </div>
+          </form>
+          <div style={{ height: "clamp(40px,5vw,70px)" }} />
         </div>
       </section>
 
-      <div className="wrap bf-two" style={{ padding: "44px 24px 70px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} >
-        {/* info + form */}
-        <div>
-          <div style={{ display: "grid", gap: 14 }}>
-            <InfoRow icon={Ic.pin} title="Dirección" main={BIZ.address} sub={BIZ.city} />
-            <InfoRow icon={Ic.phone} title="Teléfono / WhatsApp" main={BIZ.phoneDisplay} sub="Pedidos y consultas" />
-            <div style={{ border: "1px solid var(--line-dark)", borderRadius: 12, padding: 18, background: "var(--ink-2)" }}>
-              <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                <span style={{ color: "var(--orange)", marginTop: 2 }}><Ic.clock /></span>
-                <div style={{ flex: 1 }}>
-                  <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 10 }}>Horarios</div>
-                  {BIZ.hours.map((h) => (
-                    <div key={h.d} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderTop: "1px solid var(--line-dark)" }}>
-                      <span style={{ fontWeight: 700, color: h.closed ? "var(--muted-d)" : "var(--white)" }}>{h.d}</span>
-                      <span className="mono" style={{ fontSize: 13, color: h.closed ? "var(--danger)" : "var(--muted)" }}>{h.h}</span>
-                    </div>
-                  ))}
-                </div>
+      {/* info + mapa sobre crema */}
+      <section style={{ paddingBottom: "clamp(40px,5vw,70px)" }} aria-label="Dónde estamos">
+        <Wave fill="#f6e8d2" style={{ background: "#e23d16" }} />
+        <div className="wrap" style={{ paddingTop: "clamp(30px,4vw,60px)" }}>
+          <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(24px,4vw,50px)", alignItems: "start" }}>
+            <div style={{ display: "grid", gap: 16 }}>
+              {[
+                ["Dónde", BIZ.address, BIZ.city, "https://www.google.com/maps/search/?api=1&query=Av.+Boedo+1600+CABA"],
+                ["WhatsApp", BIZ.phoneDisplay, "Pedidos y consultas", waLink("¡Hola Brothers! Tengo una consulta 🍔")],
+                ["Instagram", "@" + BIZ.ig, "Novedades y promos", "https://instagram.com/" + BIZ.ig],
+              ].map(([t, m, s, href], i) => (
+                <a key={t} href={href} target="_blank" rel="noopener" className="bfx-panel" data-pop data-pop-delay={i * 0.08}
+                  style={{ rotate: ((i % 2 ? 1 : -1) * 1.2) + "deg", display: "block" }}>
+                  <div className="bfx-hand" style={{ fontSize: 14, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--bfx-red)", marginBottom: 4 }}>{t}</div>
+                  <div className="bfx-bubble" style={{ fontSize: 24 }}>{m}</div>
+                  <div className="bfx-hand" style={{ fontSize: 16, opacity: .6 }}>{s}</div>
+                </a>
+              ))}
+              <div className="bfx-panel" data-pop data-pop-delay=".24" style={{ rotate: "1.2deg" }}>
+                <div className="bfx-hand" style={{ fontSize: 14, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--bfx-red)", marginBottom: 8 }}>Horarios</div>
+                {BIZ.hours.map((h) => (
+                  <div key={h.d} className="bfx-hand" style={{ display: "flex", justifyContent: "space-between", fontSize: 18, padding: "4px 0", borderTop: "2px dashed rgba(43,20,3,.12)", opacity: h.closed ? .5 : 1 }}>
+                    <span>{h.d}</span><span style={{ color: h.closed ? "var(--bfx-red)" : "inherit" }}>{h.h}</span>
+                  </div>
+                ))}
+                <div className="bfx-hand" style={{ fontSize: 16, color: "var(--bfx-green)", marginTop: 8 }}>★ Happy hour · {HAPPY.when.toLowerCase()}</div>
               </div>
             </div>
-          </div>
 
-          <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap" }}>
-            <a className="btn btn-orange" href={waLink("¡Hola Brothers! Tengo una consulta 🍔")} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> Escribir por WhatsApp</a>
-            <button className="btn btn-ghost" onClick={() => go("#/menu")}>Pedir online</button>
-          </div>
-
-          {/* mini form de consulta */}
-          <div style={{ marginTop: 34, border: "1px solid var(--line-dark)", borderRadius: 14, padding: 24, background: "var(--ink-2)" }}>
-            <h3 className="display" style={{ fontSize: 22, margin: "0 0 4px" }}>Mandanos un mensaje</h3>
-            <p style={{ color: "var(--muted)", fontSize: 14, margin: "0 0 18px" }}>Eventos, pedidos grandes o lo que necesites.</p>
-            {sent ? (
-              <div style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--ok)", padding: "14px 0" }}>
-                <Ic.check /> <span style={{ fontWeight: 700 }}>¡Listo! Te respondemos a la brevedad.</span>
-              </div>
-            ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} style={{ display: "grid", gap: 12 }}>
-                <Field label="Nombre"><input required style={inp} placeholder="Tu nombre" /></Field>
-                <Field label="WhatsApp"><input required style={inp} placeholder="11 ...." /></Field>
-                <Field label="Mensaje"><textarea required rows={3} style={{ ...inp, resize: "vertical" }} placeholder="Contanos..." /></Field>
-                <button className="btn btn-orange btn-block">Enviar</button>
-              </form>
-            )}
+            <div className="bfx-stickerframe" data-pop style={{ rotate: "-.8deg" }}>
+              <iframe
+                title="Mapa Brothers Food LST"
+                src="https://maps.google.com/maps?q=Av.%20Boedo%201600%2C%20CABA&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                style={{ border: 0, width: "100%", height: "100%", minHeight: 520 }}
+                loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* mapa */}
-        <div>
-          <div style={{ border: "1px solid var(--line-dark)", borderRadius: 14, overflow: "hidden", height: "100%", minHeight: 460, position: "relative" }}>
-            <iframe
-              title="Mapa Brothers Food LST"
-              src="https://maps.google.com/maps?q=Av.%20Boedo%201600%2C%20CABA&t=&z=16&ie=UTF8&iwloc=&output=embed"
-              style={{ border: 0, width: "100%", height: "100%", minHeight: 460, filter: "grayscale(.3) contrast(1.05)" }}
-              loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-            <a className="btn btn-white btn-sm" href="https://www.google.com/maps/search/?api=1&query=Av.+Boedo+1600+CABA" target="_blank" rel="noopener"
-              style={{ position: "absolute", bottom: 14, left: 14 }}><Ic.pin width={15} height={15} /> Cómo llegar</a>
-          </div>
-        </div>
-      </div>
-    </div>
+      <AntojoCTA go={go} />
+    </main>
   );
 }
 
-function InfoRow({ icon: Icon, title, main, sub }) {
-  return (
-    <div style={{ display: "flex", gap: 14, alignItems: "center", border: "1px solid var(--line-dark)", borderRadius: 12, padding: "16px 18px", background: "var(--ink-2)" }}>
-      <span style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(234,123,27,.12)", color: "var(--orange)", display: "grid", placeItems: "center", flexShrink: 0 }}><Icon /></span>
-      <div>
-        <div className="mono" style={{ fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--muted)" }}>{title}</div>
-        <div style={{ fontWeight: 700, fontSize: 18, marginTop: 2 }}>{main}</div>
-        {sub && <div style={{ color: "var(--muted)", fontSize: 13 }}>{sub}</div>}
-      </div>
-    </div>
-  );
-}
-
-const inp = { width: "100%", padding: "12px 14px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "var(--ink)", color: "var(--white)", fontFamily: "var(--body)", fontSize: 15 };
-function Field({ label, children }) {
-  return (
-    <label style={{ display: "block" }}>
-      <span className="mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)", display: "block", marginBottom: 6 }}>{label}</span>
-      {children}
-    </label>
-  );
-}
-
-/* ===================== PRIVACIDAD ===================== */
+/* ===================== PRIVACIDAD (tema oscuro, legales) ===================== */
 function Privacidad({ go }) {
   const block = { border: "1px solid var(--line-dark)", borderRadius: 14, padding: 24, background: "var(--ink-2)", marginBottom: 16 };
   return (
@@ -258,4 +256,15 @@ function Privacidad({ go }) {
   );
 }
 
-Object.assign(window, { Nosotros, Contacto, Privacidad, GoogleReviewsSection, InfoRow, Field, inp });
+/* helpers de formulario (los usan checkout y el panel admin) */
+const inp = { width: "100%", padding: "12px 14px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "var(--ink)", color: "var(--white)", fontFamily: "var(--body)", fontSize: 15 };
+function Field({ label, children }) {
+  return (
+    <label style={{ display: "block" }}>
+      <span className="mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)", display: "block", marginBottom: 6 }}>{label}</span>
+      {children}
+    </label>
+  );
+}
+
+Object.assign(window, { Nosotros, Contacto, Privacidad, Field, inp });

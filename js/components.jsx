@@ -124,6 +124,9 @@ function Header({ route, go }) {
   const [open, setOpen] = useState(false);     // mobile menu
   const [scrolled, setScrolled] = useState(false);
   const [bump, setBump] = useState(false);
+  const headRef = useRef(null);
+  // páginas con tema claro cartoon (header crema)
+  const home = ["#/", "", "#/menu", "#/nosotros", "#/contacto"].includes(route);
   const count = store.cartCount();
   const links = [
     ["#/", "Inicio"], ["#/menu", "Menú"], ["#/nosotros", "Nosotros"], ["#/contacto", "Contacto"],
@@ -136,6 +139,8 @@ function Header({ route, go }) {
     io.observe(s);
     return () => io.disconnect();
   }, []);
+  // nav que se esconde al bajar y vuelve al subir (estilo crav)
+  useEffect(() => (window.FX ? FX.navAutoHide(headRef.current) : undefined), []);
   useEffect(() => { setOpen(false); }, [route]);
   useEffect(() => {
     const b = () => { setBump(true); setTimeout(() => setBump(false), 380); };
@@ -144,52 +149,32 @@ function Header({ route, go }) {
   }, []);
 
   return (
-    <header style={{ position: "sticky", top: 0, zIndex: 50 }}>
+    <header ref={headRef} className={"bfx-head" + (home ? " bfx-header-light" : "") + (scrolled ? " is-scrolled" : "")}>
       {!scrolled && <AnnouncementBar />}
-      <div style={{
-        background: scrolled ? "rgba(12,12,13,.92)" : "rgba(12,12,13,.75)",
-        backdropFilter: "blur(12px)",
-        borderBottom: "1px solid " + (scrolled ? "var(--line-dark)" : "transparent"),
-        transition: "background .25s, border-color .25s",
+      <div className="bfx-head-bar" style={{
+        background: home ? undefined : (scrolled ? "rgba(12,12,13,.92)" : "rgba(12,12,13,.75)"),
+        backdropFilter: home ? undefined : "blur(12px)",
+        borderBottom: home ? undefined : ("1px solid " + (scrolled ? "var(--line-dark)" : "transparent")),
       }}>
         <div className="wrap" style={{ height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-          <a href="#/" aria-label="Inicio" style={{ flexShrink: 0 }}><Logo size={0.92} /></a>
+          <a href="#/" aria-label="Inicio" style={{ flexShrink: 0, display: "flex" }}><LogoBadge fontSize={7} /></a>
 
           <nav className="bf-desktop-nav" style={{ display: "flex", gap: 4, alignItems: "center" }}>
-            {links.map(([href, label]) => {
-              const active = route === href;
-              return (
-                <a key={href} href={href} className={"mono navlink" + (active ? " on" : "")} style={{
-                  fontSize: 13, letterSpacing: ".08em", textTransform: "uppercase", fontWeight: 700,
-                  padding: "9px 14px", borderRadius: 6, color: active ? "var(--orange)" : "var(--white)",
-                  transition: "color .2s",
-                }}>
-                  {label}
-                </a>
-              );
-            })}
+            {links.map(([href, label]) => (
+              <a key={href} href={href} className={"bfx-navlink" + (route === href ? " on" : "")}>{label}</a>
+            ))}
           </nav>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <span className="bf-desktop-nav"><OpenBadge compact /></span>
-            <a href="#/menu" className="btn btn-orange btn-sm bf-order-cta">Pedir online</a>
-            <button className={"bf-cart-btn" + (bump ? " bf-bump" : "")} onClick={() => window.dispatchEvent(new Event("bf-open-cart"))}
-              aria-label="Carrito" style={{
-                position: "relative", display: "grid", placeItems: "center", width: 44, height: 44,
-                borderRadius: 8, border: "1px solid var(--line-dark)", background: "var(--ink-2)", color: "var(--white)",
-                transition: "border-color .2s",
-              }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span className="bf-desktop-nav bfx-openpill"><OpenBadge compact /></span>
+            <a href="#/menu" className="bfx-navcta bf-order-cta">Pedir online</a>
+            <button className={"bfx-headbtn" + (bump ? " bf-bump" : "")} onClick={() => window.dispatchEvent(new Event("bf-open-cart"))}
+              aria-label="Carrito">
               <Ic.cart />
-              {count > 0 && (
-                <span className="mono" style={{
-                  position: "absolute", top: -6, right: -6, minWidth: 20, height: 20, padding: "0 5px",
-                  borderRadius: 20, background: "var(--orange)", color: "#1a1206", fontSize: 11, fontWeight: 700,
-                  display: "grid", placeItems: "center", border: "2px solid var(--ink)",
-                }}>{count}</span>
-              )}
+              {count > 0 && <span className="badge">{count}</span>}
             </button>
-            <button className="bf-burger" onClick={() => setOpen((o) => !o)} aria-label="Menú"
-              style={{ display: "none", width: 44, height: 44, borderRadius: 8, border: "1px solid var(--line-dark)", background: "var(--ink-2)", color: "var(--white)", placeItems: "center" }}>
+            <button className="bf-burger bfx-headbtn" onClick={() => setOpen((o) => !o)} aria-label="Menú"
+              style={{ display: "none" }}>
               {open ? <Ic.x /> : <Ic.menu />}
             </button>
           </div>
@@ -197,19 +182,20 @@ function Header({ route, go }) {
 
         {/* mobile drawer */}
         {open && (
-          <div className="bf-mobile-nav" style={{ borderTop: "1px solid var(--line-dark)", background: "var(--ink)", padding: "10px 24px 20px" }}>
+          <div className="bf-mobile-nav" style={{ borderTop: "2px solid rgba(43,20,3,.1)", background: "var(--bfx-cream)", padding: "10px 24px 22px" }}>
             {links.map(([href, label], i) => (
-              <a key={href} href={href} className="display" style={{
-                display: "block", fontSize: 32, padding: "12px 0", color: route === href ? "var(--orange)" : "var(--white)",
-                borderBottom: "1px solid var(--line-dark)",
+              <a key={href} href={href} style={{
+                display: "block", fontSize: 34, padding: "13px 0", color: route === href ? "var(--bfx-red)" : "var(--bfx-deep)",
+                fontFamily: "var(--bfx-round)", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".01em",
+                borderBottom: "2px solid rgba(43,20,3,.08)",
                 animation: `bf-slidein .35s ${i * 60}ms both`,
               }}>{label}</a>
             ))}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14 }}>
-              <OpenBadge />
-              <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" style={{ color: "var(--muted)" }}><Ic.ig /></a>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16 }}>
+              <span className="bfx-openpill"><OpenBadge /></span>
+              <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" style={{ color: "var(--bfx-deep)", display: "grid" }}><Ic.ig /></a>
             </div>
-            <a href="#/menu" className="btn btn-orange btn-block btn-lg" style={{ marginTop: 14 }}>Pedir online</a>
+            <a href="#/menu" className="bfx-blob" style={{ marginTop: 16, width: "100%", fontSize: 20 }}>Pedir online</a>
           </div>
         )}
       </div>
@@ -221,50 +207,53 @@ function Header({ route, go }) {
    FOOTER
    ============================================================ */
 function Footer({ go }) {
+  const ref = useRef(null);
+  useEffect(() => (window.FX ? FX.bind(ref.current) : undefined), []);
+  const ings = ["lettuce", "tomato", "cheese", "patty", "fries", "beer", "pickle", "bacon"];
   return (
-    <footer style={{ background: "#070707", borderTop: "1px solid var(--line-dark)", marginTop: 0 }}>
-      <div className="damero thin" />
-      <div className="wrap" style={{ padding: "54px 24px 30px", display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", gap: 40 }}>
-        <div>
-          <Logo size={1} showTagline />
-          <p style={{ color: "var(--muted)", maxWidth: 320, marginTop: 18, lineHeight: 1.5 }}>
-            Hamburguesas caseras y cerveza artesanal tirada en el corazón de Boedo. Somos brothers y somos riquísimos.
-          </p>
-          <div style={{ display: "flex", gap: 10, marginTop: 18, alignItems: "center" }}>
-            <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" className="btn btn-ghost btn-sm"><Ic.ig width={16} height={16} /> @{BIZ.ig}</a>
-            <OpenBadge compact />
+    <footer ref={ref} className="bfx-footer">
+      {/* fuente de ingredientes saltando desde abajo (queda por detrás del contenido) */}
+      <div className="bfx-fountain" data-fountain aria-hidden="true">
+        {ings.map((k, i) => (
+          <div key={k} className="bfx-ing" style={{ width: 78, height: 78, left: (5 + i * 11.5) + "%" }}
+            dangerouslySetInnerHTML={{ __html: (window.FX && FX.STICKERS[k]) || "" }} />
+        ))}
+      </div>
+
+      <div className="bfx-footer-main wrap">
+        <a href="#/" aria-label="Inicio" className="bfx-footer-logo" style={{ display: "inline-flex", alignItems: "center", gap: 20 }}>
+          <LogoBadge fontSize={13} rot={-3} />
+          <span className="bfx-hand" style={{ fontSize: 19, letterSpacing: ".2em", textTransform: "uppercase", opacity: .6 }}>Burgers y algo más</span>
+        </a>
+
+        <div className="bfx-footer-info">
+          <div>
+            <span className="lbl">Dónde</span>
+            <a href="https://maps.google.com/?q=Av.+Boedo+1600+CABA" target="_blank" rel="noopener">{BIZ.address}<br />{BIZ.city}</a>
+          </div>
+          <div>
+            <span className="lbl">Horarios</span>
+            Lun cerrado<br />Mar a Sáb 09–00 · Dom 19–00
+          </div>
+          <div>
+            <span className="lbl">Pedidos</span>
+            <a href={"https://wa.me/" + BIZ.phoneE164} target="_blank" rel="noopener">WhatsApp {BIZ.phoneDisplay}</a><br />
+            <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener">Instagram @{BIZ.ig}</a>
+          </div>
+          <div>
+            <span className="lbl">Estado</span>
+            <OpenBadge /><br />
+            <span style={{ color: "var(--bfx-red)" }}>★ Happy hour · {HAPPY.when.toLowerCase()}</span>
           </div>
         </div>
-        <div>
-          <div className="eyebrow muted" style={{ marginBottom: 16 }}>Navegá</div>
-          {[["#/", "Inicio"], ["#/menu", "Menú"], ["#/nosotros", "Nosotros"], ["#/contacto", "Contacto"]].map(([h, l]) => (
-            <a key={h} href={h} style={{ display: "block", padding: "7px 0", color: "var(--white)" }}>{l}</a>
-          ))}
-          <a href="#/admin" style={{ display: "block", padding: "7px 0", color: "var(--muted)", fontSize: 13 }}>Panel cajero ›</a>
-        </div>
-        <div>
-          <div className="eyebrow muted" style={{ marginBottom: 16 }}>Dónde y cuándo</div>
-          <div style={{ display: "flex", gap: 10, color: "var(--white)", marginBottom: 12 }}><Ic.pin style={{ color: "var(--orange)", flexShrink: 0 }} /><span>{BIZ.address}<br /><span style={{ color: "var(--muted)" }}>{BIZ.city}</span></span></div>
-          <div style={{ display: "flex", gap: 10, color: "var(--white)", marginBottom: 12 }}><Ic.phone style={{ color: "var(--orange)", flexShrink: 0 }} /><span>{BIZ.phoneDisplay}</span></div>
-          {BIZ.hours.map((h) => (
-            <div key={h.d} className="mono" style={{ fontSize: 12.5, color: h.closed ? "var(--muted-d)" : "var(--muted)", padding: "3px 0" }}>
-              <b style={{ color: "var(--white)" }}>{h.d}</b> · {h.h}
-            </div>
-          ))}
-          <div className="mono" style={{ fontSize: 12, color: "var(--beer)", marginTop: 10 }}>★ Happy hour · {HAPPY.when.toLowerCase()}</div>
-        </div>
       </div>
-      <div className="wrap" style={{ padding: "0 24px 8px" }}>
-        <p className="mono" style={{ fontSize: 11, color: "var(--muted-d)", margin: 0, lineHeight: 1.5 }}>
-          +18 · Beber con moderación. Prohibida la venta de bebidas alcohólicas a menores de 18 años (Ley Nacional 24.788).
+
+      <div className="bfx-footer-legal">
+        <p>+18 · Beber con moderación. Prohibida la venta de bebidas alcohólicas a menores de 18 años (Ley Nacional 24.788).</p>
+        <p>
+          © {new Date().getFullYear()} Brothers Food.lst · Boedo, CABA · Smash burgers y birra tirada ·{" "}
+          <a href="#/privacidad">Privacidad</a> · <a href="#/admin">Panel ›</a> · Hecho con hambre 🍔
         </p>
-      </div>
-      <div className="wrap" style={{ padding: "12px 24px 18px", borderTop: "1px solid var(--line-dark)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-        <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)" }}>© {new Date().getFullYear()} Brothers Food.lst · Boedo, CABA</span>
-        <span className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)", display: "flex", gap: 16, flexWrap: "wrap" }}>
-          <a href="#/privacidad" style={{ color: "var(--muted)" }}>Política de privacidad</a>
-          <span>Hecho con hambre 🍔</span>
-        </span>
       </div>
     </footer>
   );
@@ -560,4 +549,27 @@ function Toaster() {
   );
 }
 
-Object.assign(window, { Header, Footer, WhatsAppFAB, ProductCard, Stars, Photo, waLink, Reveal, Customizer, Toaster, OpenBadge, toast });
+/* ============================================================
+   CTA compartido (estilo "feel the Change") — menú / nosotros / contacto
+   ============================================================ */
+function AntojoCTA({ go }) {
+  const ref = useRef(null);
+  useEffect(() => (window.FX ? FX.bind(ref.current) : undefined), []);
+  return (
+    <section ref={ref} style={{ padding: "clamp(70px,9vw,130px) 0 clamp(50px,6vw,90px)", textAlign: "center", overflow: "clip", position: "relative" }} aria-label="Pedí ahora">
+      <div className="wrap" style={{ position: "relative" }}>
+        <span className="bfx-badge bfx-badge--red" data-pop data-idle style={{ "--rot": "-7deg" }}>¿SE TE ANTOJÓ?</span>
+        <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 18 }}>
+          <span data-split="chars" style={{ display: "block" }}>SENTÍ</span>
+          <span data-split="chars" style={{ display: "block" }}><span className="ylw">EL SABOR.</span></span>
+        </h2>
+        <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "22px auto 32px" }}>
+          Smash para valientes, papas para todos. Pedí online y te avisamos cuando sale de la plancha.
+        </p>
+        <a href="#/menu" className="bfx-blob" data-squash>Pedir online →</a>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { Header, Footer, WhatsAppFAB, ProductCard, Stars, Photo, waLink, Reveal, Customizer, Toaster, OpenBadge, toast, AntojoCTA });
