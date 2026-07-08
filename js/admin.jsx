@@ -18,10 +18,10 @@ function AdminLogin({ go }) {
   const [err, setErr] = React.useState(false);
   const submit = (e) => { e.preventDefault(); if (store.login(user, pass)) setErr(false); else setErr(true); };
   return (
-    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24, background: "radial-gradient(circle at 50% 20%, #15110b, var(--ink))" }}>
+    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24, background: "radial-gradient(circle at 50% 12%, #fff, var(--ink) 62%)" }}>
       <div style={{ width: "min(400px,100%)" }}>
         <div style={{ textAlign: "center", marginBottom: 26 }}>
-          <a href="#/"><Logo size={1.1} /></a>
+          <a href="#/"><Logo size={1.1} light /></a>
           <div className="mono" style={{ fontSize: 12, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--muted)", marginTop: 18 }}>Panel de gestión · caja y cocina</div>
         </div>
         <form onSubmit={submit} style={{ ...card, padding: 28 }}>
@@ -94,8 +94,8 @@ function AdminShell({ go, auth }) {
   return (
     <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: "228px 1fr", background: "var(--ink)" }} className="bf-admin">
       {/* sidebar */}
-      <aside style={{ borderRight: "1px solid var(--line-dark)", background: "#0a0a0a", display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh" }} className="bf-admin-side">
-        <div style={{ padding: "20px 18px", borderBottom: "1px solid var(--line-dark)" }}><a href="#/"><Logo size={0.78} /></a></div>
+      <aside style={{ borderRight: "1px solid var(--line-dark)", background: "var(--ink-2)", display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh" }} className="bf-admin-side">
+        <div style={{ padding: "20px 18px", borderBottom: "1px solid var(--line-dark)" }}><a href="#/"><Logo size={0.78} light /></a></div>
         <nav style={{ padding: 12, display: "grid", gap: 4, flex: 1, alignContent: "start" }}>
           {nav.map(([id, label, Icon, badge]) => (
             <button key={id} onClick={() => setTab(id)} data-tour={"nav-" + id} className={"adm-nav" + (tab === id ? " on" : "")} style={{

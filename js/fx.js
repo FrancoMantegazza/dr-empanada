@@ -418,10 +418,17 @@
       root.querySelectorAll("[data-path-scene]").forEach(function (scene) {
         var rider = scene.querySelector(".bfx-rider");
         if (!rider) return;
-        // Waypoints muestreados EXACTOS (bezier cúbica) de la ruta
-        // d="M -80 240 C 260 100 520 480 780 360 C 1040 240 1200 520 1560 420"
-        // convertidos a % del viewBox 1440x900 (left=x/14.4, top=y/9).
-        var P = [
+        // Waypoints muestreados EXACTOS (bezier cúbica) de la ruta, en % del
+        // viewBox 1440x900 (left=x/14.4, top=y/9). Dos rutas: la serpentina
+        // horizontal (desktop) y un descenso vertical (mobile) — porque con
+        // preserveAspectRatio="none" la horizontal se deforma en la sección
+        // alta+angosta del celu. La ruta SVG se togglea por CSS (bfx-route--d/m).
+        var isM = window.matchMedia && window.matchMedia("(max-width: 720px)").matches;
+        var P = isM ? [
+          // d="M 260 -40 C 520 180 120 320 300 480 C 480 640 140 760 300 980"
+          [18.1, -4.4], [24.4, 12.4], [21.5, 26.9], [17.7, 40.2], [20.8, 53.3],
+          [24.5, 66.1], [21.4, 78.6], [17.9, 92.4], [20.8, 108.9],
+        ] : [
           [-5.6, 26.7], [8, 23.4], [20.5, 28.5], [32.1, 36.6], [43.3, 42.2],
           [54.2, 40.0], [64.3, 36.6], [73.8, 39.8], [83.7, 45.3], [94.8, 49.0], [108.3, 46.7],
         ];

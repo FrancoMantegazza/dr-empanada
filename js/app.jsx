@@ -49,11 +49,15 @@ function App() {
 
   const isAdmin = path.startsWith("#/admin");
 
-  // páginas públicas con tema claro cartoon; checkout/admin mantienen el oscuro
-  const isLight = ["#/", "", "#/menu", "#/nosotros", "#/contacto"].includes(path);
+  // páginas públicas con tema claro cartoon; admin mantiene el oscuro
+  const isLight = ["#/", "", "#/menu", "#/nosotros", "#/contacto", "#/checkout"].includes(path);
   React.useEffect(() => {
     document.body.classList.toggle("bfx-home", isLight);
   }, [isLight]);
+  // admin también en cartoon (crema) vía remap de tokens en fx.css
+  React.useEffect(() => {
+    document.body.classList.toggle("bfx-admin", isAdmin);
+  }, [isAdmin]);
 
   let page;
   if (path === "#/" || path === "") page = <Home go={go} />;

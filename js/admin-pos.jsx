@@ -213,7 +213,7 @@ function POS({ auth, dest, onBack, onPay }) {
       </div>
 
       {/* ticket */}
-      <div style={{ display: "flex", flexDirection: "column", background: "#0a0a0a", minWidth: 0 }}>
+      <div style={{ display: "flex", flexDirection: "column", background: "var(--ink-2)", minWidth: 0 }}>
         <div style={{ padding: "16px 18px", borderBottom: "1px solid var(--line-dark)" }}>
           <h3 className="display" style={{ fontSize: 20, margin: 0 }}>Ticket</h3>
         </div>

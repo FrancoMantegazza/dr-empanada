@@ -251,8 +251,12 @@ function Home({ go }) {
       <section className="bfx-mustardsec" data-path-scene style={{ padding: "clamp(70px,9vw,120px) 0 clamp(90px,10vw,150px)", overflow: "clip" }} aria-label="Delivery por Boedo y alrededores">
         {/* ruta punteada + moto */}
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
-          <path className="bfx-route" d="M -80 240 C 260 100 520 480 780 360 C 1040 240 1200 520 1560 420"
+          {/* desktop: serpentina horizontal */}
+          <path className="bfx-route bfx-route--d" d="M -80 240 C 260 100 520 480 780 360 C 1040 240 1200 520 1560 420"
             fill="none" stroke="#fff" strokeOpacity=".55" strokeWidth="6" strokeDasharray="20 26" strokeLinecap="round" />
+          {/* mobile: descenso vertical (no se deforma en sección alta+angosta) */}
+          <path className="bfx-route bfx-route--m" d="M 260 -40 C 520 180 120 320 300 480 C 480 640 140 760 300 980"
+            fill="none" stroke="#fff" strokeOpacity=".55" strokeWidth="8" strokeDasharray="18 24" strokeLinecap="round" />
         </svg>
         {/* zIndex 1: la moto pasa por DETRÁS de las cards (wrap tiene zIndex 2) */}
         <div className="bfx-rider" aria-hidden="true" style={{ position: "absolute", left: 0, top: 0, width: "clamp(80px,9vw,130px)", zIndex: 1, filter: "drop-shadow(0 14px 22px rgba(43,20,3,.3))" }}

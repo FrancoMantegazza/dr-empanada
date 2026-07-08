@@ -126,7 +126,7 @@ function Header({ route, go }) {
   const [bump, setBump] = useState(false);
   const headRef = useRef(null);
   // páginas con tema claro cartoon (header crema)
-  const home = ["#/", "", "#/menu", "#/nosotros", "#/contacto"].includes(route);
+  const home = ["#/", "", "#/menu", "#/nosotros", "#/contacto", "#/checkout"].includes(route);
   const count = store.cartCount();
   const links = [
     ["#/", "Inicio"], ["#/menu", "Menú"], ["#/nosotros", "Nosotros"], ["#/contacto", "Contacto"],
@@ -418,111 +418,107 @@ function Customizer() {
     window.dispatchEvent(new Event("bf-open-cart"));
   };
 
-  const Section = ({ label, children }) => (
-    <div style={{ marginBottom: 20 }}>
-      <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 10 }}>{label}</div>
+  const Sec = ({ label, children }) => (
+    <div style={{ marginBottom: 22 }}>
+      <div className="bfx-seclabel">{label}</div>
       {children}
     </div>
   );
 
   return (
-    <div className="modal-bg" onClick={(e) => { if (e.target === e.currentTarget) setItem(null); }}>
-      <div className="modal" role="dialog" aria-modal="true" aria-label={"Personalizar " + item.name}>
+    <div className="bfx-modal-bg" onClick={(e) => { if (e.target === e.currentTarget) setItem(null); }}>
+      <div className="bfx-modal" role="dialog" aria-modal="true" aria-label={"Personalizar " + item.name}>
         {/* header foto */}
-        <div style={{ position: "relative", height: 150 }}>
-          <Photo item={item} style={{ position: "absolute", inset: 0 }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, var(--ink) 4%, rgba(12,12,13,.25))" }} />
-          <button onClick={() => setItem(null)} aria-label="Cerrar" style={{
-            position: "absolute", top: 12, right: 12, width: 38, height: 38, borderRadius: 10,
-            background: "rgba(12,12,13,.7)", border: "1px solid var(--line-dark)", color: "var(--white)", display: "grid", placeItems: "center",
-          }}><Ic.x /></button>
-          <div style={{ position: "absolute", left: 20, bottom: 10 }}>
-            <h2 className="display" style={{ fontSize: 30, margin: 0 }}>{item.name}</h2>
-            <p style={{ color: "var(--muted)", fontSize: 13.5, margin: "2px 0 0", maxWidth: 420 }}>{item.desc}</p>
+        <div className="bfx-modal-head">
+          <img src={item.img || IMG("photo-1586190848861-99aa4a171e90")} alt={item.name} />
+          <div className="veil" />
+          <button className="bfx-modal-close" onClick={() => setItem(null)} aria-label="Cerrar"><Ic.x /></button>
+          <div className="ttl">
+            <h2>{item.name}</h2>
+            {item.desc && <p>{item.desc}</p>}
           </div>
         </div>
 
-        <div style={{ padding: "18px 20px 0" }}>
+        <div className="bfx-modal-body">
           {item.priceDouble && (
-            <Section label="Tamaño">
+            <Sec label="Tamaño">
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 {[["single", "Simple", item.price], ["double", "Doble", item.priceDouble]].map(([v, l, p]) => (
-                  <button key={v} className={"opt" + (size === v ? " on" : "")} onClick={() => setSize(v)}>
-                    <span className={"opt-check opt-radio"}>{size === v && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#1a1206" }} />}</span>
-                    <span style={{ flex: 1, fontWeight: 700 }}>{l}</span>
-                    <span className="mono tabular" style={{ fontSize: 13 }}>{money(p)}</span>
+                  <button key={v} className={"bfx-opt" + (size === v ? " on" : "")} onClick={() => setSize(v)}>
+                    <span className="bfx-tick"><span className="dot" /></span>
+                    <span className="nm">{l}</span>
+                    <span className="pr">{money(p)}</span>
                   </button>
                 ))}
               </div>
-            </Section>
+            </Sec>
           )}
 
           {isBurger && (
-            <Section label="Medallón · mismo precio">
+            <Sec label="Medallón · mismo precio">
               <div style={{ display: "grid", gap: 8 }}>
                 {MEDALLONES.map((m) => (
-                  <button key={m} className={"opt" + (medallon === m ? " on" : "")} onClick={() => setMedallon(m)}>
-                    <span className="opt-check opt-radio">{medallon === m && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#1a1206" }} />}</span>
-                    <span style={{ flex: 1, fontWeight: 600 }}>{m}{m !== "Carne" && <Ic.leaf width={14} height={14} style={{ color: "var(--ok)", marginLeft: 8, verticalAlign: "-2px" }} />}</span>
+                  <button key={m} className={"bfx-opt" + (medallon === m ? " on" : "")} onClick={() => setMedallon(m)}>
+                    <span className="bfx-tick"><span className="dot" /></span>
+                    <span className="nm">{m}{m !== "Carne" && <Ic.leaf width={15} height={15} style={{ color: "var(--bfx-green)", marginLeft: 8, verticalAlign: "-2px" }} />}</span>
                   </button>
                 ))}
               </div>
-            </Section>
+            </Sec>
           )}
 
           {item.protein && (
-            <Section label="Elegí la proteína">
+            <Sec label="Elegí la proteína">
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 {PROTEINAS.map((m) => (
-                  <button key={m} className={"opt" + (protein === m ? " on" : "")} onClick={() => setProtein(m)}>
-                    <span className="opt-check opt-radio">{protein === m && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#1a1206" }} />}</span>
-                    <span style={{ flex: 1, fontWeight: 700 }}>{m}</span>
+                  <button key={m} className={"bfx-opt" + (protein === m ? " on" : "")} onClick={() => setProtein(m)}>
+                    <span className="bfx-tick"><span className="dot" /></span>
+                    <span className="nm">{m}</span>
                   </button>
                 ))}
               </div>
-            </Section>
+            </Sec>
           )}
 
           {isBurger && (
-            <Section label="Mejorá tus papas">
+            <Sec label="Mejorá tus papas">
               <div style={{ display: "grid", gap: 8 }}>
                 {PAPAS_UPGRADES.map((p) => (
-                  <button key={p.id} className={"opt" + (papas === p.id ? " on" : "")} onClick={() => setPapas(p.id)}>
-                    <span className="opt-check opt-radio">{papas === p.id && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#1a1206" }} />}</span>
-                    <span style={{ flex: 1, fontWeight: 600 }}>{p.name}</span>
-                    <span className="mono tabular" style={{ fontSize: 13, color: p.price ? "var(--orange)" : "var(--muted)" }}>{p.price ? "+" + money(p.price) : "—"}</span>
+                  <button key={p.id} className={"bfx-opt" + (papas === p.id ? " on" : "")} onClick={() => setPapas(p.id)}>
+                    <span className="bfx-tick"><span className="dot" /></span>
+                    <span className="nm">{p.name}</span>
+                    <span className={"pr" + (p.price ? "" : " free")}>{p.price ? "+" + money(p.price) : "—"}</span>
                   </button>
                 ))}
               </div>
-            </Section>
+            </Sec>
           )}
 
-          <Section label="Agregados">
+          <Sec label="Agregados">
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }} className="bf-two">
               {EXTRAS.map((e) => {
                 const on = extras.includes(e.id);
                 return (
-                  <button key={e.id} className={"opt" + (on ? " on" : "")} onClick={() => toggleExtra(e.id)} style={{ padding: "10px 12px" }}>
-                    <span className="opt-check">{on && <Ic.check width={13} height={13} />}</span>
-                    <span style={{ flex: 1, fontWeight: 600, fontSize: 13.5, lineHeight: 1.2 }}>{e.name}</span>
-                    <span className="mono tabular" style={{ fontSize: 12, color: "var(--orange)" }}>+{money(e.price)}</span>
+                  <button key={e.id} className={"bfx-opt" + (on ? " on" : "")} onClick={() => toggleExtra(e.id)} style={{ fontSize: 16, padding: "11px 13px" }}>
+                    <span className="bfx-tick sq">{on && <Ic.check width={13} height={13} />}</span>
+                    <span className="nm" style={{ lineHeight: 1.15 }}>{e.name}</span>
+                    <span className="pr">+{money(e.price)}</span>
                   </button>
                 );
               })}
             </div>
-          </Section>
+          </Sec>
         </div>
 
         {/* footer */}
-        <div style={{ position: "sticky", bottom: 0, background: "var(--ink-2)", borderTop: "1px solid var(--line-dark)", padding: "14px 20px", display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ display: "flex", alignItems: "center", border: "1px solid var(--line-dark)", borderRadius: 10, background: "var(--ink)" }}>
-            <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Menos" style={{ width: 38, height: 42, display: "grid", placeItems: "center", background: "none", border: "none", color: "var(--white)" }}><Ic.minus width={15} height={15} /></button>
-            <span className="mono tabular" style={{ width: 28, textAlign: "center", fontWeight: 700 }}>{qty}</span>
-            <button onClick={() => setQty((q) => q + 1)} aria-label="Más" style={{ width: 38, height: 42, display: "grid", placeItems: "center", background: "none", border: "none", color: "var(--white)" }}><Ic.plus width={15} height={15} /></button>
+        <div className="bfx-modal-foot">
+          <div className="bfx-qtybox">
+            <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Menos"><Ic.minus width={15} height={15} /></button>
+            <span>{qty}</span>
+            <button onClick={() => setQty((q) => q + 1)} aria-label="Más"><Ic.plus width={15} height={15} /></button>
           </div>
-          <button className="btn btn-orange btn-lg" style={{ flex: 1, justifyContent: "space-between" }} onClick={confirm}>
-            <span>Agregar al pedido</span>
-            <span className="tabular">{money(total)}</span>
+          <button className="bfx-blob" style={{ flex: 1, fontSize: 20 }} onClick={confirm}>
+            Agregar · {money(total)}
           </button>
         </div>
       </div>

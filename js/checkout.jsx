@@ -1,5 +1,6 @@
 /* ============================================================
-   checkout.jsx — Finalizar pedido (datos, entrega, pago, confirmación)
+   checkout.jsx — Finalizar pedido, estética cartoon (crema)
+   Mantiene toda la lógica (datos → pago → confirmar → tracking).
    ============================================================ */
 function Checkout({ go }) {
   const store = useStore();
@@ -18,11 +19,11 @@ function Checkout({ go }) {
 
   if (lines.length === 0 && !order) {
     return (
-      <div className="wrap" style={{ padding: "90px 24px", textAlign: "center" }}>
-        <div style={{ opacity: .3, display: "flex", justifyContent: "center", marginBottom: 16 }}><Ic.cart width={56} height={56} /></div>
-        <h1 className="display" style={{ fontSize: 40, margin: "0 0 10px" }}>No hay nada en el carrito</h1>
-        <p style={{ color: "var(--muted)", marginBottom: 26 }}>Agregá algo del menú para poder pedir.</p>
-        <button className="btn btn-orange btn-lg" onClick={() => go("#/menu")}>Ir al menú <Ic.arrow /></button>
+      <div className="bfx wrap" style={{ padding: "110px 24px", textAlign: "center" }}>
+        <Sticker name="burger" size={96} style={{ position: "relative", margin: "0 auto 18px" }} />
+        <h1 className="bfx-giant bfx-giant--md" style={{ fontSize: "clamp(34px,6vw,68px)", margin: "0 0 10px" }}>Carrito vacío</h1>
+        <p className="bfx-copy" style={{ margin: "0 0 26px", opacity: .8 }}>Sumá algo del menú para poder pedir.</p>
+        <button className="bfx-blob" onClick={() => go("#/menu")}>Ir al menú →</button>
       </div>
     );
   }
@@ -38,145 +39,125 @@ function Checkout({ go }) {
       address: form.address, bell: form.bell, notes: form.notes, pay: form.pay,
     });
     setOrder(o);
-    window.scrollTo({ top: 0 });
+    if (window.FX) FX.toTop(); else window.scrollTo({ top: 0 });
   };
 
   return (
-    <div className="fadeup wrap" style={{ padding: "40px 24px 80px" }}>
-      <button onClick={() => go("#/menu")} className="mono" style={{ background: "none", border: "none", color: "var(--muted)", display: "flex", alignItems: "center", gap: 6, marginBottom: 20, fontSize: 13 }}>‹ Seguir agregando</button>
-      <h1 className="display" style={{ fontSize: "clamp(36px,5vw,56px)", margin: "0 0 6px" }}>Finalizar pedido</h1>
+    <div className="bfx wrap" style={{ padding: "40px 24px 90px" }}>
+      <button onClick={() => go("#/menu")} className="bfx-hand" style={{ background: "none", border: "none", color: "var(--bfx-deep)", opacity: .7, display: "flex", alignItems: "center", gap: 6, marginBottom: 18, fontSize: 18, letterSpacing: ".04em", cursor: "pointer", textTransform: "uppercase" }}>‹ Seguir agregando</button>
+      <h1 className="bfx-giant bfx-giant--md" style={{ fontSize: "clamp(40px,6.5vw,88px)", margin: "0 0 8px" }}>Finalizar pedido</h1>
 
-      {/* steps indicator */}
-      <div style={{ display: "flex", gap: 8, margin: "18px 0 30px", flexWrap: "wrap" }}>
+      {/* steps */}
+      <div style={{ display: "flex", gap: 8, margin: "16px 0 30px", flexWrap: "wrap" }}>
         {[[1, "Tus datos"], [2, "Pago"], [3, "Confirmar"]].map(([n, l]) => (
-          <div key={n} style={{ display: "flex", alignItems: "center", gap: 9, padding: "8px 14px", borderRadius: 100, border: "1px solid " + (step >= n ? "var(--orange)" : "var(--line-dark)"), background: step >= n ? "rgba(234,123,27,.1)" : "transparent" }}>
-            <span className="mono" style={{ width: 22, height: 22, borderRadius: "50%", background: step >= n ? "var(--orange)" : "var(--line-dark)", color: step >= n ? "#1a1206" : "var(--muted)", display: "grid", placeItems: "center", fontSize: 12, fontWeight: 700 }}>{n}</span>
-            <span className="mono" style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", color: step >= n ? "var(--white)" : "var(--muted)" }}>{l}</span>
+          <div key={n} className={"bfx-step" + (step >= n ? " on" : "")}>
+            <span className="n">{n}</span>{l}
           </div>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.3fr .7fr", gap: 30, alignItems: "start" }} className="bf-checkout-grid">
+      <div style={{ display: "grid", gridTemplateColumns: "1.3fr .7fr", gap: 26, alignItems: "start" }} className="bf-checkout-grid">
         {/* left: form */}
         <div style={{ display: "grid", gap: 18 }}>
           {step === 1 && (
-            <div style={card}>
-              <h2 className="display" style={{ fontSize: 24, margin: "0 0 18px" }}>Tus datos</h2>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                <Field label="Nombre *"><input style={inp} value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Juan" /></Field>
-                <Field label="Apellido *"><input style={inp} value={form.lastname} onChange={(e) => set("lastname", e.target.value)} placeholder="Pérez" /></Field>
+            <div className="bfx-card">
+              <h2 className="bfx-bubble" style={{ fontSize: 30, margin: "0 0 20px" }}>Tus datos</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="bf-two">
+                <TField label="Nombre *"><input className="bfx-tinput" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Juan" /></TField>
+                <TField label="Apellido *"><input className="bfx-tinput" value={form.lastname} onChange={(e) => set("lastname", e.target.value)} placeholder="Pérez" /></TField>
               </div>
               <div style={{ marginTop: 14 }}>
-                <Field label="Teléfono / WhatsApp *"><input style={inp} value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="11 1234-5678" inputMode="tel" /></Field>
+                <TField label="Teléfono / WhatsApp *"><input className="bfx-tinput" value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="11 1234-5678" inputMode="tel" /></TField>
               </div>
 
-              <div style={{ marginTop: 22, marginBottom: 6 }} className="mono" >
-                <span style={{ fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--muted)" }}>Modalidad de entrega</span>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="bfx-seclabel" style={{ margin: "22px 0 10px" }}>Modalidad de entrega</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="bf-two">
                 {[["delivery", Ic.truck, "Delivery", "Te lo llevamos"], ["takeaway", Ic.bag, "Take away", "Pasás a buscarlo"]].map(([val, Icon, t, d]) => (
-                  <button key={val} onClick={() => set("mode", val)} style={{
-                    textAlign: "left", padding: 16, borderRadius: 12, cursor: "pointer",
-                    border: "1.5px solid " + (form.mode === val ? "var(--orange)" : "var(--line-dark)"),
-                    background: form.mode === val ? "rgba(234,123,27,.08)" : "var(--ink)", color: "var(--white)",
-                    transition: "border-color .15s ease, background .15s ease",
-                  }}>
-                    <span style={{ color: form.mode === val ? "var(--orange)" : "var(--muted)" }}><Icon width={22} height={22} /></span>
-                    <div style={{ fontWeight: 700, fontSize: 16, marginTop: 8 }}>{t}</div>
-                    <div style={{ color: "var(--muted)", fontSize: 13 }}>{d}</div>
+                  <button key={val} onClick={() => set("mode", val)} className={"bfx-choice" + (form.mode === val ? " on" : "")}>
+                    <span className="ico"><Icon width={24} height={24} /></span>
+                    <div className="t">{t}</div>
+                    <div className="d">{d}</div>
                   </button>
                 ))}
               </div>
 
               {form.mode === "delivery" && (
                 <div style={{ marginTop: 16, display: "grid", gap: 14 }}>
-                  <Field label="Dirección *"><input style={inp} value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="Calle y altura, piso/depto" /></Field>
-                  <Field label="Timbre / referencia"><input style={inp} value={form.bell} onChange={(e) => set("bell", e.target.value)} placeholder="Timbre B · portón negro" /></Field>
+                  <TField label="Dirección *"><input className="bfx-tinput" value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="Calle y altura, piso/depto" /></TField>
+                  <TField label="Timbre / referencia"><input className="bfx-tinput" value={form.bell} onChange={(e) => set("bell", e.target.value)} placeholder="Timbre B · portón negro" /></TField>
                 </div>
               )}
               <div style={{ marginTop: 16 }}>
-                <Field label="Notas (opcional)"><textarea rows={2} style={{ ...inp, resize: "vertical" }} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Sin pickles, salsa aparte..." /></Field>
+                <TField label="Notas (opcional)"><textarea rows={2} className="bfx-tinput" style={{ resize: "vertical" }} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Sin pickles, salsa aparte..." /></TField>
               </div>
 
-              <button className="btn btn-orange btn-block btn-lg" style={{ marginTop: 22 }} disabled={!canStep1} onClick={() => setStep(2)}>
-                Continuar al pago <Ic.arrow />
-              </button>
-              {!canStep1 && <p className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)", textAlign: "center", marginTop: 10 }}>Completá los campos con *</p>}
+              <button className="bfx-blob" style={{ marginTop: 24, width: "100%", opacity: canStep1 ? 1 : .5 }} disabled={!canStep1} onClick={() => setStep(2)}>Continuar al pago →</button>
+              {!canStep1 && <p className="bfx-hand" style={{ fontSize: 15, opacity: .55, textAlign: "center", marginTop: 10, letterSpacing: ".04em" }}>Completá los campos con *</p>}
             </div>
           )}
 
           {step === 2 && (
-            <div style={card}>
-              <h2 className="display" style={{ fontSize: 24, margin: "0 0 6px" }}>¿Cómo pagás?</h2>
-              <p style={{ color: "var(--muted)", fontSize: 14, margin: "0 0 18px" }}>Elegí el método. El pago se coordina al confirmar.</p>
+            <div className="bfx-card">
+              <h2 className="bfx-bubble" style={{ fontSize: 30, margin: "0 0 6px" }}>¿Cómo pagás?</h2>
+              <p className="bfx-copy" style={{ fontSize: 18, margin: "0 0 18px", opacity: .75 }}>Elegí el método. El pago se coordina al confirmar.</p>
               <div style={{ display: "grid", gap: 12 }}>
                 {[
                   ["transferencia", "Transferencia", "Alias / CBU al instante", Ic.copy],
                   ["mp", "Mercado Pago", "Te pasamos el link de pago", Ic.phone],
                   ["sena", "Seña + efectivo", "Señás online y el resto en efectivo", Ic.bag],
                 ].map(([val, t, d, Icon]) => (
-                  <button key={val} onClick={() => set("pay", val)} style={{
-                    display: "flex", alignItems: "center", gap: 14, textAlign: "left", padding: 16, borderRadius: 12, cursor: "pointer",
-                    border: "1.5px solid " + (form.pay === val ? "var(--orange)" : "var(--line-dark)"),
-                    background: form.pay === val ? "rgba(234,123,27,.08)" : "var(--ink)", color: "var(--white)",
-                    transition: "border-color .15s ease, background .15s ease",
-                  }}>
-                    <span style={{ width: 42, height: 42, borderRadius: 10, display: "grid", placeItems: "center", background: form.pay === val ? "var(--orange)" : "var(--ink-3)", color: form.pay === val ? "#1a1206" : "var(--muted)", flexShrink: 0 }}><Icon width={20} height={20} /></span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 700, fontSize: 16 }}>{t}</div>
-                      <div style={{ color: "var(--muted)", fontSize: 13 }}>{d}</div>
+                  <button key={val} onClick={() => set("pay", val)} className={"bfx-choice" + (form.pay === val ? " on" : "")} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                    <span style={{ width: 46, height: 46, borderRadius: 12, display: "grid", placeItems: "center", background: form.pay === val ? "var(--bfx-red)" : "var(--bfx-cream)", color: form.pay === val ? "#fff" : "rgba(43,20,3,.5)", flexShrink: 0 }}><Icon width={21} height={21} /></span>
+                    <div style={{ flex: 1, textAlign: "left" }}>
+                      <div className="t" style={{ marginTop: 0 }}>{t}</div>
+                      <div className="d">{d}</div>
                     </div>
-                    <span style={{ width: 20, height: 20, borderRadius: "50%", border: "2px solid " + (form.pay === val ? "var(--orange)" : "var(--line-dark)"), display: "grid", placeItems: "center" }}>
-                      {form.pay === val && <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--orange)" }} />}
-                    </span>
+                    <span className="bfx-tick"><span className="dot" style={{ opacity: form.pay === val ? 1 : 0 }} /></span>
                   </button>
                 ))}
               </div>
 
               {(form.pay === "transferencia" || form.pay === "sena") && <TransferData />}
 
-              <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
-                <button className="btn btn-ghost btn-lg" onClick={() => setStep(1)}>Volver</button>
-                <button className="btn btn-orange btn-lg" style={{ flex: 1 }} onClick={() => setStep(3)}>Revisar pedido <Ic.arrow /></button>
+              <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+                <button className="bfx-btn-ghost" onClick={() => setStep(1)}>Volver</button>
+                <button className="bfx-blob" style={{ flex: 1 }} onClick={() => setStep(3)}>Revisar pedido →</button>
               </div>
             </div>
           )}
 
           {step === 3 && (
-            <div style={card}>
-              <h2 className="display" style={{ fontSize: 24, margin: "0 0 18px" }}>Revisá y confirmá</h2>
+            <div className="bfx-card">
+              <h2 className="bfx-bubble" style={{ fontSize: 30, margin: "0 0 20px" }}>Revisá y confirmá</h2>
               <Summary form={form} />
-              <button className="btn btn-orange btn-block btn-lg" style={{ marginTop: 20 }} onClick={confirm}>
-                <Ic.check /> Confirmar pedido · {money(total)}
-              </button>
-              <button className="btn btn-ghost btn-block" style={{ marginTop: 10 }} onClick={() => setStep(2)}>Volver</button>
-              <p className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)", textAlign: "center", marginTop: 12 }}>Al confirmar, tu pedido entra a la cocina y te avisamos por WhatsApp.</p>
+              <button className="bfx-blob" style={{ marginTop: 22, width: "100%" }} onClick={confirm}>Confirmar · {money(total)}</button>
+              <button className="bfx-btn-ghost" style={{ width: "100%", marginTop: 10 }} onClick={() => setStep(2)}>Volver</button>
+              <p className="bfx-hand" style={{ fontSize: 15, opacity: .55, textAlign: "center", marginTop: 14, letterSpacing: ".03em" }}>Al confirmar, tu pedido entra a la cocina y te avisamos por WhatsApp.</p>
             </div>
           )}
         </div>
 
         {/* right: order summary */}
-        <aside style={{ ...card, position: "sticky", top: 90 }}>
-          <h3 className="display" style={{ fontSize: 20, margin: "0 0 14px" }}>Tu pedido</h3>
-          <div style={{ display: "grid", gap: 10, maxHeight: 280, overflowY: "auto", marginBottom: 14 }}>
+        <aside className="bfx-card" style={{ position: "sticky", top: 96 }}>
+          <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 16px" }}>Tu pedido</h3>
+          <div style={{ display: "grid", gap: 12, maxHeight: 300, overflowY: "auto", marginBottom: 16 }}>
             {lines.map((l) => (
               <div key={l.id + l.variant + (l.modsLabel || "")} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                <span className="mono tabular" style={{ minWidth: 26, height: 26, borderRadius: 6, background: "var(--ink-3)", color: "var(--orange)", display: "grid", placeItems: "center", fontSize: 13, fontWeight: 700 }}>{l.qty}</span>
+                <span className="bfx-qtychip">{l.qty}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>{l.item.name}</div>
-                  {l.variant === "double" && <div className="mono" style={{ fontSize: 10.5, color: "var(--orange)" }}>Doble</div>}
-                  {l.modsLabel && <div style={{ fontSize: 11.5, color: "var(--muted)", lineHeight: 1.35 }}>{l.modsLabel}</div>}
+                  <div style={{ fontFamily: "var(--bfx-modak)", color: "var(--bfx-red)", fontSize: 17, lineHeight: 1 }}>{l.item.name}{l.variant === "double" ? " · Doble" : ""}</div>
+                  {l.modsLabel && <div className="bfx-hand" style={{ fontSize: 14, color: "rgba(43,20,3,.6)", lineHeight: 1.35, marginTop: 3 }}>{l.modsLabel}</div>}
                 </div>
-                <div className="mono tabular" style={{ fontSize: 13 }}>{money(l.lineTotal)}</div>
+                <div className="bfx-hand" style={{ fontSize: 17 }}>{money(l.lineTotal)}</div>
               </div>
             ))}
           </div>
-          <div style={{ borderTop: "1px solid var(--line-dark)", paddingTop: 12, display: "grid", gap: 7 }}>
+          <div style={{ borderTop: "2px dashed rgba(43,20,3,.15)", paddingTop: 14, display: "grid", gap: 8 }}>
             <Row k="Subtotal" v={money(subtotal)} />
             <Row k={form.mode === "delivery" ? "Envío" : "Take away"} v={shipping ? money(shipping) : "Gratis"} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 6 }}>
-              <span className="display" style={{ fontSize: 18 }}>Total</span>
-              <span className="display tabular" style={{ fontSize: 28, color: "var(--orange)" }}>{money(total)}</span>
+              <span className="bfx-bubble" style={{ fontSize: 22 }}>Total</span>
+              <span className="bfx-bubble" style={{ fontSize: 32 }}>{money(total)}</span>
             </div>
           </div>
         </aside>
@@ -186,7 +167,11 @@ function Checkout({ go }) {
 }
 
 function Row({ k, v }) {
-  return <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--muted)", fontSize: 14 }}>{k}</span><span className="mono tabular" style={{ fontSize: 14 }}>{v}</span></div>;
+  return <div style={{ display: "flex", justifyContent: "space-between" }}><span className="bfx-hand" style={{ fontSize: 17, color: "rgba(43,20,3,.65)" }}>{k}</span><span className="bfx-hand" style={{ fontSize: 17 }}>{v}</span></div>;
+}
+
+function TField({ label, children }) {
+  return <label className="bfx-field"><span className="lbl">{label}</span>{children}</label>;
 }
 
 function TransferData() {
@@ -194,20 +179,20 @@ function TransferData() {
   const copy = (txt, key) => { navigator.clipboard?.writeText(txt); setCopied(key); setTimeout(() => setCopied(""), 1500); };
   const rows = [["Alias", BIZ.pay.alias, "alias"], ["CBU", BIZ.pay.cbu, "cbu"], ["Titular", BIZ.pay.titular, null]];
   return (
-    <div className="kraft" style={{ borderRadius: 12, padding: 18, marginTop: 16, color: "var(--ink)" }}>
-      <div className="mono" style={{ fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--orange-deep)", marginBottom: 12, fontWeight: 700 }}>Datos para transferir</div>
+    <div style={{ background: "var(--bfx-cream)", border: "2.5px dashed rgba(43,20,3,.2)", borderRadius: 16, padding: 18, marginTop: 16 }}>
+      <div className="bfx-seclabel" style={{ marginBottom: 12 }}>Datos para transferir</div>
       <div style={{ display: "grid", gap: 8 }}>
         {rows.map(([k, v, key]) => (
-          <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, borderBottom: "1px dashed rgba(0,0,0,.15)", paddingBottom: 8 }}>
-            <span style={{ fontSize: 13, color: "#6b6253" }}>{k}</span>
+          <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, borderBottom: "1.5px dashed rgba(43,20,3,.15)", paddingBottom: 8 }}>
+            <span className="bfx-hand" style={{ fontSize: 15, color: "rgba(43,20,3,.6)", letterSpacing: ".04em" }}>{k}</span>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span className="mono" style={{ fontWeight: 700, fontSize: 13.5, color: "var(--ink)" }}>{v}</span>
-              {key && <button onClick={() => copy(v, key)} style={{ background: "none", border: "none", color: copied === key ? "var(--orange-deep)" : "#9a8e76", cursor: "pointer", display: "grid" }}>{copied === key ? <Ic.check width={15} height={15} /> : <Ic.copy />}</button>}
+              <span style={{ fontFamily: "var(--bfx-round)", fontWeight: 700, fontSize: 16, color: "var(--bfx-deep)" }}>{v}</span>
+              {key && <button onClick={() => copy(v, key)} aria-label={"Copiar " + k} style={{ background: "none", border: "none", color: copied === key ? "var(--bfx-green)" : "rgba(43,20,3,.4)", cursor: "pointer", display: "grid" }}>{copied === key ? <Ic.check width={16} height={16} /> : <Ic.copy width={16} height={16} />}</button>}
             </div>
           </div>
         ))}
       </div>
-      <p style={{ fontSize: 12, color: "#6b6253", margin: "12px 0 0" }}>Enviá el comprobante por WhatsApp al confirmar el pedido.</p>
+      <p className="bfx-hand" style={{ fontSize: 14, color: "rgba(43,20,3,.55)", margin: "12px 0 0", letterSpacing: ".03em" }}>Enviá el comprobante por WhatsApp al confirmar el pedido.</p>
     </div>
   );
 }
@@ -215,7 +200,7 @@ function TransferData() {
 function Summary({ form }) {
   const payLabel = { transferencia: "Transferencia", mp: "Mercado Pago", sena: "Seña + efectivo" }[form.pay];
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div>
       <SumRow label="Cliente" value={form.name + " " + form.lastname} />
       <SumRow label="WhatsApp" value={form.phone} />
       <SumRow label="Entrega" value={form.mode === "delivery" ? "Delivery" : "Take away"} />
@@ -227,9 +212,9 @@ function Summary({ form }) {
 }
 function SumRow({ label, value }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, borderBottom: "1px solid var(--line-dark)", paddingBottom: 10 }}>
-      <span className="mono" style={{ fontSize: 11.5, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--muted)", flexShrink: 0 }}>{label}</span>
-      <span style={{ fontWeight: 600, textAlign: "right" }}>{value}</span>
+    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, borderBottom: "2px dashed rgba(43,20,3,.15)", padding: "11px 0" }}>
+      <span className="bfx-hand" style={{ fontSize: 15, letterSpacing: ".06em", textTransform: "uppercase", color: "rgba(43,20,3,.55)", flexShrink: 0 }}>{label}</span>
+      <span style={{ fontFamily: "var(--bfx-mouse)", fontSize: 18, textAlign: "right", color: "var(--bfx-deep)" }}>{value}</span>
     </div>
   );
 }
@@ -247,54 +232,55 @@ function OrderSuccess({ order, go }) {
     `%0ATotal: ${money(order.total)}%0AA nombre de ${order.name}.`;
 
   return (
-    <div className="fadeup wrap" style={{ padding: "50px 24px 80px", maxWidth: 780 }}>
-      <div style={{ textAlign: "center", marginBottom: 30 }}>
-        <div style={{ width: 76, height: 76, borderRadius: "50%", background: "rgba(63,174,107,.15)", color: "var(--ok)", display: "grid", placeItems: "center", margin: "0 auto 18px", border: "2px solid var(--ok)" }}><Ic.check width={36} height={36} /></div>
-        <div className="eyebrow" style={{ color: "var(--ok)", marginBottom: 10 }}>Pedido confirmado</div>
-        <h1 className="display" style={{ fontSize: "clamp(34px,5vw,52px)", margin: 0 }}>¡Gracias, {order.name.split(" ")[0]}!</h1>
-        <p style={{ color: "var(--muted)", fontSize: 17, marginTop: 10 }}>Tu pedido <b className="mono" style={{ color: "var(--orange)" }}>{order.id}</b> ya entró a la cocina.</p>
+    <div className="bfx wrap" style={{ padding: "60px 24px 90px", maxWidth: 800 }}>
+      <div style={{ textAlign: "center", marginBottom: 34 }}>
+        <div style={{ width: 84, height: 84, borderRadius: "50%", background: "var(--bfx-green)", color: "#fff", display: "grid", placeItems: "center", margin: "0 auto 18px", border: "4px solid #fff", boxShadow: "0 16px 34px -14px rgba(96,169,5,.6)" }}><Ic.check width={40} height={40} /></div>
+        <span className="bfx-badge bfx-badge--green" style={{ "--rot": "-4deg" }}>Pedido confirmado</span>
+        <h1 className="bfx-giant bfx-giant--md" style={{ fontSize: "clamp(38px,6vw,80px)", margin: "16px 0 0" }}>¡Gracias, {order.name.split(" ")[0]}!</h1>
+        <p className="bfx-copy" style={{ marginTop: 12, opacity: .8 }}>Tu pedido <b style={{ color: "var(--bfx-red)", fontFamily: "var(--bfx-round)", fontWeight: 800 }}>{order.id}</b> ya entró a la cocina.</p>
       </div>
 
       {/* tracking */}
-      <div style={{ ...card, marginBottom: 18 }}>
-        <h3 className="display" style={{ fontSize: 20, margin: "0 0 22px" }}>Seguimiento</h3>
+      <div className="bfx-card" style={{ marginBottom: 18 }}>
+        <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 24px" }}>Seguimiento</h3>
         <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
-          <div style={{ position: "absolute", top: 17, left: 24, right: 24, height: 3, background: "var(--line-dark)" }} />
-          <div style={{ position: "absolute", top: 17, left: 24, height: 3, background: "var(--orange)", width: `calc(${(curIdx / (flow.length - 1)) * 100}% - 48px * ${curIdx / (flow.length - 1)})`, transition: "width .4s", maxWidth: "calc(100% - 48px)" }} />
+          <div style={{ position: "absolute", top: 19, left: 24, right: 24, height: 4, background: "rgba(43,20,3,.12)", borderRadius: 4 }} />
+          <div style={{ position: "absolute", top: 19, left: 24, height: 4, background: "var(--bfx-red)", borderRadius: 4, width: `calc(${(curIdx / (flow.length - 1)) * 100}% - 48px * ${curIdx / (flow.length - 1)})`, transition: "width .4s", maxWidth: "calc(100% - 48px)" }} />
           {flow.map((s, i) => {
             const done = i <= curIdx;
             const Icon = [Ic.check, Ic.fire, Ic.bag, Ic.truck][i];
             return (
               <div key={s} style={{ position: "relative", textAlign: "center", flex: 1, zIndex: 1 }}>
-                <div style={{ width: 38, height: 38, borderRadius: "50%", margin: "0 auto", display: "grid", placeItems: "center", background: done ? "var(--orange)" : "var(--ink-3)", color: done ? "#1a1206" : "var(--muted)", border: "2px solid " + (done ? "var(--orange)" : "var(--line-dark)") }}>
-                  <Icon width={18} height={18} />
+                <div style={{ width: 42, height: 42, borderRadius: "50%", margin: "0 auto", display: "grid", placeItems: "center", background: done ? "var(--bfx-red)" : "#fff", color: done ? "#fff" : "rgba(43,20,3,.4)", border: "3px solid " + (done ? "var(--bfx-red)" : "rgba(43,20,3,.15)") }}>
+                  <Icon width={19} height={19} />
                 </div>
-                <div className="mono" style={{ fontSize: 10.5, marginTop: 8, color: done ? "var(--white)" : "var(--muted-d)", letterSpacing: ".04em", textTransform: "uppercase" }}>{store.STATUS_LABEL[s]}</div>
+                <div className="bfx-hand" style={{ fontSize: 13.5, marginTop: 8, color: done ? "var(--bfx-deep)" : "rgba(43,20,3,.4)", letterSpacing: ".06em", textTransform: "uppercase" }}>{store.STATUS_LABEL[s]}</div>
               </div>
             );
           })}
         </div>
-        <p className="mono" style={{ fontSize: 12, color: "var(--muted)", textAlign: "center", marginTop: 22, marginBottom: 0 }}>
+        <p className="bfx-hand" style={{ fontSize: 15, color: "rgba(43,20,3,.55)", textAlign: "center", marginTop: 24, marginBottom: 0, letterSpacing: ".03em" }}>
           Te vamos avisando cada cambio de estado por WhatsApp. Esta página se actualiza sola.
         </p>
       </div>
 
-      <div style={{ ...card, marginBottom: 18 }}>
+      <div className="bfx-card" style={{ marginBottom: 18 }}>
         <Summary form={{ name: order.name.split(" ")[0], lastname: order.name.split(" ").slice(1).join(" "), phone: order.phone, mode: order.mode, address: order.address, bell: order.bell, pay: order.pay, notes: order.notes }} />
-        <div style={{ borderTop: "1px solid var(--line-dark)", marginTop: 14, paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <span className="display" style={{ fontSize: 20 }}>Total</span>
-          <span className="display tabular" style={{ fontSize: 30, color: "var(--orange)" }}>{money(order.total)}</span>
+        <div style={{ borderTop: "2px dashed rgba(43,20,3,.15)", marginTop: 14, paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <span className="bfx-bubble" style={{ fontSize: 22 }}>Total</span>
+          <span className="bfx-bubble" style={{ fontSize: 34 }}>{money(order.total)}</span>
         </div>
       </div>
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-        <a className="btn btn-orange btn-lg" style={{ flex: 1 }} href={waLink(decodeURIComponent(waText))} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> Enviar comprobante por WhatsApp</a>
-        <button className="btn btn-ghost btn-lg" onClick={() => go("#/menu")}>Volver al menú</button>
+        <a className="bfx-blob" style={{ flex: 1, minWidth: 240 }} href={waLink(decodeURIComponent(waText))} target="_blank" rel="noopener"><Ic.wa width={19} height={19} style={{ marginRight: 8 }} /> Enviar comprobante</a>
+        <button className="bfx-btn-ghost" onClick={() => go("#/menu")}>Volver al menú</button>
       </div>
     </div>
   );
 }
 
+/* card oscuro — lo consumen admin-pos.jsx / admin-reports.jsx (NO borrar) */
 const card = { background: "var(--ink-2)", border: "1px solid var(--line-dark)", borderRadius: 16, padding: 24 };
 
 Object.assign(window, { Checkout, card });

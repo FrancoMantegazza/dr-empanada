@@ -657,8 +657,212 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 @media (max-width: 480px){
   .bfx-footer-info{ grid-template-columns: 1fr; }
 }
+
+/* ---------- polaroids "LA BANDA": zigzag en mobile (sin solape) ---------- */
+.bfx-route--m{ display: none; }
+@media (max-width: 720px){
+  .bfx-polaroid-row{ flex-direction: column; align-items: center; gap: 30px !important; }
+  .bfx-polaroid-row .bfx-polaroid{ margin-top: 0 !important; width: min(300px, 82vw) !important; }
+  .bfx-polaroid-row .bfx-polaroid:nth-child(odd){ align-self: flex-start; }
+  .bfx-polaroid-row .bfx-polaroid:nth-child(even){ align-self: flex-end; }
+  /* ruta de la moto: path vertical (el horizontal se deforma con preserveAspectRatio=none) */
+  .bfx-route--d{ display: none; }
+  .bfx-route--m{ display: inline; }
+}
 @media (prefers-reduced-motion: reduce){
   #bfx-loader .word{ animation:none; }
   .bfx-blob:hover{ scale:none; }
   .bfx-marquee .row{ animation:none !important; }
 }
+
+/* ============================================================
+   CUSTOMIZER (modal) + CHECKOUT — superficies claras cartoon
+   ============================================================ */
+
+/* blob deshabilitado (checkout "continuar") */
+.bfx-blob:disabled{ opacity:.5; cursor:not-allowed; }
+.bfx-blob:disabled:hover{ scale:none; }
+
+/* botón secundario / ghost (Volver, etc) */
+.bfx-btn-ghost{
+  font-family: var(--bfx-mouse); font-size: 18px; letter-spacing:.06em; text-transform:uppercase;
+  padding: 15px 28px 13px; border-radius: 100px; cursor:pointer;
+  background: transparent; border: 2.5px solid rgba(43,20,3,.2); color: var(--bfx-deep);
+  transition: border-color .15s, color .15s, scale .15s;
+}
+.bfx-btn-ghost:hover{ border-color: var(--bfx-red); color: var(--bfx-red); }
+.bfx-btn-ghost:active{ scale:.97; }
+
+/* ---------- modal shell (customizer) ---------- */
+.bfx-modal-bg{
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(43,20,3,.55); backdrop-filter: blur(3px);
+  display: grid; place-items: end center;
+}
+.bfx-modal{
+  width: min(560px, 100%); max-height: 92vh;
+  background: var(--bfx-cream);
+  border: 3px solid #fff; border-radius: 26px 26px 0 0;
+  box-shadow: 0 -22px 60px -20px rgba(43,20,3,.6);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.bfx-modal-head{ position: relative; height: 172px; flex-shrink: 0; }
+.bfx-modal-head img{ width:100%; height:100%; object-fit: cover; display:block; }
+.bfx-modal-head .veil{ position:absolute; inset:0; background: linear-gradient(to top, var(--bfx-cream) 3%, rgba(43,20,3,.12) 58%, rgba(43,20,3,.34)); }
+.bfx-modal-head .ttl{ position:absolute; left: 22px; right: 70px; bottom: 12px; }
+.bfx-modal-head .ttl h2{
+  font-family: var(--bfx-modak); font-size: 34px; line-height:.9; margin:0;
+  color: var(--bfx-red); -webkit-text-stroke:.04em #fff; paint-order: stroke fill;
+}
+.bfx-modal-head .ttl p{ font-family: var(--bfx-mouse); font-size: 17px; letter-spacing:.02em; color: var(--bfx-deep); margin: 6px 0 0; opacity:.85; }
+.bfx-modal-close{
+  position:absolute; top: 14px; right: 14px; z-index:2;
+  width: 42px; height:42px; border-radius:50%;
+  background:#fff; color: var(--bfx-deep); border: 2.5px solid rgba(43,20,3,.12);
+  display:grid; place-items:center; cursor:pointer;
+  transition: scale .15s, color .15s, border-color .15s;
+}
+.bfx-modal-close:hover{ scale:1.08; color: var(--bfx-red); border-color: var(--bfx-red); }
+.bfx-modal-close:active{ scale:.94; }
+.bfx-modal-body{ flex:1; overflow-y:auto; padding: 20px 22px 10px; }
+.bfx-modal-foot{
+  flex-shrink:0; background:#fff; border-top: 2px dashed rgba(43,20,3,.15);
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex; align-items:center; gap:12px;
+}
+
+/* ---------- section label ---------- */
+.bfx-seclabel{
+  font-family: var(--bfx-mouse); font-size: 16px; letter-spacing:.12em; text-transform:uppercase;
+  color: var(--bfx-red); margin: 0 0 10px;
+}
+
+/* ---------- option rows (radios / checks) ---------- */
+.bfx-opt{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+  padding: 13px 15px; border-radius: 14px; cursor:pointer;
+  background:#fff; border: 2.5px solid rgba(43,20,3,.12); color: var(--bfx-deep);
+  font-family: var(--bfx-mouse); font-size: 19px; letter-spacing:.02em;
+  transition: border-color .15s, background .15s, scale .12s;
+}
+.bfx-opt:hover{ border-color: rgba(226,61,22,.5); }
+.bfx-opt:active{ scale:.99; }
+.bfx-opt.on{ border-color: var(--bfx-red); background:#fff6ef; box-shadow: 0 8px 20px -12px rgba(226,61,22,.5); }
+.bfx-opt .nm{ flex:1; min-width:0; }
+.bfx-opt .pr{ font-family: var(--bfx-round); font-weight:800; font-size: 16px; color: var(--bfx-red); flex-shrink:0; }
+.bfx-opt .pr.free{ color: rgba(43,20,3,.4); }
+.bfx-tick{
+  width:24px; height:24px; border-radius:50%; flex-shrink:0;
+  border: 2.5px solid rgba(43,20,3,.25); display:grid; place-items:center; color:#fff;
+  transition: border-color .15s, background .15s;
+}
+.bfx-tick.sq{ border-radius: 8px; }
+.bfx-opt.on .bfx-tick, .bfx-choice.on .bfx-tick{ border-color: var(--bfx-red); background: var(--bfx-red); }
+.bfx-tick .dot{ width:10px; height:10px; border-radius:50%; background:#fff; opacity:0; }
+.bfx-opt.on .bfx-tick .dot{ opacity:1; }
+
+/* ---------- choice cards (modalidad / pago) ---------- */
+.bfx-choice{
+  padding: 16px; border-radius: 16px; cursor:pointer;
+  background:#fff; border: 2.5px solid rgba(43,20,3,.12); color: var(--bfx-deep);
+  font-family: var(--bfx-mouse);
+  transition: border-color .15s, background .15s, scale .12s;
+}
+.bfx-choice:hover{ border-color: rgba(226,61,22,.5); }
+.bfx-choice:active{ scale:.99; }
+.bfx-choice.on{ border-color: var(--bfx-red); background:#fff6ef; box-shadow: 0 10px 24px -14px rgba(226,61,22,.4); }
+.bfx-choice .ico{ color: rgba(43,20,3,.4); display:inline-flex; }
+.bfx-choice.on .ico{ color: var(--bfx-red); }
+.bfx-choice .t{ font-family: var(--bfx-modak); color: var(--bfx-red); font-size: 20px; line-height:1; margin-top:8px; }
+.bfx-choice .d{ font-size: 15px; color: rgba(43,20,3,.6); margin-top: 3px; }
+
+/* ---------- form field ---------- */
+.bfx-field{ display:block; }
+.bfx-field .lbl{ font-family: var(--bfx-mouse); font-size: 15px; letter-spacing:.1em; text-transform:uppercase; color: rgba(43,20,3,.55); margin-bottom: 7px; display:block; }
+.bfx-tinput{
+  width:100%; padding: 13px 16px; border-radius: 13px;
+  border: 2.5px solid rgba(43,20,3,.14); background:#fff; color: var(--bfx-deep);
+  font-family: var(--bfx-mouse); font-size: 18px; letter-spacing:.02em;
+  transition: border-color .15s, box-shadow .15s;
+}
+.bfx-tinput::placeholder{ color: rgba(43,20,3,.35); }
+.bfx-tinput:focus{ border-color: var(--bfx-red); box-shadow: 0 0 0 3px rgba(226,61,22,.13); outline:none; }
+
+/* ---------- card claro (paneles checkout) ---------- */
+.bfx-card{
+  background:#fff; border-radius: 22px; padding: 24px;
+  box-shadow: 0 18px 44px -22px rgba(43,20,3,.28); border: 2px solid rgba(43,20,3,.05);
+}
+
+/* ---------- qty box (footer modal) ---------- */
+.bfx-qtybox{ display:inline-flex; align-items:center; background: var(--bfx-cream); border: 2.5px solid rgba(43,20,3,.14); border-radius: 100px; flex-shrink:0; }
+.bfx-qtybox button{ width:42px; height:44px; display:grid; place-items:center; background:none; border:none; color: var(--bfx-deep); cursor:pointer; transition: color .15s; }
+.bfx-qtybox button:hover{ color: var(--bfx-red); }
+.bfx-qtybox span{ font-family: var(--bfx-round); font-weight:800; width:30px; text-align:center; font-size: 18px; }
+
+/* ---------- qty chip (resumen) ---------- */
+.bfx-qtychip{ min-width:28px; height:28px; padding:0 7px; border-radius:8px; background: var(--bfx-red); color:#fff; font-family: var(--bfx-round); font-weight:800; font-size:14px; display:grid; place-items:center; flex-shrink:0; }
+
+/* ---------- step chips (checkout) ---------- */
+.bfx-step{
+  display:inline-flex; align-items:center; gap:9px; padding: 8px 16px 7px; border-radius:100px;
+  font-family: var(--bfx-mouse); font-size: 15px; letter-spacing:.08em; text-transform:uppercase;
+  border: 2.5px solid rgba(43,20,3,.15); background:#fff; color: rgba(43,20,3,.5);
+}
+.bfx-step.on{ border-color: var(--bfx-red); color: var(--bfx-red); }
+.bfx-step .n{ width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background: rgba(43,20,3,.18); color:#fff; font-family: var(--bfx-round); font-weight:800; font-size:13px; }
+.bfx-step.on .n{ background: var(--bfx-red); }
+
+@media (max-width: 720px){
+  .bfx-modal-head{ height: 150px; }
+  .bfx-modal-head .ttl h2{ font-size: 29px; }
+  .bfx-card{ padding: 20px; border-radius: 20px; }
+}
+@media (min-width: 721px){
+  .bfx-modal-bg{ place-items: center; padding: 24px; }
+  .bfx-modal{ border-radius: 26px; max-height: 88vh; box-shadow: 0 40px 90px -30px rgba(43,20,3,.7); }
+}
+@media (max-width: 420px){
+  .bfx-opt{ padding: 12px 12px; gap: 9px; font-size: 17px; }
+  .bfx-opt .pr{ font-size: 14px; }
+  .bfx-tick{ width:22px; height:22px; }
+}
+
+/* ============================================================
+   PANEL ADMIN — re-skin cartoon vía remap de tokens brand.css
+   El admin usa --ink/--white/--orange/etc por todos lados; los
+   remapeamos scopeados a body.bfx-admin → superficie crema/roja.
+   ============================================================ */
+body.bfx-admin{
+  background: var(--bfx-cream);
+  color: var(--bfx-deep);
+  --ink:         var(--bfx-cream);   /* fondo página → crema */
+  --ink-2:       #ffffff;            /* cards / superficies → blanco */
+  --ink-3:       var(--bfx-cream);   /* superficie anidada → crema */
+  --line-dark:   rgba(43,20,3,.14);  /* hairline oscuro sobre claro */
+  --white:       var(--bfx-deep);    /* texto principal → marrón */
+  --muted:       rgba(43,20,3,.6);
+  --muted-d:     rgba(43,20,3,.42);
+  --orange:      var(--bfx-red);     /* acento → rojo Brothers */
+  --orange-2:    #ffd9c4;
+  --orange-deep: var(--bfx-red-2);
+  --shadow:      0 18px 44px -22px rgba(43,20,3,.28);
+  --shadow-sm:   0 6px 18px -10px rgba(43,20,3,.22);
+}
+/* tipografía cartoon (scoped) — display condensado tipo póster,
+   botones redondos Baloo; .mono queda Space Mono para números/tabular */
+body.bfx-admin .display{ font-family: var(--bfx-mouse); letter-spacing:.02em; }
+body.bfx-admin .btn{ font-family: var(--bfx-round); font-weight:800; letter-spacing:.02em; border-radius: 12px; }
+body.bfx-admin .btn-lg{ border-radius: 14px; }
+body.bfx-admin .eyebrow{ font-family: var(--bfx-mouse); letter-spacing:.2em; }
+/* texto blanco sobre acento rojo (brand.css los pinta oscuros) */
+body.bfx-admin .btn-orange{ color:#fff; }
+body.bfx-admin .adm-nav.on{ color:#fff; }
+body.bfx-admin .tag.solid{ color:#fff; }
+body.bfx-admin .opt.on{ background: rgba(226,61,22,.08); }
+body.bfx-admin ::selection{ background: var(--bfx-red); color:#fff; }
+/* scrollbar claro */
+body.bfx-admin *::-webkit-scrollbar-thumb{ background: rgba(43,20,3,.22); background-clip:content-box; }
+body.bfx-admin *::-webkit-scrollbar-thumb:hover{ background: rgba(43,20,3,.35); background-clip:content-box; }
+/* tour card sombra marca */
+body.bfx-admin .tour-card{ box-shadow: 0 18px 44px -22px rgba(43,20,3,.3); }
