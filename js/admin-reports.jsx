@@ -3,8 +3,8 @@
    ============================================================ */
 
 /* costo estimado de mercadería por categoría (editable) */
-const COST_RATIO = { burgers: 0.40, sandwiches: 0.38, papas: 0.30, ensaladas: 0.35, cervezas: 0.25, tragos: 0.25, drinks: 0.32 };
-const itemCat = (id) => (FLAT_ITEMS.find((i) => i.id === id) || {}).cat || "burgers";
+const COST_RATIO = { empanadas: 0.38, pastelitos: 0.32, promos: 0.36, salsas: 0.25, drinks: 0.32 };
+const itemCat = (id) => (FLAT_ITEMS.find((i) => i.id === id) || {}).cat || "empanadas";
 
 /* ---------------- REPORTS ---------------- */
 function Reports() {
@@ -63,8 +63,8 @@ function Reports() {
   hours.push({ h: 0, total: byHour[0] || 0 });
   const maxHour = Math.max(...hours.map((x) => x.total), 1);
 
-  const catLabels = { burgers: "Hamburguesas", sandwiches: "Sandwiches", papas: "Papas", ensaladas: "Ensaladas", cervezas: "Cervezas", tragos: "Tragos", drinks: "Bebidas s/alc" };
-  const catColors = { burgers: "var(--orange)", sandwiches: "#5aa9ff", papas: "#e9b949", ensaladas: "var(--ok)", cervezas: "var(--beer)", tragos: "#9b7bff", drinks: "#8d8d96" };
+  const catLabels = { empanadas: "Empanadas", pastelitos: "Pastelitos", promos: "Promos & docenas", salsas: "Salsas", drinks: "Bebidas" };
+  const catColors = { empanadas: "var(--orange)", pastelitos: "#5aa9ff", promos: "#e9b949", salsas: "var(--ok)", drinks: "#8d8d96" };
   const modeLabel = { salon: "Salón", delivery: "Delivery", takeaway: "Mostrador / Take away" };
 
   return (

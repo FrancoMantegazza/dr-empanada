@@ -1,8 +1,8 @@
 {
-  "name": "brothers-food-lst",
+  "name": "dr-empanada",
   "version": "1.0.0",
   "private": true,
-  "description": "Sitio de Brothers Food.lst — estático, sin paso de build.",
+  "description": "Sitio de Dr. Empanada — estático, sin paso de build.",
   "scripts": {
     "dev": "npx -y serve -l 4173 .",
     "start": "npx -y serve -l 4173 ."

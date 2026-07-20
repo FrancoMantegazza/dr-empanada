@@ -45,12 +45,12 @@ function MenuPage({ go }) {
             <span data-split="chars" style={{ display: "block" }}><span className="ylw">SE DEBE.</span></span>
           </h1>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "22px auto 0" }}>
-            Sumá lo que quieras al carrito y pedí online: delivery propio o take away. Todos los combos vienen con papas.
+            Sumá lo que quieras al carrito y pedí online: delivery propio o take away. Al horno o fritas, al mismo precio.
           </p>
           <div style={{ marginTop: 24, display: "flex", justifyContent: "center", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
             <div style={{ position: "relative" }}>
               <input className="bfx-searchbox" value={query} onChange={(e) => setQuery(e.target.value)}
-                placeholder="Buscá… (IPA, thomason, milanesa)" aria-label="Buscar en el menú" />
+                placeholder="Buscá… (humita, cuchillo, membrillo)" aria-label="Buscar en el menú" />
               {query && (
                 <button onClick={() => setQuery("")} aria-label="Limpiar búsqueda"
                   style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--bfx-red)", display: "grid", cursor: "pointer" }}>
@@ -58,7 +58,7 @@ function MenuPage({ go }) {
                 </button>
               )}
             </div>
-            {isHappyNow() && <span className="bfx-badge bfx-badge--green" style={{ "--rot": "-4deg", fontSize: 15 }}>HAPPY HOUR ACTIVO</span>}
+            {isHappyNow() && <span className="bfx-badge bfx-badge--green" style={{ "--rot": "-4deg", fontSize: 15 }}>PROMO MEDIODÍA ACTIVA</span>}
           </div>
         </div>
       </section>
@@ -112,9 +112,8 @@ function MenuPage({ go }) {
             {cat.layout === "taps" && <BeerGrid items={cat.items} />}
             {cat.layout === "list" && <LightList items={cat.items} />}
 
-            {cat.id === "burgers" && !q && <ExtrasPanel />}
-            {cat.id === "sandwiches" && !q && <DipsPanel />}
-            {cat.id === "cervezas" && !q && <HappyBanner go={go} />}
+            {cat.id === "empanadas" && !q && <ExtrasPanel />}
+            {cat.id === "promos" && !q && <HappyBanner go={go} />}
           </section>
         ))}
       </div>
@@ -141,7 +140,7 @@ function MenuCard({ item, rot = 0 }) {
   return (
     <div className="bfx-menucard" style={{ opacity: out ? .55 : 1, rotate: rot + "deg" }}>
       <div className="photo">
-        <img src={(item.img) || IMG("photo-1586190848861-99aa4a171e90")} alt={item.name} loading="lazy" />
+        <img src={(item.img) || "assets/horno-tabla.jpg"} alt={item.name} loading="lazy" />
         <div style={{ position: "absolute", top: 10, left: 10, display: "flex", gap: 6 }}>
           {item.tags.map((t) => (
             <span key={t} className={"bfx-minitag " + (TAG_CLS[t] || "")}>{t === "TOP" ? "★ TOP" : t}</span>
@@ -168,8 +167,8 @@ function MenuCard({ item, rot = 0 }) {
       </div>
       <div className="desc">{item.desc}</div>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
-        <span className="price">{money(item.price)}{item.priceDouble && <span style={{ fontSize: 15, opacity: .55 }}> simple</span>}</span>
-        {item.priceDouble && <span className="bfx-hand" style={{ fontSize: 16, opacity: .6 }}>Doble {money(item.priceDouble)}</span>}
+        <span className="price">{money(item.price)}{item.priceDouble && <span style={{ fontSize: 15, opacity: .55 }}> unidad</span>}</span>
+        {item.priceDouble && <span className="bfx-hand" style={{ fontSize: 16, opacity: .6 }}>Docena {money(item.priceDouble)}</span>}
       </div>
     </div>
   );
@@ -251,9 +250,9 @@ function ExtrasPanel() {
   return (
     <Reveal>
       <div className="bfx-panel" style={{ marginTop: 28 }}>
-        <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 4px" }}>Agregados</h3>
+        <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 4px" }}>Salsas & agregados</h3>
         <p className="bfx-copy" style={{ fontSize: 17, margin: "4px 0 14px", opacity: .75 }}>
-          Los elegís al personalizar tu burga: tocá el <b>+</b> en cualquiera y armala a tu gusto.
+          Los elegís al personalizar tu pedido: tocá el <b>+</b> en cualquier empanada y armala a tu gusto.
         </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {EXTRAS.map((e) => (
@@ -291,18 +290,18 @@ function HappyBanner({ go }) {
       <div className="bfx-panel" style={{ marginTop: 28, background: "var(--bfx-mustard)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "#fff" }}>Happy hour</h3>
+            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "#fff" }}>Promo mediodía</h3>
             <span className="bfx-minitag" style={{ transform: "rotate(-3deg)", background: active ? "var(--bfx-green)" : "var(--bfx-red)" }}>
-              {active ? "ACTIVO AHORA" : HAPPY.when.toUpperCase()}
+              {active ? "ACTIVA AHORA" : HAPPY.when.toUpperCase()}
             </span>
           </div>
           <p className="bfx-hand" style={{ color: "#4a2c00", fontSize: 18, margin: "8px 0 0", maxWidth: 480, letterSpacing: ".02em" }}>
-            2 unidades a precio especial en birras y tragos · {HAPPY.where}
+            Docenas y medias docenas a precio especial · {HAPPY.where}
           </p>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {HAPPY.deals.slice(0, 3).map((d) => (
-            <span key={d.name} className="bfx-chip2" style={{ background: "#fff", borderColor: "transparent" }}>{d.name} <b>2×{money(d.price)}</b></span>
+            <span key={d.name} className="bfx-chip2" style={{ background: "#fff", borderColor: "transparent" }}>{d.name} <b>{money(d.price)}</b></span>
           ))}
         </div>
       </div>

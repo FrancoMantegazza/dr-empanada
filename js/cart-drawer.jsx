@@ -22,9 +22,9 @@ function CartDrawer({ go }) {
   const lineKey = (l) => l.id + "|" + l.variant + "|" + (l.modsLabel || "");
   const goCheckout = () => { setOpen(false); go("#/checkout"); };
   const thumb = (it) => it && (it.img
-    || (it.cat === "cervezas" ? IMG("photo-1535958636474-b021ee887b13", 200)
-      : (it.cat === "tragos" || it.cat === "drinks") ? IMG("photo-1514362545857-3bc16c4c7d1b", 200)
-        : IMG("photo-1586190848861-99aa4a171e90", 200)));
+    || (it.cat === "salsas" ? "assets/promo-bandeja.jpg"
+      : it.cat === "drinks" ? "assets/promo-docena.jpg"
+        : "assets/horno-tabla.jpg"));
 
   return (
     <>
@@ -47,7 +47,7 @@ function CartDrawer({ go }) {
             <div>
               <Sticker name="burger" size={92} style={{ position: "relative", margin: "0 auto 14px" }} />
               <p className="bfx-bubble" style={{ fontSize: 30, margin: "0 0 8px" }}>Carrito vacío</p>
-              <p className="bfx-copy" style={{ fontSize: 18, margin: "0 0 22px", opacity: .75 }}>Sumá unas burgers y una birra bien tirada.</p>
+              <p className="bfx-copy" style={{ fontSize: 18, margin: "0 0 22px", opacity: .75 }}>Sumá unas empanadas y unos pastelitos.</p>
               <button className="bfx-blob" style={{ fontSize: 20 }} onClick={() => { setOpen(false); go("#/menu"); }}>Ver el menú</button>
             </div>
           </div>
@@ -62,7 +62,7 @@ function CartDrawer({ go }) {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
                       <div style={{ minWidth: 0 }}>
-                        <div className="nm">{l.item.name}{l.variant === "double" ? " · Doble" : ""}</div>
+                        <div className="nm">{l.item.name}{l.variant === "double" ? " · Docena" : ""}</div>
                         {l.modsLabel && <div className="sub">{l.modsLabel}</div>}
                       </div>
                       <button className="rm" onClick={() => store.removeLine(l.id, l.variant, l.mods)} aria-label={"Quitar " + l.item.name}><Ic.x width={17} height={17} /></button>

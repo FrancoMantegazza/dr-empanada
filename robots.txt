@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://brothers-food-lst.pages.dev/sitemap.xml
+Sitemap: https://dr-empanada.pages.dev/sitemap.xml

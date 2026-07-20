@@ -42,7 +42,7 @@ function modsTotal(mods) {
 function modsLabel(mods) {
   if (!mods) return "";
   const parts = [];
-  if (mods.medallon && mods.medallon !== "Carne") parts.push(mods.medallon);
+  if (mods.medallon && mods.medallon !== MEDALLONES[0]) parts.push(mods.medallon);
   if (mods.protein && mods.protein !== "Carne") parts.push("De " + mods.protein.toLowerCase());
   if (mods.papas && mods.papas !== "clasicas") { const p = findPapas(mods.papas); if (p) parts.push(p.name); }
   (mods.extras || []).forEach((id) => { const e = findExtra(id); if (e) parts.push("+ " + e.name); });
@@ -119,7 +119,7 @@ const Store = {
     const shipping = payload.mode === "delivery" ? 2500 : 0;
     const seq = this.nextSeq();
     const order = {
-      id: "BF-" + String(seq).padStart(4, "0"),
+      id: "DE-" + String(seq).padStart(4, "0"),
       seq,
       createdAt: Date.now(),
       status: "recibido",
@@ -245,7 +245,7 @@ const Store = {
       const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
       const shipping = mode === "delivery" ? 2500 : 0;
       return {
-        id: "BF-" + String(seq).padStart(4, "0"), seq,
+        id: "DE-" + String(seq).padStart(4, "0"), seq,
         createdAt: Date.now() - mins * 60000, status,
         lines, subtotal, shipping, total: subtotal + shipping,
         mode, pay, name, phone: mode === "salon" ? "" : "11 5555-" + (1000 + seq),
@@ -262,15 +262,15 @@ const Store = {
     };
     const paidAgo = (mins, method, extra = {}) => ({ paid: true, payMethod: method, paidAt: Date.now() - mins * 60000, ...extra });
     const demo = [
-      mk(4, "recibido", "Julián Pérez", [L("big-brothers", "double", 1, { extras: ["panceta"] }), L("papas-cheddar", "single", 1), L("rubia", "single", 2)], "delivery", "mp"),
-      mk(8, "preparacion", "Mesa 3", [L("crispy", "double", 1), L("clasica", "single", 1), L("ipa", "single", 2)], "salon", "efectivo", { table: 3, by: "cajero" }),
-      mk(11, "preparacion", "Mostrador", [L("thomason", "single", 2), L("papas", "single", 1)], "takeaway", "efectivo"),
-      mk(19, "camino", "Romina Díaz", [L("crispy", "single", 1), L("ipa", "single", 1)], "delivery", "transferencia"),
-      mk(24, "listo", "Mesa 7", [L("oklahoma", "single", 2), L("rubia", "single", 2), L("papas-cheddar-panceta", "single", 1)], "salon", "efectivo", { table: 7, by: "cajero" }),
-      mk(42, "entregado", "Franco S.", [L("clasica", "double", 1), L("negra", "single", 1), L("papas-completas", "single", 1)], "takeaway", "transferencia", paidAgo(38, "transferencia")),
-      mk(55, "entregado", "Mesa 2", [L("big-brothers", "single", 2), L("caesar", "single", 1), L("apa", "single", 2)], "salon", "efectivo", { table: 2, by: "cajero", ...paidAgo(20, "efectivo", { cashReceived: 70000, change: 5500 }) }),
-      mk(70, "entregado", "Belén M.", [L("big-brothers", "single", 2), L("gaseosa", "single", 2)], "delivery", "mp", paidAgo(60, "mp")),
-      mk(95, "entregado", "Diego R.", [L("bondiola", "single", 1), L("papas", "single", 1), L("roja", "single", 2)], "takeaway", "efectivo", paidAgo(90, "efectivo", { cashReceived: 40000, change: 3300 })),
+      mk(4, "recibido", "Julián Pérez", [L("carne-cuchillo", "double", 1, { extras: ["criolla"] }), L("salsa-chimi", "single", 1), L("gaseosa", "single", 2)], "delivery", "mp"),
+      mk(8, "preparacion", "Mesa 3", [L("matambre-pizza", "double", 1), L("humita", "single", 2), L("gaseosa-15", "single", 1)], "salon", "efectivo", { table: 3, by: "cajero" }),
+      mk(11, "preparacion", "Mostrador", [L("cheese", "single", 6), L("pastelito-membrillo", "single", 3)], "takeaway", "efectivo"),
+      mk(19, "camino", "Romina Díaz", [L("docena-surtida", "single", 1), L("salsa-criolla", "single", 1)], "delivery", "transferencia"),
+      mk(24, "listo", "Mesa 7", [L("vacio", "single", 4), L("provolone", "single", 2), L("limonada", "single", 2)], "salon", "efectivo", { table: 7, by: "cajero" }),
+      mk(42, "entregado", "Franco S.", [L("humita", "double", 1), L("pastelito-batata", "single", 3), L("agua", "single", 1)], "takeaway", "transferencia", paidAgo(38, "transferencia")),
+      mk(55, "entregado", "Mesa 2", [L("carne-suave", "single", 6), L("caprese", "single", 3), L("gaseosa", "single", 2)], "salon", "efectivo", { table: 2, by: "cajero", ...paidAgo(20, "efectivo", { cashReceived: 30000, change: 2000 }) }),
+      mk(70, "entregado", "Belén M.", [L("media-docena", "single", 1), L("gaseosa", "single", 2)], "delivery", "mp", paidAgo(60, "mp")),
+      mk(95, "entregado", "Diego R.", [L("bondiola-bbq", "single", 3), L("pastelito-dulce", "single", 2), L("gaseosa", "single", 1)], "takeaway", "efectivo", paidAgo(90, "efectivo", { cashReceived: 15000, change: 900 })),
     ];
     write(LS.orders, demo);
     emit();

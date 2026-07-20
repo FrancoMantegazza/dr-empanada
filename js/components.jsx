@@ -50,17 +50,17 @@ function Stars({ value = 5, size = 16 }) {
 
 /* ---------- Photo (foto real con skeleton + fallback icónico) ---------- */
 const KIND_IMG = {
-  burger: IMG("photo-1586190848861-99aa4a171e90"),
-  beer: IMG("photo-1535958636474-b021ee887b13"),
-  fries: IMG("photo-1630384060421-cb20d0e0649d"),
-  ribs: IMG("photo-1544025162-d76694265947"),
-  drink: IMG("photo-1622483767028-3f66f32aef97"),
-  promo: "assets/promo-thomason.jpg",
-  combo: IMG("photo-1594212699903-ec8a3eca50f5"),
-  cheers: IMG("photo-1532634922-8fe0b757fb13"),
-  tap: IMG("photo-1535958636474-b021ee887b13"),
+  burger: "assets/empanadas/carne-cuchillo.jpg",
+  beer: "assets/promo-bandeja.jpg",
+  fries: "assets/pastelitos-membrillo.jpg",
+  ribs: "assets/empanadas/vacio.jpg",
+  drink: "assets/promo-docena.jpg",
+  promo: "assets/promo-docena.jpg",
+  combo: "assets/tabla-carne.jpg",
+  cheers: "assets/horno-fila.jpg",
+  tap: "assets/horno-tabla.jpg",
 };
-const CAT_ICON = { cervezas: Ic.beer, tragos: Ic.glass, drinks: Ic.glass };
+const CAT_ICON = { salsas: Ic.glass, drinks: Ic.glass };
 function Photo({ item, src, kind, alt = "", className = "", style }) {
   const [ld, setLd] = useState(false);
   const url = src || (item && item.img) || (kind && KIND_IMG[kind]) || null;
@@ -100,10 +100,10 @@ function OpenBadge({ compact = false }) {
 function AnnouncementBar() {
   const happy = isHappyNow();
   const msgs = [
-    happy ? "Happy hour activo · 2x en birras y tragos hasta las 21" : "Happy hour · mar a dom · 13 a 21 hs",
+    happy ? "Promo mediodía activa · docenas a precio especial hasta las 15" : "Promo mediodía · mar a dom · 11 a 15 hs",
     "Delivery propio en Boedo y alrededores",
-    "Todos los combos vienen con papas",
-    "Viernes Thomason en promo",
+    "Al horno o fritas, al mismo precio",
+    "Viernes docena en promo",
   ];
   const row = [...msgs, ...msgs, ...msgs];
   return (
@@ -223,7 +223,7 @@ function Footer({ go }) {
       <div className="bfx-footer-main wrap">
         <a href="#/" aria-label="Inicio" className="bfx-footer-logo" style={{ display: "inline-flex", alignItems: "center", gap: 20 }}>
           <LogoBadge fontSize={13} rot={-3} />
-          <span className="bfx-hand" style={{ fontSize: 19, letterSpacing: ".2em", textTransform: "uppercase", opacity: .6 }}>Burgers y algo más</span>
+          <span className="bfx-hand" style={{ fontSize: 19, letterSpacing: ".2em", textTransform: "uppercase", opacity: .6 }}>El especialista en sabor</span>
         </a>
 
         <div className="bfx-footer-info">
@@ -243,16 +243,16 @@ function Footer({ go }) {
           <div>
             <span className="lbl">Estado</span>
             <OpenBadge /><br />
-            <span style={{ color: "var(--bfx-red)" }}>★ Happy hour · {HAPPY.when.toLowerCase()}</span>
+            <span style={{ color: "var(--bfx-red)" }}>★ Promo mediodía · {HAPPY.when.toLowerCase()}</span>
           </div>
         </div>
       </div>
 
       <div className="bfx-footer-legal">
-        <p>+18 · Beber con moderación. Prohibida la venta de bebidas alcohólicas a menores de 18 años (Ley Nacional 24.788).</p>
+        <p>Desde 1989 · Elaboración propia, masa casera y repulgue a mano.</p>
         <p>
-          © {new Date().getFullYear()} Brothers Food.lst · Boedo, CABA · Smash burgers y birra tirada ·{" "}
-          <a href="#/privacidad">Privacidad</a> · <a href="#/admin">Panel ›</a> · Hecho con hambre 🍔
+          © {new Date().getFullYear()} Dr. Empanada · Boedo, CABA · El especialista en sabor ·{" "}
+          <a href="#/privacidad">Privacidad</a> · <a href="#/admin">Panel ›</a> · Hecho con hambre 🥟
         </p>
       </div>
     </footer>
@@ -266,7 +266,7 @@ function WhatsAppFAB() {
   const [hint, setHint] = useState(false);
   useEffect(() => { const t = setTimeout(() => setHint(true), 1400); const t2 = setTimeout(() => setHint(false), 7000); return () => { clearTimeout(t); clearTimeout(t2); }; }, []);
   return (
-    <a href={waLink("¡Hola Brothers! Quería hacer un pedido 🍔")} target="_blank" rel="noopener"
+    <a href={waLink("¡Hola Dr. Empanada! Quería hacer un pedido 🥟")} target="_blank" rel="noopener"
       onMouseEnter={() => setHint(true)} onMouseLeave={() => setHint(false)}
       style={{ position: "fixed", right: 22, bottom: 22, zIndex: 60, display: "flex", alignItems: "center", gap: 0 }}>
       {hint && (
@@ -335,11 +335,11 @@ function ProductCard({ item, featured = false }) {
           <div>
             <div className="mono tabular" style={{ fontSize: 20, fontWeight: 700, color: "var(--white)" }}>
               {money(item.price)}
-              {item.priceDouble && <span style={{ fontSize: 12, color: "var(--muted)", marginLeft: 6 }}>simple</span>}
+              {item.priceDouble && <span style={{ fontSize: 12, color: "var(--muted)", marginLeft: 6 }}>unidad</span>}
             </div>
             {item.priceDouble && (
               <div className="mono tabular" style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2 }}>
-                Doble {money(item.priceDouble)}
+                Docena {money(item.priceDouble)}
               </div>
             )}
           </div>
@@ -360,7 +360,7 @@ function ProductCard({ item, featured = false }) {
 }
 
 /* ============================================================
-   CUSTOMIZER — armá tu burger / sandwich
+   CUSTOMIZER — armá tu empanada / docena
    ============================================================ */
 function Customizer() {
   const store = useStore();
@@ -394,7 +394,7 @@ function Customizer() {
 
   if (!item) return null;
 
-  const isBurger = item.cat === "burgers";
+  const isBurger = item.cat === "empanadas";
   const toggleExtra = (id) => setExtras((xs) => xs.includes(id) ? xs.filter((x) => x !== id) : [...xs, id]);
   const base = size === "double" ? (item.priceDouble || item.price) : item.price;
   const mods = {
@@ -430,7 +430,7 @@ function Customizer() {
       <div className="bfx-modal" role="dialog" aria-modal="true" aria-label={"Personalizar " + item.name}>
         {/* header foto */}
         <div className="bfx-modal-head">
-          <img src={item.img || IMG("photo-1586190848861-99aa4a171e90")} alt={item.name} />
+          <img src={item.img || "assets/horno-tabla.jpg"} alt={item.name} />
           <div className="veil" />
           <button className="bfx-modal-close" onClick={() => setItem(null)} aria-label="Cerrar"><Ic.x /></button>
           <div className="ttl">
@@ -441,9 +441,9 @@ function Customizer() {
 
         <div className="bfx-modal-body">
           {item.priceDouble && (
-            <Sec label="Tamaño">
+            <Sec label="Cantidad">
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                {[["single", "Simple", item.price], ["double", "Doble", item.priceDouble]].map(([v, l, p]) => (
+                {[["single", "Por unidad", item.price], ["double", "Por docena", item.priceDouble]].map(([v, l, p]) => (
                   <button key={v} className={"bfx-opt" + (size === v ? " on" : "")} onClick={() => setSize(v)}>
                     <span className="bfx-tick"><span className="dot" /></span>
                     <span className="nm">{l}</span>
@@ -455,12 +455,12 @@ function Customizer() {
           )}
 
           {isBurger && (
-            <Sec label="Medallón · mismo precio">
+            <Sec label="Cocción · mismo precio">
               <div style={{ display: "grid", gap: 8 }}>
                 {MEDALLONES.map((m) => (
                   <button key={m} className={"bfx-opt" + (medallon === m ? " on" : "")} onClick={() => setMedallon(m)}>
                     <span className="bfx-tick"><span className="dot" /></span>
-                    <span className="nm">{m}{m !== "Carne" && <Ic.leaf width={15} height={15} style={{ color: "var(--bfx-green)", marginLeft: 8, verticalAlign: "-2px" }} />}</span>
+                    <span className="nm">{m}{m !== MEDALLONES[0] && <Ic.fire width={15} height={15} style={{ color: "var(--bfx-mustard)", marginLeft: 8, verticalAlign: "-2px" }} />}</span>
                   </button>
                 ))}
               </div>
@@ -481,7 +481,7 @@ function Customizer() {
           )}
 
           {isBurger && (
-            <Sec label="Mejorá tus papas">
+            <Sec label="Sumale una salsa">
               <div style={{ display: "grid", gap: 8 }}>
                 {PAPAS_UPGRADES.map((p) => (
                   <button key={p.id} className={"bfx-opt" + (papas === p.id ? " on" : "")} onClick={() => setPapas(p.id)}>
@@ -560,7 +560,7 @@ function AntojoCTA({ go }) {
           <span data-split="chars" style={{ display: "block" }}><span className="ylw">EL SABOR.</span></span>
         </h2>
         <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "22px auto 32px" }}>
-          Smash para valientes, papas para todos. Pedí online y te avisamos cuando sale de la plancha.
+          Carne cuchillo para valientes, humita para golosos. Pedí online y te avisamos cuando sale del horno.
         </p>
         <a href="#/menu" className="bfx-blob" data-squash>Pedir online →</a>
       </div>

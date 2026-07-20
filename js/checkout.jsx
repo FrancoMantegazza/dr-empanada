@@ -88,7 +88,7 @@ function Checkout({ go }) {
                 </div>
               )}
               <div style={{ marginTop: 16 }}>
-                <TField label="Notas (opcional)"><textarea rows={2} className="bfx-tinput" style={{ resize: "vertical" }} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Sin pickles, salsa aparte..." /></TField>
+                <TField label="Notas (opcional)"><textarea rows={2} className="bfx-tinput" style={{ resize: "vertical" }} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Bien cocidas, salsa aparte..." /></TField>
               </div>
 
               <button className="bfx-blob" style={{ marginTop: 24, width: "100%", opacity: canStep1 ? 1 : .5 }} disabled={!canStep1} onClick={() => setStep(2)}>Continuar al pago →</button>
@@ -145,7 +145,7 @@ function Checkout({ go }) {
               <div key={l.id + l.variant + (l.modsLabel || "")} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                 <span className="bfx-qtychip">{l.qty}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "var(--bfx-modak)", color: "var(--bfx-red)", fontSize: 17, lineHeight: 1 }}>{l.item.name}{l.variant === "double" ? " · Doble" : ""}</div>
+                  <div style={{ fontFamily: "var(--bfx-modak)", color: "var(--bfx-red)", fontSize: 17, lineHeight: 1 }}>{l.item.name}{l.variant === "double" ? " · Docena" : ""}</div>
                   {l.modsLabel && <div className="bfx-hand" style={{ fontSize: 14, color: "rgba(43,20,3,.6)", lineHeight: 1.35, marginTop: 3 }}>{l.modsLabel}</div>}
                 </div>
                 <div className="bfx-hand" style={{ fontSize: 17 }}>{money(l.lineTotal)}</div>
@@ -227,8 +227,8 @@ function OrderSuccess({ order, go }) {
   const curIdx = flow.indexOf(live.status === "entregado" ? "camino" : live.status);
 
   const waText =
-    `¡Hola Brothers! Acabo de hacer el pedido ${order.id} 🍔%0A` +
-    order.lines.map((l) => `• ${l.qty}x ${l.name}${l.variant === "double" ? " (doble)" : ""}${l.mods ? " — " + l.mods : ""}`).join("%0A") +
+    `¡Hola Dr. Empanada! Acabo de hacer el pedido ${order.id} 🥟%0A` +
+    order.lines.map((l) => `• ${l.qty}x ${l.name}${l.variant === "double" ? " (docena)" : ""}${l.mods ? " — " + l.mods : ""}`).join("%0A") +
     `%0ATotal: ${money(order.total)}%0AA nombre de ${order.name}.`;
 
   return (

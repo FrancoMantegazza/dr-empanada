@@ -1,7 +1,7 @@
 /* ============================================================
-   home.jsx — HOME rediseñado "cartoon poster" (nivel crav)
-   Secciones: hero gigante · marquee · la banda · experiencia (rojo)
-   · foto full · cada capa · delivery (mostaza) · la barra (bordó)
+   home.jsx — HOME "cartoon poster" de Dr. Empanada
+   Secciones: hero gigante · marquee · las más pedidas · experiencia
+   · foto full · cada sabor · delivery (mostaza) · la vitrina
    · CTA final. Animado por fx.js vía data-attrs.
    ============================================================ */
 
@@ -55,14 +55,14 @@ function Glove({ side = "left", style, ...rest }) {
     <div aria-hidden="true" {...rest} style={{ position: "absolute", transform: flip ? "scaleX(-1)" : undefined, ...style }}>
       <svg viewBox="0 0 120 110" style={{ width: "100%", display: "block" }}>
         <path d="M14 96 Q2 74 16 58 Q4 46 16 34 Q10 18 30 14 Q38 2 54 10 L96 34 Q116 48 106 72 Q96 98 66 102 Q34 106 14 96 Z"
-          fill="#fff" stroke="#c92f0d" strokeWidth="7" strokeLinejoin="round" />
-        <path d="M34 34 Q48 28 58 38 M28 56 Q44 50 56 60" stroke="#c92f0d" strokeWidth="6" fill="none" strokeLinecap="round" />
+          fill="#fff" stroke="#17130e" strokeWidth="7" strokeLinejoin="round" />
+        <path d="M34 34 Q48 28 58 38 M28 56 Q44 50 56 60" stroke="#17130e" strokeWidth="6" fill="none" strokeLinecap="round" />
       </svg>
     </div>
   );
 }
 
-const HERO_IMG = IMG("photo-1568901346375-23c9450c58cd", 1100);
+const HERO_IMG = "assets/hero-empanada.jpg";
 
 /* ============================================================
    HOME
@@ -72,36 +72,36 @@ function Home({ go }) {
   const happy = isHappyNow();
 
   const marqueeMsgs = [
-    "Happy hour · mar a dom · 13 a 21 hs", "Delivery propio en Boedo",
-    "Todos los combos con papas", "7 canillas de birra artesanal",
-    "Viernes Thomason en promo", "Medallón NotCo sin cargo extra",
+    "Promo mediodía · mar a dom · 11 a 15 hs", "Delivery propio en Boedo",
+    "Al horno o fritas, como quieras", "13 sabores + pastelitos",
+    "Viernes docena en promo", "Desde 1989 · El especialista en sabor",
   ];
 
   const polaroids = [
-    { img: IMG("photo-1553979459-d2229ba7433b", 800), name: "Crispy Brothers", price: money(17600), rot: -5 },
-    { img: "assets/promo-thomason.jpg", name: "Thomason · viernes", price: money(PROMO_THOMASON.price), rot: 3 },
-    { img: IMG("photo-1568901346375-23c9450c58cd", 800), name: "Big Brothers", price: money(16000), rot: 6 },
+    { img: "assets/empanadas/carne-cuchillo.jpg", name: "Carne Cuchillo", price: money(2700), rot: -5 },
+    { img: "assets/promo-docena.jpg", name: "Docena promo · viernes", price: money(PROMO_VIERNES.price), rot: 3 },
+    { img: "assets/empanadas/matambre-pizza.jpg", name: "Matambre a la Pizza", price: money(2700), rot: 6 },
   ];
 
   const barrios = [
-    { n: "BOEDO", img: IMG("photo-1586190848861-99aa4a171e90", 640), rot: -4 },
-    { n: "ALMAGRO", img: IMG("photo-1594212699903-ec8a3eca50f5", 640), rot: 3 },
-    { n: "SAN CRISTÓBAL", img: IMG("photo-1550304943-4f24f54ddde9", 640), rot: -3 },
-    { n: "CABALLITO", img: IMG("photo-1528735602780-2552fd46c7af", 640), rot: 5 },
-    { n: "PQUE. PATRICIOS", img: IMG("photo-1606755962773-d324e0a13086", 640), rot: -6 },
+    { n: "BOEDO", img: "assets/horno-tabla.jpg", rot: -4 },
+    { n: "ALMAGRO", img: "assets/tabla-carne.jpg", rot: 3 },
+    { n: "SAN CRISTÓBAL", img: "assets/empanadas/caprese.jpg", rot: -3 },
+    { n: "CABALLITO", img: "assets/promo-docena.jpg", rot: 5 },
+    { n: "PQUE. PATRICIOS", img: "assets/empanadas/humita.jpg", rot: -6 },
   ];
 
-  const beers = MENU.find((c) => c.id === "cervezas").items;
+  const sabores = MENU.find((c) => c.id === "empanadas").items.slice(0, 6);
   const reviews = REVIEWS.slice(0, 3);
 
   return (
     <main ref={ref} className="bfx">
 
       {/* ================= HERO ================= */}
-      <section className="bfx-hero" aria-label="Brothers Food LST">
+      <section className="bfx-hero" aria-label="Dr. Empanada">
         <div className="bfx-hero-stage">
           <div className="bfx-hero-title">
-            <h1 className="bfx-giant bfx-giant--xl" aria-label="Somos Brothers Food y somos riquísimos" style={{ position: "relative" }}>
+            <h1 className="bfx-giant bfx-giant--xl" aria-label="Somos Dr. Empanada y somos riquísimos" style={{ position: "relative" }}>
               <span aria-hidden="true" data-split="chars" style={{ display: "block" }}>SOMOS</span>
               {/* la marca va con el logo real, no con texto */}
               <span aria-hidden="true" data-pop data-pop-delay=".35" style={{ display: "block", padding: "clamp(8px,1vw,18px) 0" }}>
@@ -110,33 +110,33 @@ function Home({ go }) {
               <span aria-hidden="true" data-split="chars" style={{ display: "block" }}>Y SOMOS <span className="ylw">RIQUÍSIMOS.</span></span>
             </h1>
             <span className="bfx-badge bfx-badge--green" data-pop data-pop-delay=".9" data-idle
-              style={{ "--rot": "-9deg", position: "absolute", left: "6%", top: "-4%", zIndex: 3 }}>SMASH REAL</span>
+              style={{ "--rot": "-9deg", position: "absolute", left: "6%", top: "-4%", zIndex: 3 }}>REPULGUE A MANO</span>
             <span className="bfx-badge" data-pop data-pop-delay="1.05" data-idle
-              style={{ "--rot": "7deg", position: "absolute", right: "5%", top: "16%", zIndex: 3 }}>DESDE BOEDO</span>
+              style={{ "--rot": "7deg", position: "absolute", right: "5%", top: "16%", zIndex: 3 }}>DESDE 1989</span>
             <span className="bfx-badge bfx-badge--red" data-pop data-pop-delay="1.2" data-idle
               style={{ "--rot": "-6deg", position: "absolute", right: "12%", bottom: "-6%", zIndex: 3 }}>
-              {happy ? "HAPPY HOUR ACTIVO" : "HAPPY HOUR 13–21"}
+              {happy ? "PROMO MEDIODÍA ACTIVA" : "PROMO MEDIODÍA 11–15"}
             </span>
           </div>
 
-          {/* burger central con ojos */}
+          {/* empanada central con ojos */}
           <div className="bfx-hero-burger" data-pop data-pop-delay=".55" data-inertia>
             <div className="bfx-blobphoto" data-idle style={{ width: "100%", height: "100%" }}>
-              <img src={HERO_IMG} alt="Smash burger Brothers Food" fetchPriority="high" />
+              <img src={HERO_IMG} alt="Empanada de carne cuchillo de Dr. Empanada" fetchPriority="high" />
             </div>
             <GooglyEyes style={{ left: "22%", top: "8%", width: "56%" }} />
           </div>
         </div>
 
         {/* palabra gigante de fondo */}
-        <div className="bfx-hero-word bfx-bubble" aria-hidden="true" data-pop data-pop-delay=".4">BURGERS</div>
+        <div className="bfx-hero-word bfx-bubble" aria-hidden="true" data-pop data-pop-delay=".4">EMPANADAS</div>
 
         <div className="bfx-hero-copy">
           <p className="bfx-copy" data-split="lines">
-            Smash aplastada bien caliente en la plancha: costra caramelizada afuera, jugosa adentro. Caseras desde el primer pan.
+            Masa casera estirada en el día y rellenos generosos que se cocinan a fuego lento. Empanadas de verdad, desde 1989.
           </p>
           <p className="bfx-copy" data-split="lines">
-            Cheddar fundido, salsa brother y papas en todos los combos. Y 7 canillas de birra artesanal para bajarla como se debe.
+            Al horno o fritas, con el repulgue hecho a mano de siempre. Y pastelitos crocantes para cerrar como se debe.
           </p>
         </div>
       </section>
@@ -152,18 +152,18 @@ function Home({ go }) {
         </div>
       </div>
 
-      {/* ================= LA BANDA (polaroids) ================= */}
+      {/* ================= LAS MÁS PEDIDAS (polaroids) ================= */}
       <section style={{ padding: "clamp(70px,9vw,130px) 0 0", textAlign: "center" }} aria-label="Las más pedidas">
         <div className="wrap">
           <div className="bfx-kicker" data-pop>★ LAS MÁS PEDIDAS ★</div>
           <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 18 }}>
             <span data-split="chars" style={{ display: "block" }}>JUGOSAS,</span>
-            <span data-split="chars" style={{ display: "block" }}>CON CHEDDAR,</span>
+            <span data-split="chars" style={{ display: "block" }}>BIEN RELLENAS,</span>
             <span data-split="chars" style={{ display: "block" }}><span className="ylw">A FULL.</span></span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 620, margin: "26px auto 0" }}>
-            La banda completa: smash dobles, promo Thomason los viernes y la Big Brothers que nunca falla.
-            Todas se pueden pedir con medallón NotCo o veggie de lentejas casero, al mismo precio.
+            La banda completa: carne cuchillo que nunca falla, matambre a la pizza para los que saben
+            y la docena promo de los viernes. Todas al horno o fritas, al mismo precio.
           </p>
           <div style={{ marginTop: 34 }}>
             <a href="#/menu" className="bfx-blob" data-squash>Pedir online</a>
@@ -179,11 +179,11 @@ function Home({ go }) {
             ))}
           </div>
         </div>
-        <Wave fill="#e23d16" style={{ marginTop: "clamp(-40px,-3vw,-20px)", position: "relative", zIndex: 0 }} />
+        <Wave fill="#17130e" style={{ marginTop: "clamp(-40px,-3vw,-20px)", position: "relative", zIndex: 0 }} />
       </section>
 
-      {/* ================= EXPERIENCIA (rojo) ================= */}
-      <section className="bfx-red" style={{ paddingTop: "clamp(60px,7vw,110px)", overflow: "clip" }} aria-label="La experiencia Brothers">
+      {/* ================= EXPERIENCIA (negro) ================= */}
+      <section className="bfx-red" style={{ paddingTop: "clamp(60px,7vw,110px)", overflow: "clip" }} aria-label="La experiencia Dr. Empanada">
         <div className="wrap" style={{ textAlign: "center", position: "relative" }}>
           <Sticker name="fries" size={110} data-pop data-idle style={{ position: "absolute", left: "2%", top: -30, "--rot": "-14deg" }} />
           <Sticker name="beer" size={110} data-pop data-idle style={{ position: "absolute", right: "3%", top: 60, "--rot": "10deg" }} />
@@ -193,21 +193,21 @@ function Home({ go }) {
             <span data-split="chars" style={{ display: "block" }}><span className="soft">SE SIENTE</span> BIEN</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "24px auto 0" }}>
-            Ingredientes de verdad, pan casero y una parada obligada en Av. Boedo 1600. Vení al salón, pedí take away o delivery propio.
+            Ingredientes de verdad, masa casera y una parada obligada en Av. Boedo 1600. Vení al salón, pedí take away o delivery propio.
           </p>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 30, position: "relative", zIndex: 3 }}>
-            {["100% caseras", "Medallón NotCo", "Papas en todos los combos", "7 canillas", "Delivery propio", "Happy hour 13–21", "4.7★ en Google"].map((c, i) => (
+            {["100% caseras", "Repulgue a mano", "Al horno o fritas", "13 sabores", "Delivery propio", "Promo mediodía 11–15", "4.7★ en Google"].map((c, i) => (
               <span key={c} className={"bfx-chip" + (i % 3 === 0 ? " bfx-chip--solid" : "")} data-pop data-pop-delay={i * 0.06}>{c}</span>
             ))}
           </div>
         </div>
 
-        {/* burger gigante asomando con ojos y guantes */}
+        {/* empanada gigante asomando con ojos y guantes */}
         <div style={{ position: "relative", width: "min(760px,86vw)", margin: "clamp(30px,4vw,60px) auto -6px" }}>
           <div data-float=".14" style={{ position: "relative" }}>
             <div className="bfx-blobphoto" style={{ aspectRatio: "1.25", border: "9px solid #fff", borderBottom: "none", borderRadius: "46% 54% 0 0 / 74% 66% 0 0" }}>
-              <img src={IMG("photo-1607013251379-e6eecfffe234", 1200)} alt="Cheese burger de cerca" loading="lazy" />
+              <img src="assets/empanadas/cheese.jpg" alt="Empanada cheese de cerca" loading="lazy" />
             </div>
             <GooglyEyes style={{ left: "27%", top: "4%", width: "46%" }} />
             <Glove side="left" style={{ left: "-7%", bottom: "8%", width: "clamp(90px,14vw,150px)" }} data-pop />
@@ -218,16 +218,16 @@ function Home({ go }) {
 
       {/* ================= FOTO FULL (parallax) ================= */}
       <div style={{ position: "relative" }}>
-        <Wave fill="#e23d16" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
+        <Wave fill="#17130e" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
         <div style={{ height: "80vh", overflow: "hidden", position: "relative" }}>
-          <img data-float=".08" src={IMG("photo-1532634922-8fe0b757fb13", 1600)} alt="Brindis con birras artesanales"
+          <img data-float=".08" src="assets/horno-fila.jpg" alt="Empanadas recién salidas del horno"
             loading="lazy" style={{ width: "100%", height: "114%", objectFit: "cover" }} />
         </div>
         <Wave fill="#f6e8d2" style={{ position: "absolute", bottom: -1, left: 0, right: 0, zIndex: 2 }} />
       </div>
 
-      {/* ================= CADA CAPA (ingredientes flotando) ================= */}
-      <section style={{ padding: "clamp(80px,10vw,150px) 0 clamp(60px,8vw,110px)", textAlign: "center", overflow: "clip" }} aria-label="Cada capa cuenta">
+      {/* ================= CADA SABOR (ingredientes flotando) ================= */}
+      <section style={{ padding: "clamp(80px,10vw,150px) 0 clamp(60px,8vw,110px)", textAlign: "center", overflow: "clip" }} aria-label="Cada sabor cuenta">
         <div className="wrap" style={{ position: "relative" }}>
           <Sticker name="lettuce" size={150} data-float=".35" style={{ position: "absolute", left: "4%", top: "-8%", transform: "rotate(-10deg)" }} />
           <Sticker name="tomato" size={130} data-float=".22" style={{ position: "absolute", right: "6%", top: "12%", transform: "rotate(12deg)" }} />
@@ -237,12 +237,12 @@ function Home({ go }) {
 
           <span className="bfx-badge bfx-badge--red" data-pop data-idle style={{ "--rot": "-7deg" }}>CALIDAD REAL</span>
           <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 20 }}>
-            <span data-split="chars" style={{ display: "block" }}>CADA CAPA</span>
-            <span data-split="chars" style={{ display: "block" }}>CON SABOR</span>
-            <span data-split="chars" style={{ display: "block" }}><span className="ylw">PROPIO.</span></span>
+            <span data-split="chars" style={{ display: "block" }}>CADA SABOR</span>
+            <span data-split="chars" style={{ display: "block" }}>CON PERSONALIDAD</span>
+            <span data-split="chars" style={{ display: "block" }}><span className="ylw">PROPIA.</span></span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 540, margin: "26px auto 0" }}>
-            Del pan al último pepinillo: verdura fresca, cheddar que se estira, panceta crocante y medallones aplastados en el momento. Nada congelado, nada de vueltas.
+            De la masa al último repulgue: carne cortada a cuchillo, cebolla dorada lenta, queso que se estira y rellenos cocinados en el día. Nada congelado, nada de vueltas.
           </p>
         </div>
       </section>
@@ -265,11 +265,11 @@ function Home({ go }) {
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
           <div className="bfx-kicker" data-pop style={{ color: "#fff" }}>DELIVERY PROPIO + TAKE AWAY</div>
           <h2 className="bfx-giant bfx-giant--lg bfx-giant--outline" style={{ marginTop: 14, textAlign: "left" }}>
-            <span data-split="chars" style={{ display: "block" }}>DE BOEDO</span>
+            <span data-split="chars" style={{ display: "block" }}>DEL HORNO</span>
             <span data-split="chars" style={{ display: "block" }}>A TU PUERTA</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, marginTop: 22, color: "#4a2c00" }}>
-            Sale caliente de la plancha y llega caliente a tu casa: repartidores propios, sin apps de por medio. ¿Estás cerca? Pasá a buscarlo por Av. Boedo 1600.
+            Salen calentitas del horno y llegan calentitas a tu casa: repartidores propios, sin apps de por medio. ¿Estás cerca? Pasá a buscarlas por Av. Boedo 1600.
           </p>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(20px,3vw,40px)", justifyContent: "center", marginTop: "clamp(40px,5vw,70px)" }}>
@@ -284,48 +284,48 @@ function Home({ go }) {
         </div>
       </section>
 
-      {/* ================= LA BARRA (bordó) ================= */}
-      <section className="bfx-bar" style={{ padding: "0 0 clamp(80px,9vw,130px)" }} aria-label="Cervezas artesanales tiradas">
-        <Wave fill="#4c0016" style={{ background: "#f4a804" }} />
+      {/* ================= LA VITRINA (oscuro) ================= */}
+      <section className="bfx-bar" style={{ padding: "0 0 clamp(80px,9vw,130px)" }} aria-label="Los sabores de la casa">
+        <Wave fill="#241c12" style={{ background: "#f4a804" }} />
         <div className="wrap" style={{ textAlign: "center", paddingTop: "clamp(50px,6vw,90px)", position: "relative" }}>
-          <Sticker name="beer" size={120} data-pop data-idle style={{ position: "absolute", right: "4%", top: -20, "--rot": "12deg" }} />
-          <div className="bfx-kicker" data-pop style={{ color: "#f6e8d2" }}>LA BARRA · PRODUCTORES INDEPENDIENTES</div>
+          <Sticker name="burger" size={120} data-pop data-idle style={{ position: "absolute", right: "4%", top: -20, "--rot": "12deg" }} />
+          <div className="bfx-kicker" data-pop style={{ color: "#f6e8d2" }}>LA VITRINA · ELABORACIÓN PROPIA</div>
           <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 16, color: "#ffd750" }}>
-            <span data-split="chars" style={{ display: "block" }}>7 CANILLAS,</span>
-            <span data-split="chars" style={{ display: "block" }}>SIEMPRE FRÍAS.</span>
+            <span data-split="chars" style={{ display: "block" }}>13 SABORES,</span>
+            <span data-split="chars" style={{ display: "block" }}>SIEMPRE CALENTITOS.</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0", color: "#f6e8d2" }}>
-            Birra artesanal tirada de Chicago, Norecord, Fuerte al Medio y más. En happy hour (mar a dom, 13 a 21) llevás 2 pintas por {money(7000)} las clásicas y 2 por {money(11000)} las intensas.
+            De la carne cuchillo a la humita cremosa, todas con masa casera y repulgue a mano. En la promo del mediodía (mar a dom, 11 a 15) la docena clásica sale {money(24000)}.
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(215px, 1fr))", gap: 20, marginTop: "clamp(40px,5vw,64px)", textAlign: "left" }}>
-            {beers.map((b, i) => (
+            {sabores.map((b, i) => (
               <div key={b.id} className="bfx-beercard" data-pop data-pop-delay={i * 0.07} style={{ "--rot": ((i % 3) - 1) * 2 + "deg" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ width: 20, height: 30, borderRadius: "3px 3px 6px 6px", background: b.color, border: "2px solid #efdcbc", flexShrink: 0 }} />
                   <div>
                     <div className="name">{b.name}</div>
-                    <div className="brew">{b.brewery}</div>
+                    <div className="brew">Al horno o frita</div>
                   </div>
                 </div>
-                <div className="row"><span>Amargor</span><span>{b.ibu} IBU · {b.abv}%</span></div>
-                <div className="bfx-meter"><span style={{ width: Math.min(100, (b.ibu / 70) * 100) + "%" }} /></div>
+                <div className="row"><span>Las más pedidas</span><span>{b.pop}%</span></div>
+                <div className="bfx-meter"><span style={{ width: b.pop + "%" }} /></div>
                 <div className="row">
                   <span className="price">{money(b.price)}</span>
-                  <span className="hh">HH: 2 × {money(b.hh)}</span>
+                  <span className="hh">Docena: {money(b.priceDouble)}</span>
                 </div>
               </div>
             ))}
           </div>
           <p className="bfx-hand" style={{ marginTop: 26, fontSize: 18, letterSpacing: ".08em", color: "rgba(246,232,210,.65)", textTransform: "uppercase" }}>
-            +18 · Beber con moderación · Prohibida la venta a menores (Ley 24.788)
+            Elaboración propia · Horneadas en el día · Desde 1989
           </p>
         </div>
       </section>
 
       {/* ================= CTA FINAL ================= */}
       <section style={{ textAlign: "center", overflow: "clip", paddingBottom: "clamp(60px,7vw,100px)" }} aria-label="Pedí ahora">
-        <Wave fill="#f6e8d2" style={{ background: "#4c0016", marginBottom: "clamp(60px,8vw,110px)" }} />
+        <Wave fill="#f6e8d2" style={{ background: "#241c12", marginBottom: "clamp(60px,8vw,110px)" }} />
         <div className="wrap" style={{ position: "relative" }}>
           <Sticker name="burger" size={150} data-pop data-idle style={{ position: "absolute", left: "3%", top: "-10%", "--rot": "-10deg" }} />
           <Sticker name="fries" size={120} data-pop data-idle style={{ position: "absolute", right: "5%", bottom: "0%", "--rot": "12deg" }} />
@@ -335,7 +335,7 @@ function Home({ go }) {
             <span data-split="chars" style={{ display: "block" }}><span className="ylw">AHORA.</span></span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "24px auto 34px" }}>
-            Armá tu pedido online en un minuto: elegís, personalizás tu burga y te avisamos cuando sale. {isOpenNow() ? "Estamos abiertos ahora mismo." : "Abrimos de martes a sábado desde las 9."}
+            Armá tu pedido online en un minuto: elegís los sabores, armás tu docena y te avisamos cuando sale del horno. {isOpenNow() ? "Estamos abiertos ahora mismo." : "Abrimos de martes a sábado desde las 9."}
           </p>
           <a href="#/menu" className="bfx-blob" data-squash style={{ fontSize: "clamp(26px,3.2vw,40px)" }}>Pedir online →</a>
 

@@ -169,7 +169,7 @@ function beep() {
 /* ---------------- ORDERS BOARD (KDS) ---------------- */
 const STATUS_META = {
   recibido: { label: "Recibido", color: "#e9b949", bg: "rgba(233,185,73,.12)" },
-  preparacion: { label: "En preparación", color: "#ea7b1b", bg: "rgba(234,123,27,.12)" },
+  preparacion: { label: "En preparación", color: "#f4a804", bg: "rgba(244,168,4,.12)" },
   listo: { label: "Listo", color: "#5aa9ff", bg: "rgba(90,169,255,.12)" },
   camino: { label: "En camino", color: "#9b7bff", bg: "rgba(155,123,255,.12)" },
   entregado: { label: "Entregado", color: "#3fae6b", bg: "rgba(63,174,107,.12)" },
@@ -426,7 +426,7 @@ function OrderDetail({ order, onClose, onPay }) {
             <button className="btn btn-orange btn-block" onClick={() => onPay(live)}><Ic.check width={17} height={17} /> Cobrar · {money(live.total)}</button>
           )}
           {live.phone && (
-            <a className={"btn btn-block " + (live.paid ? "btn-orange" : "btn-ghost")} href={waLink(`¡Hola ${live.name}! Tu pedido ${live.id} está: ${meta.label}. — Brothers Food.lst 🍔`)} target="_blank" rel="noopener">
+            <a className={"btn btn-block " + (live.paid ? "btn-orange" : "btn-ghost")} href={waLink(`¡Hola ${live.name}! Tu pedido ${live.id} está: ${meta.label}. — Dr. Empanada 🥟`)} target="_blank" rel="noopener">
               <Ic.wa width={17} height={17} /> Avisar estado por WhatsApp
             </a>
           )}

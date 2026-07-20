@@ -1,18 +1,18 @@
 /* ============================================================
-   FX.CSS — Brothers Food LST · capa "cartoon poster"
-   Home rediseñado estilo sticker/cartoon (crav-level).
+   FX.CSS — Dr. Empanada · capa "cartoon poster"
+   Paleta de marca: negro + dorado (el especialista en sabor).
    Prefijo bfx- para no pisar brand.css (menu/admin intactos).
    ============================================================ */
 
 :root{
   --bfx-cream:   #f6e8d2;
   --bfx-cream-2: #efdcbc;
-  --bfx-red:     #e23d16;   /* display naranja-rojo */
-  --bfx-red-2:   #c92f0d;
-  --bfx-mustard: #f4a804;
+  --bfx-red:     #17130e;   /* negro de marca (acento display) */
+  --bfx-red-2:   #000000;
+  --bfx-mustard: #f4a804;   /* dorado Dr. Empanada */
   --bfx-yellow:  #ffd750;
   --bfx-green:   #60a905;
-  --bfx-bordo:   #4c0016;
+  --bfx-bordo:   #241c12;   /* marrón profundo (la vitrina) */
   --bfx-deep:    #2b1403;   /* marrón casi negro */
   --bfx-modak:   "Modak", "Arial Black", system-ui, sans-serif;
   --bfx-mouse:   "Mouse Memoirs", "Oswald", "Arial Narrow", sans-serif;
@@ -335,15 +335,16 @@ body.bfx-home .grain{ opacity:.35; }
 @keyframes bfx-loader-bob{ 0%,100%{ transform: translateY(0) rotate(-1.5deg); } 50%{ transform: translateY(-10px) rotate(1.5deg); } }
 @keyframes bfx-loader-fill{ 0%{ width:0%; } 70%{ width:82%; } 100%{ width:96%; } }
 
-/* ---------- logo badge (logo original en vector) ----------
+/* ---------- logo badge (logo de marca en vector) ----------
+   Círculo negro + borde dorado, como el logo real de Dr. Empanada.
    El tamaño se controla con font-size del elemento. */
 .bfx-logobadge{
   display:inline-flex; flex-direction:column; align-items:center; justify-content:center;
   gap:.32em;
   width: 7.6em; height: 7.6em; flex-shrink:0;
   background:#0c0c0d;
-  border-radius: 1.15em;
-  border: .26em solid #fff;
+  border-radius: 50%;
+  border: .26em solid #f4a804;
   box-shadow: 0 .8em 1.8em -0.7em rgba(43,20,3,.5);
   text-align:center; user-select:none;
 }
@@ -351,7 +352,7 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-logobadge .t{
   font-family: var(--display);
   font-size: .92em; line-height: 1.06; letter-spacing: .04em;
-  color:#fff; text-transform: uppercase;
+  color:#ffd750; text-transform: uppercase;
   /* anula el stroke/sombra heredados de .bfx-giant cuando vive dentro del hero */
   -webkit-text-stroke: 0 !important;
   text-shadow: none !important;
@@ -392,7 +393,7 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-navlink.on{ color: #fff; background: var(--bfx-red); }
 /* en páginas oscuras (checkout/admin no lo usan, pero por si acaso) */
 header:not(.bfx-header-light) .bfx-navlink{ color: var(--white); }
-header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); background: rgba(234,123,27,.12); }
+header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); background: rgba(244,168,4,.12); }
 
 /* CTA "Pedir online" — pill cartoon */
 .bfx-navcta{
@@ -843,9 +844,9 @@ body.bfx-admin{
   --white:       var(--bfx-deep);    /* texto principal → marrón */
   --muted:       rgba(43,20,3,.6);
   --muted-d:     rgba(43,20,3,.42);
-  --orange:      var(--bfx-red);     /* acento → rojo Brothers */
-  --orange-2:    #ffd9c4;
-  --orange-deep: var(--bfx-red-2);
+  --orange:      #d98e00;            /* acento → dorado profundo Dr. Empanada */
+  --orange-2:    #ffe3a8;
+  --orange-deep: #b47500;
   --shadow:      0 18px 44px -22px rgba(43,20,3,.28);
   --shadow-sm:   0 6px 18px -10px rgba(43,20,3,.22);
 }

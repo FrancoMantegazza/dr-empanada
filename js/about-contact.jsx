@@ -10,11 +10,11 @@ function Nosotros({ go }) {
 
   // historia por capas (estilo "A story in every bite")
   const story = [
-    { tag: "VERDE Y FRESCO", cls: "bfx-badge--green", img: IMG("photo-1512621776951-a57141f2eefd", 800), rot: 3, txt: "Lechuga y verdura fresca todos los días. Crocante, lavada y cortada en el momento." },
-    { tag: "SMASH AL MOMENTO", cls: "bfx-badge--red", img: IMG("photo-1553979459-d2229ba7433b", 800), rot: -4, txt: "Medallones de carne aplastados bien caliente: costra caramelizada afuera, jugoso adentro." },
-    { tag: "CHEDDAR FUNDIDO", cls: "", img: IMG("photo-1573080496219-bb080dd4f877", 800), rot: 4, txt: "Cheddar de verdad que se estira, se funde y se mete en todas las capas." },
-    { tag: "PAN DE CASA", cls: "bfx-badge--red", img: IMG("photo-1509722747041-616f39b57569", 800), rot: -3, txt: "Pan casero tostado en manteca, hecho para bancar una doble sin desarmarse." },
-    { tag: "BIRRA TIRADA", cls: "bfx-badge--green", img: IMG("photo-1535958636474-b021ee887b13", 800), rot: 5, txt: "7 canillas de productores independientes, siempre frías y con la espuma justa." },
+    { tag: "MASA CASERA", cls: "bfx-badge--green", img: "assets/horno-tabla.jpg", rot: 3, txt: "Masa propia estirada en el día: finita, elástica y con el punto justo de horno." },
+    { tag: "RELLENO GENEROSO", cls: "bfx-badge--red", img: "assets/carne-corte.jpg", rot: -4, txt: "Carne cortada a cuchillo, cebolla dorada lenta y rellenos que se cocinan a fuego lento." },
+    { tag: "QUESO QUE SE ESTIRA", cls: "", img: "assets/empanadas/provolone.jpg", rot: 4, txt: "Muzzarella, provolone y cheddar de verdad, que se funden y se estiran en cada bocado." },
+    { tag: "REPULGUE A MANO", cls: "bfx-badge--red", img: "assets/tabla-carne.jpg", rot: -3, txt: "Cada empanada cerrada a mano, con el repulgue de siempre. Así se distingue cada sabor." },
+    { tag: "PASTELITOS CROCANTES", cls: "bfx-badge--green", img: "assets/pastelitos-membrillo.jpg", rot: 5, txt: "Hojaldre frito y crocante con membrillo, batata o dulce de leche. El final obligado." },
   ];
 
   return (
@@ -31,10 +31,10 @@ function Nosotros({ go }) {
           </h1>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0" }}>
             No tenemos una lista larga de ingredientes: tenemos una corta, y somos obsesivos con cada cosa que entra.
-            Dos hermanos de Boedo haciendo la burga que nos gustaría comer.
+            Desde 1989 haciendo la empanada que nos gustaría comer.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 28 }}>
-            {[["+5", "años en Boedo"], ["4.7★", "en Google"], ["9.7K", "en Instagram"], ["100%", "casero"]].map(([n, l], i) => (
+            {[["+35", "años de historia"], ["4.7★", "en Google"], ["13", "sabores"], ["100%", "casero"]].map(([n, l], i) => (
               <div key={l} className="bfx-panel" data-pop data-pop-delay={i * 0.08}
                 style={{ padding: "14px 22px 12px", rotate: ((i % 2 ? 1 : -1) * 2) + "deg", textAlign: "center" }}>
                 <div className="bfx-bubble" style={{ fontSize: 30 }}>{n}</div>
@@ -54,7 +54,7 @@ function Nosotros({ go }) {
             <span data-split="chars" style={{ display: "block" }}>EN CADA CAPA.</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 460, marginTop: 18, color: "#4a2c00" }}>
-            No elegimos ingredientes de una lista: pensamos de dónde vienen, por qué importan y qué le suman a la burga.
+            No elegimos ingredientes de una lista: pensamos de dónde vienen, por qué importan y qué le suman a cada empanada.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "clamp(40px,5vw,70px)", marginTop: "clamp(40px,5vw,70px)" }}>
@@ -87,13 +87,13 @@ function Nosotros({ go }) {
           <Sticker name="beer" size={110} data-pop data-idle style={{ position: "absolute", right: "3%", top: -20, "--rot": "10deg" }} />
           <span className="bfx-badge bfx-badge--red" data-pop data-idle style={{ "--rot": "-6deg" }}>AV. BOEDO 1600</span>
           <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 18 }}>
-            <span data-split="chars" style={{ display: "block" }}>DE BOEDO,</span>
+            <span data-split="chars" style={{ display: "block" }}>DESDE 1989,</span>
             <span data-split="chars" style={{ display: "block" }}><span className="ylw">CON HAMBRE.</span></span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0" }}>
-            Arrancamos con una plancha, un pan casero y cero vueltas. Hoy servimos en el salón, llevamos con delivery propio
-            y tiramos pintas todos los días menos los lunes. Pack fútbol para los partidos, promo Thomason los viernes y
-            happy hour de martes a domingo.
+            Arrancamos con un horno, una masa casera y cero vueltas. Hoy servimos en el salón, llevamos con delivery propio
+            y horneamos todos los días menos los lunes. Docenas surtidas para juntadas, docena en promo los viernes y
+            promo mediodía de martes a domingo.
           </p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 30, flexWrap: "wrap" }}>
             <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" className="bfx-pill-ylw" style={{ fontSize: 18 }}>
@@ -116,7 +116,7 @@ function Contacto({ go }) {
   const [f, setF] = React.useState({ nombre: "", tel: "", msg: "" });
   const submit = (e) => {
     e.preventDefault();
-    const text = `¡Hola Brothers! Soy ${f.nombre}${f.tel ? " (" + f.tel + ")" : ""}. ${f.msg}`;
+    const text = `¡Hola Dr. Empanada! Soy ${f.nombre}${f.tel ? " (" + f.tel + ")" : ""}. ${f.msg}`;
     window.open(waLink(text), "_blank", "noopener");
   };
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
@@ -142,7 +142,7 @@ function Contacto({ go }) {
             <input className="bfx-input" placeholder="Tu WhatsApp (opcional)" value={f.tel} onChange={set("tel")} aria-label="WhatsApp" />
             <textarea className="bfx-input" required rows={4} placeholder="Contanos qué se te antoja…" value={f.msg} onChange={set("msg")} aria-label="Mensaje" style={{ resize: "vertical" }} />
             <div style={{ textAlign: "center", marginTop: 6 }}>
-              <button type="submit" className="bfx-pill-ylw" data-squash>Enviar antojo 🍔</button>
+              <button type="submit" className="bfx-pill-ylw" data-squash>Enviar antojo 🥟</button>
             </div>
           </form>
           <div style={{ height: "clamp(40px,5vw,70px)" }} />
@@ -157,7 +157,7 @@ function Contacto({ go }) {
             <div style={{ display: "grid", gap: 16 }}>
               {[
                 ["Dónde", BIZ.address, BIZ.city, "https://www.google.com/maps/search/?api=1&query=Av.+Boedo+1600+CABA"],
-                ["WhatsApp", BIZ.phoneDisplay, "Pedidos y consultas", waLink("¡Hola Brothers! Tengo una consulta 🍔")],
+                ["WhatsApp", BIZ.phoneDisplay, "Pedidos y consultas", waLink("¡Hola Dr. Empanada! Tengo una consulta 🥟")],
                 ["Instagram", "@" + BIZ.ig, "Novedades y promos", "https://instagram.com/" + BIZ.ig],
               ].map(([t, m, s, href], i) => (
                 <a key={t} href={href} target="_blank" rel="noopener" className="bfx-panel" data-pop data-pop-delay={i * 0.08}
@@ -174,13 +174,13 @@ function Contacto({ go }) {
                     <span>{h.d}</span><span style={{ color: h.closed ? "var(--bfx-red)" : "inherit" }}>{h.h}</span>
                   </div>
                 ))}
-                <div className="bfx-hand" style={{ fontSize: 16, color: "var(--bfx-green)", marginTop: 8 }}>★ Happy hour · {HAPPY.when.toLowerCase()}</div>
+                <div className="bfx-hand" style={{ fontSize: 16, color: "var(--bfx-green)", marginTop: 8 }}>★ Promo mediodía · {HAPPY.when.toLowerCase()}</div>
               </div>
             </div>
 
             <div className="bfx-stickerframe" data-pop style={{ rotate: "-.8deg" }}>
               <iframe
-                title="Mapa Brothers Food LST"
+                title="Mapa Dr. Empanada"
                 src="https://maps.google.com/maps?q=Av.%20Boedo%201600%2C%20CABA&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 style={{ border: 0, width: "100%", height: "100%", minHeight: 520 }}
                 loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
@@ -209,7 +209,7 @@ function Privacidad({ go }) {
 
       <div className="wrap" style={{ padding: "40px 24px 70px", maxWidth: 820 }}>
         <p style={{ fontSize: 17, color: "var(--muted)", lineHeight: 1.6, marginBottom: 28 }}>
-          En Brothers Food.lst cuidamos tus datos tanto como nuestras hamburguesas. Acá te contamos qué información pedimos, para qué la usamos y qué derechos tenés.
+          En Dr. Empanada cuidamos tus datos tanto como nuestras empanadas. Acá te contamos qué información pedimos, para qué la usamos y qué derechos tenés.
         </p>
 
         <div style={block}>
@@ -248,7 +248,7 @@ function Privacidad({ go }) {
         </div>
 
         <div style={{ display: "flex", gap: 12, marginTop: 26, flexWrap: "wrap" }}>
-          <a className="btn btn-orange" href={waLink("¡Hola Brothers! Tengo una consulta sobre mis datos 🔒")} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> Escribinos</a>
+          <a className="btn btn-orange" href={waLink("¡Hola Dr. Empanada! Tengo una consulta sobre mis datos 🔒")} target="_blank" rel="noopener"><Ic.wa width={18} height={18} /> Escribinos</a>
           <button className="btn btn-ghost" onClick={() => go("#/")}>Volver al inicio</button>
         </div>
       </div>

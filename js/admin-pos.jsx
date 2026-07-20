@@ -70,7 +70,7 @@ function TableCard({ n, onOpen, onPay }) {
       cursor: "pointer", borderRadius: 14, padding: "16px 16px 14px", minHeight: 130,
       display: "flex", flexDirection: "column",
       border: "1.5px solid " + (free ? "var(--line-dark)" : served ? "var(--ok)" : "var(--orange)"),
-      background: free ? "var(--ink-2)" : served ? "rgba(63,174,107,.07)" : "rgba(234,123,27,.07)",
+      background: free ? "var(--ink-2)" : served ? "rgba(63,174,107,.07)" : "rgba(244,168,4,.07)",
       transition: "transform .15s, border-color .15s",
     }}
       onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; }}
@@ -224,7 +224,7 @@ function POS({ auth, dest, onBack, onPay }) {
               {existing.lines.map((l, i) => (
                 <div key={i} style={{ display: "flex", gap: 8, padding: "5px 0", fontSize: 13, color: "var(--muted)" }}>
                   <span className="mono">{l.qty}×</span>
-                  <span style={{ flex: 1 }}>{l.name}{l.variant === "double" ? " (doble)" : ""}{l.mods ? " · " + l.mods : ""}</span>
+                  <span style={{ flex: 1 }}>{l.name}{l.variant === "double" ? " (docena)" : ""}{l.mods ? " · " + l.mods : ""}</span>
                   <span className="mono tabular">{money(l.lineTotal)}</span>
                 </div>
               ))}
@@ -244,7 +244,7 @@ function POS({ auth, dest, onBack, onPay }) {
                 return (
                   <div key={k} style={{ padding: "9px 0", borderBottom: "1px solid var(--line-dark)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                      <span style={{ fontWeight: 600, fontSize: 14 }}>{l.name}{l.variant === "double" ? " (doble)" : ""}</span>
+                      <span style={{ fontWeight: 600, fontSize: 14 }}>{l.name}{l.variant === "double" ? " (docena)" : ""}</span>
                       <span className="mono tabular" style={{ fontWeight: 700, fontSize: 13.5 }}>{money(l.lineTotal)}</span>
                     </div>
                     {l.modsLabel && <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 2 }}>{l.modsLabel}</div>}
@@ -348,7 +348,7 @@ function PayModal({ order, onClose }) {
                   <button key={d} onClick={() => setDiscount(d)} className="mono" style={{
                     flex: 1, padding: "8px 0", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer",
                     border: "1px solid " + (discount === d ? "var(--orange)" : "var(--line-dark)"),
-                    background: discount === d ? "rgba(234,123,27,.1)" : "transparent",
+                    background: discount === d ? "rgba(244,168,4,.1)" : "transparent",
                     color: discount === d ? "var(--orange)" : "var(--muted)",
                   }}>{d === 0 ? "Sin desc." : "−" + d + "%"}</button>
                 ))}
@@ -374,7 +374,7 @@ function PayModal({ order, onClose }) {
                       <button key={s} onClick={() => setCash(String(s))} className="mono tabular" style={{
                         padding: "8px 13px", borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: "pointer",
                         border: "1px solid " + (cashN === s ? "var(--orange)" : "var(--line-dark)"),
-                        background: cashN === s ? "rgba(234,123,27,.1)" : "transparent", color: cashN === s ? "var(--orange)" : "var(--white)",
+                        background: cashN === s ? "rgba(244,168,4,.1)" : "transparent", color: cashN === s ? "var(--orange)" : "var(--white)",
                       }}>{money(s)}</button>
                     ))}
                   </div>

@@ -1,5 +1,5 @@
 /* ============================================================
-   fx.js — Motor de animaciones (GSAP + ScrollTrigger + Lenis)
+   fx.js — Motor de animaciones de Dr. Empanada (GSAP + Lenis)
    Sistema de stickers, pops, split text, parallax, fountain,
    loader cinemático y cursor con estela.
    Sin build: JS plano, corre antes de React.
@@ -46,48 +46,67 @@
       '<path d="M30 58 Q34 44 50 46 Q66 42 70 56" stroke="#4f8f0a" stroke-width="5" fill="none" stroke-linecap="round"/>'
     ),
     patty: stk(
-      '<rect x="4" y="30" width="92" height="40" rx="20" fill="#fff"/>' +
-      '<rect x="10" y="36" width="80" height="28" rx="14" fill="#6d3f16"/>' +
-      '<circle cx="30" cy="50" r="4" fill="#54300f"/><circle cx="50" cy="45" r="3.4" fill="#54300f"/><circle cx="68" cy="52" r="4" fill="#54300f"/><circle cx="44" cy="56" r="2.6" fill="#8a5423"/><circle cx="60" cy="42" r="2.4" fill="#8a5423"/>'
+      // bocado de empanada cortada: se ve el relleno de carne
+      '<path d="M8 62 C8 36 26 22 50 22 C74 22 92 36 92 62 Z" fill="#fff"/>' +
+      '<path d="M13 60 C13 39 29 27 50 27 C71 27 87 39 87 60 Z" fill="#e8a51e"/>' +
+      '<path d="M16 60 C22 48 34 42 50 42 C66 42 78 48 84 60 Z" fill="#6d3f16"/>' +
+      '<circle cx="34" cy="53" r="3.2" fill="#54300f"/><circle cx="50" cy="50" r="3" fill="#54300f"/><circle cx="66" cy="53" r="3.2" fill="#54300f"/><circle cx="43" cy="56" r="2.2" fill="#c4432b"/><circle cx="58" cy="56" r="2.2" fill="#8a5423"/>' +
+      '<rect x="6" y="60" width="88" height="7" rx="3.5" fill="#fff"/>'
     ),
     fries: stk(
-      '<g><path d="M30 40 L26 6 L36 10 L38 40 Z" fill="#ffd750" stroke="#fff" stroke-width="4"/><path d="M44 38 L46 4 L56 4 L54 38 Z" fill="#ffd750" stroke="#fff" stroke-width="4"/><path d="M62 40 L70 8 L79 14 L70 42 Z" fill="#ffd750" stroke="#fff" stroke-width="4"/>' +
-      '<path d="M18 34 h64 l-7 60 q-.5 4 -5 4 h-40 q-4.5 0 -5 -4 Z" fill="#e8380d" stroke="#fff" stroke-width="5"/>' +
-      '<path d="M36 60 q14 12 28 0" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></g>'
+      // pastelito frito cuadrado con dulce
+      '<g transform="rotate(8 50 50)">' +
+      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#ffd750" stroke="#fff" stroke-width="5"/>' +
+      '<path d="M18 40 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
+      '<path d="M18 60 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
+      '<circle cx="50" cy="50" r="13" fill="#c4432b" stroke="#fff" stroke-width="4"/>' +
+      '<circle cx="46" cy="46" r="3" fill="#e06a48"/>' +
+      '</g>'
     ),
     beer: stk(
-      '<path d="M22 34 h48 v52 q0 8 -8 8 h-32 q-8 0 -8 -8 Z" fill="#f2a913" stroke="#fff" stroke-width="5"/>' +
-      '<path d="M70 44 h8 q8 0 8 8 v14 q0 8 -8 8 h-8" fill="none" stroke="#fff" stroke-width="5"/>' +
-      '<rect x="30" y="44" width="7" height="40" rx="3.5" fill="#ffd167"/><rect x="46" y="44" width="7" height="40" rx="3.5" fill="#ffd167"/>' +
-      '<circle cx="28" cy="30" r="9" fill="#fff"/><circle cx="44" cy="25" r="11" fill="#fff"/><circle cx="60" cy="30" r="9" fill="#fff"/><circle cx="52" cy="34" r="8" fill="#fff"/><circle cx="36" cy="34" r="8" fill="#fff"/>'
+      // vaso de gaseosa con sorbete
+      '<path d="M28 30 h44 l-6 58 q-.5 6 -6 6 h-20 q-5.5 0 -6 -6 Z" fill="#f2a913" stroke="#fff" stroke-width="5"/>' +
+      '<path d="M30 44 h40 M32 60 h36" stroke="#ffd167" stroke-width="5" stroke-linecap="round"/>' +
+      '<path d="M52 30 L64 6 l10 4" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="38" cy="52" r="4" fill="#ffd167"/><circle cx="56" cy="70" r="4" fill="#ffd167"/><circle cx="48" cy="40" r="3" fill="#fff"/>'
     ),
     pickle: stk(
+      // aceituna (clásica del relleno)
       '<circle cx="50" cy="50" r="40" fill="#fff"/>' +
       '<circle cx="50" cy="50" r="34" fill="#8fbf28"/>' +
       '<circle cx="50" cy="50" r="24" fill="#a8d43e"/>' +
-      '<g stroke="#7ba31c" stroke-width="4" stroke-linecap="round"><line x1="50" y1="30" x2="50" y2="70"/><line x1="30" y1="50" x2="70" y2="50"/><line x1="36" y1="36" x2="64" y2="64"/><line x1="64" y1="36" x2="36" y2="64"/></g>'
+      '<circle cx="50" cy="50" r="10" fill="#c4432b"/>' +
+      '<ellipse cx="42" cy="38" rx="6" ry="10" fill="#d7ec9a" transform="rotate(-30 42 38)"/>'
     ),
     bacon: stk(
-      '<path d="M10 30 q12 -12 24 0 q12 12 24 0 q12 -12 24 0 l8 10 q-12 12 -24 0 q-12 -12 -24 0 q-12 12 -24 0 Z" fill="#c4432b" stroke="#fff" stroke-width="5" transform="translate(0 6)"/>' +
-      '<path d="M10 52 q12 -12 24 0 q12 12 24 0 q12 -12 24 0 l8 10 q-12 12 -24 0 q-12 -12 -24 0 q-12 12 -24 0 Z" fill="#e06a48" stroke="#fff" stroke-width="5" transform="translate(0 6)"/>' +
-      '<path d="M14 44 q10 -9 20 0 M46 44 q10 -9 20 0" stroke="#f2b09a" stroke-width="5" fill="none" stroke-linecap="round" transform="translate(0 4)"/>'
+      // huevo duro en rodaja (relleno clásico)
+      '<circle cx="50" cy="50" r="42" fill="#fff"/>' +
+      '<ellipse cx="50" cy="50" rx="34" ry="36" fill="#fdf4dc"/>' +
+      '<circle cx="50" cy="52" r="17" fill="#ffc93c"/>' +
+      '<circle cx="45" cy="47" r="5" fill="#ffe291"/>'
     ),
     burger: stk(
-      '<path d="M12 42 q0 -26 38 -26 q38 0 38 26 l0 4 h-76 Z" fill="#e8a51e" stroke="#fff" stroke-width="5"/>' +
-      '<circle cx="34" cy="28" r="2.4" fill="#fff"/><circle cx="50" cy="24" r="2.4" fill="#fff"/><circle cx="66" cy="28" r="2.4" fill="#fff"/>' +
-      '<path d="M10 46 h80 l-6 8 -12 -6 -14 8 -14 -8 -14 8 -14 -6 Z" fill="#7cc41f" stroke="#fff" stroke-width="4"/>' +
-      '<rect x="12" y="54" width="76" height="10" rx="5" fill="#ffc93c" stroke="#fff" stroke-width="4"/>' +
-      '<rect x="10" y="64" width="80" height="12" rx="6" fill="#6d3f16" stroke="#fff" stroke-width="4"/>' +
-      '<path d="M14 78 h72 q-2 12 -14 12 h-44 q-12 0 -14 -12 Z" fill="#e8a51e" stroke="#fff" stroke-width="5"/>'
+      // empanada con repulgue (glifo estrella de la marca)
+      '<path d="M8 66 C8 38 27 22 50 22 C73 22 92 38 92 66 Z" fill="#e8a51e" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>' +
+      '<path d="M14 60 C20 44 33 36 50 36 C67 36 80 44 86 60" fill="none" stroke="#c98a10" stroke-width="4" stroke-linecap="round"/>' +
+      '<circle cx="17" cy="47" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="26" cy="36" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="38" cy="28.5" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="50" cy="26" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="62" cy="28.5" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="74" cy="36" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="83" cy="47" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<path d="M34 50 q6 6 12 0 M54 50 q6 6 12 0" stroke="#8a5a10" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M10 66 h80" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'
     ),
     moto: stk(
       '<g stroke="#fff" stroke-width="4">' +
-      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#e23d16"/>' +
+      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#f4a804"/>' +
       '<path d="M18 30 h14 M18 38 h10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>' +
       '<path d="M42 48 h20 l10 -16 h12" fill="none" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '<circle cx="30" cy="74" r="15" fill="#2b1403"/><circle cx="30" cy="74" r="6" fill="#fff"/>' +
       '<circle cx="86" cy="74" r="15" fill="#2b1403"/><circle cx="86" cy="74" r="6" fill="#fff"/>' +
-      '<path d="M30 74 h40 l14 -22 M56 48 l8 26" fill="none" stroke="#e23d16" stroke-width="7" stroke-linecap="round"/>' +
+      '<path d="M30 74 h40 l14 -22 M56 48 l8 26" fill="none" stroke="#f4a804" stroke-width="7" stroke-linecap="round"/>' +
       '<path d="M92 46 h10" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '</g>', "0 0 110 100"
     ),
@@ -178,7 +197,7 @@
       return d;
     });
 
-    var statuses = ["PRENDIENDO LA PLANCHA…", "APLASTANDO LOS MEDALLONES…", "TIRANDO LA PINTA…", "EMPLATANDO…"];
+    var statuses = ["PRENDIENDO EL HORNO…", "ESTIRANDO LA MASA…", "HACIENDO EL REPULGUE…", "¡AL HORNO!"];
     var st = { v: 0 };
     var tl = gsap.timeline();
 
@@ -222,7 +241,7 @@
         el.appendChild(c);
         return c.querySelector("path");
       };
-      var p1 = mk("#e23d16"), p2 = mk("#f6e8d2");
+      var p1 = mk("#f4a804"), p2 = mk("#f6e8d2");
       var s1 = { yl: 101, yr: 101, yc: 101 }, s2 = { yl: 101, yr: 101, yc: 101 };
       var upd = function (p, s) { p.setAttribute("d", "M -1 -1 L 101 -1 L 101 " + s.yr + " Q 50 " + s.yc + " -1 " + s.yl + " Z"); };
       // p2 (crema, arriba de todo al final) primero invisible detrás de p1: orden DOM p1 luego p2
@@ -552,11 +571,12 @@
      ============================================================ */
   var LOGO_SVG =
     '<span class="bfx-logobadge" style="font-size:18px">' +
-    '<svg viewBox="0 0 100 72" fill="none"><circle cx="50" cy="13" r="4.5" fill="#fff"/>' +
-    '<path d="M14 52 C14 32 30 20 50 20 C70 20 86 32 86 52" stroke="#fff" stroke-width="5.5" fill="none" stroke-linecap="round"/>' +
-    '<line x1="50" y1="20" x2="50" y2="17" stroke="#fff" stroke-width="5.5" stroke-linecap="round"/>' +
-    '<rect x="9" y="54" width="82" height="6" rx="3" fill="#fff"/></svg>' +
-    '<span class="t">BROTHERS<br>FOOD.LST</span></span>';
+    '<svg viewBox="0 0 100 72" fill="none">' +
+    '<path d="M14 56 C14 34 30 20 50 20 C70 20 86 34 86 56 Z" stroke="#f4a804" stroke-width="5.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<circle cx="22" cy="37" r="3.4" fill="#ffd750"/><circle cx="31.5" cy="27.5" r="3.4" fill="#ffd750"/><circle cx="43" cy="22.5" r="3.4" fill="#ffd750"/>' +
+    '<circle cx="57" cy="22.5" r="3.4" fill="#ffd750"/><circle cx="68.5" cy="27.5" r="3.4" fill="#ffd750"/><circle cx="78" cy="37" r="3.4" fill="#ffd750"/>' +
+    '<rect x="9" y="58" width="82" height="6" rx="3" fill="#f4a804"/></svg>' +
+    '<span class="t">DR.<br>EMPANADA</span></span>';
 
   FX.pageWipe = function (onCover) {
     if (!hasGsap || rm) { if (onCover) onCover(); return; }

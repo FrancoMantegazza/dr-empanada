@@ -8,7 +8,7 @@ function tourSteps(isOwner) {
   return [
     {
       title: "¡Bienvenido al panel!",
-      text: "Este es el centro de operaciones de Brothers Food. En un minuto te muestro cada sección. Avanzá con el botón, con las flechas del teclado o haciendo click en la pantalla. Salís cuando quieras con Esc.",
+      text: "Este es el centro de operaciones de Dr. Empanada. En un minuto te muestro cada sección. Avanzá con el botón, con las flechas del teclado o haciendo click en la pantalla. Salís cuando quieras con Esc.",
       center: true,
     },
     {
