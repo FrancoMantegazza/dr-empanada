@@ -1,28 +1,29 @@
 /* ============================================================
    DR. EMPANADA — Brand tokens & base
-   Base: negro & blanco · Acento: dorado de marca · damero + kraft
+   Base: negro cálido & crema · Acento: amarillo + dorado del sello
+   Paleta muestreada del logo oficial (@drempanada.arg).
    ============================================================ */
 
 :root{
   /* --- Color --- */
-  --ink:        #0c0c0d;   /* near-black base */
-  --ink-2:      #161618;   /* raised surface on dark */
-  --ink-3:      #202023;   /* card on dark */
-  --line-dark:  #2c2c30;   /* hairline on dark */
+  --ink:        #0d0b07;   /* negro cálido del sello */
+  --ink-2:      #17140e;   /* raised surface on dark */
+  --ink-3:      #211d15;   /* card on dark */
+  --line-dark:  #2f2a21;   /* hairline on dark */
 
   --paper:      #f4efe4;   /* warm off-white (kraft paper) */
   --paper-2:    #eae1d0;   /* deeper kraft */
   --bone:       #fbf9f3;   /* lightest */
   --line-light: #ddd3bf;
 
-  --white:      #f7f4ec;
-  --muted:      #9a978f;   /* muted text on dark */
+  --white:      #fffdf2;   /* crema del wordmark */
+  --muted:      #9c9488;   /* muted text on dark */
   --muted-d:    #6f6a5e;   /* muted text on light */
 
-  --orange:     #f4a804;   /* brand accent (dorado Dr. Empanada) */
-  --orange-2:   #ffe3a8;   /* tint */
-  --orange-deep:#b47500;
-  --beer:       #e7a92a;   /* gold secundario */
+  --orange:     #ffd829;   /* acento: amarillo de la mascota */
+  --orange-2:   #ffeeab;   /* tint */
+  --orange-deep:#c08a12;   /* versión para fondos claros */
+  --beer:       #e0b060;   /* dorado metálico del anillo/cinta */
   --foam:       #f6e9c8;
 
   --ok:         #3fae6b;
@@ -82,7 +83,7 @@ p{ text-wrap:pretty; }
 .damero{
   height:14px;
   background:
-    conic-gradient(#0c0c0d 90deg, #f7f4ec 90deg 180deg, #0c0c0d 180deg 270deg, #f7f4ec 270deg) 0 0/28px 28px;
+    conic-gradient(#0d0b07 90deg, #fffdf2 90deg 180deg, #0d0b07 180deg 270deg, #fffdf2 270deg) 0 0/28px 28px;
   background-repeat:repeat;
 }
 .damero.thin{ height:10px; background-size:20px 20px; }
@@ -108,7 +109,7 @@ p{ text-wrap:pretty; }
 }
 .btn:active{ transform:translateY(1px) scale(.98); }
 .btn-orange{ background:var(--orange); color:#1a1206; }
-.btn-orange:hover:not(:active){ background:#ffbe2a; transform:translateY(-1px); box-shadow:0 12px 26px -14px rgba(244,168,4,.7); }
+.btn-orange:hover:not(:active){ background:#ffbe2a; transform:translateY(-1px); box-shadow:0 12px 26px -14px rgba(255,216,41,.7); }
 .btn-white{ background:var(--white); color:var(--ink); }
 .btn-white:hover:not(:active){ background:#fff; transform:translateY(-1px); box-shadow:0 12px 26px -16px rgba(0,0,0,.6); }
 .btn-ghost{ background:transparent; color:var(--white); border-color:var(--line-dark); }
@@ -258,7 +259,7 @@ html{ scroll-behavior:smooth; }
   transition:border-color .15s, background .15s;
 }
 .opt:hover{ border-color:#4a4a52; }
-.opt.on{ border-color:var(--orange); background:rgba(244,168,4,.08); }
+.opt.on{ border-color:var(--orange); background:rgba(255,216,41,.08); }
 .opt-check{
   width:20px; height:20px; border-radius:6px; border:2px solid var(--line-dark);
   display:grid; place-items:center; color:#1a1206; flex-shrink:0; transition:all .15s;
@@ -338,7 +339,7 @@ html{ scroll-behavior:smooth; }
 .lift:hover{
   box-shadow:
     0 26px 52px -22px rgba(0,0,0,.72),
-    0 18px 60px -30px rgba(244,168,4,.35);
+    0 18px 60px -30px rgba(255,216,41,.35);
 }
 
 /* --- Happy hour deals: feedback al hover --- */
@@ -421,7 +422,7 @@ html{ scroll-behavior:smooth; }
 .stk-oval{
   display:inline-flex; align-items:center; justify-content:center;
   font-family:var(--display); text-transform:uppercase; letter-spacing:.04em;
-  font-size:clamp(20px,3vw,30px); color:#f7f4ec;
+  font-size:clamp(20px,3vw,30px); color:#fffdf2;
   background:var(--orange-deep); padding:22px 52px; border-radius:50%;
   border:4px solid #fff; box-shadow:0 16px 40px -14px rgba(26,18,6,.4);
   cursor:pointer; transition:scale .25s var(--ease-out), box-shadow .25s;
@@ -451,7 +452,7 @@ html{ scroll-behavior:smooth; }
 .tour-spot{
   border-radius:12px; pointer-events:none;
   border:2px solid var(--orange);
-  box-shadow:0 0 0 9999px rgba(0,0,0,.76), 0 0 24px rgba(244,168,4,.35);
+  box-shadow:0 0 0 9999px rgba(0,0,0,.76), 0 0 24px rgba(255,216,41,.35);
   transition:left .35s var(--ease-out), top .35s var(--ease-out), width .35s var(--ease-out), height .35s var(--ease-out);
 }
 .tour-card{

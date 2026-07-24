@@ -47,7 +47,7 @@ function Nosotros({ go }) {
 
       {/* historia por capas — mostaza estilo crav */}
       <section className="bfx-mustardsec" style={{ padding: "0 0 clamp(70px,8vw,120px)", overflow: "clip" }} aria-label="Una historia en cada capa">
-        <Wave fill="#f4a804" style={{ background: "var(--bfx-cream)" }} />
+        <Wave fill="#ffd829" style={{ background: "var(--bfx-cream)" }} />
         <div className="wrap" style={{ position: "relative", paddingTop: "clamp(40px,5vw,70px)" }}>
           <h2 className="bfx-giant bfx-giant--lg bfx-giant--outline" style={{ textAlign: "left" }}>
             <span data-split="chars" style={{ display: "block" }}>UNA HISTORIA</span>

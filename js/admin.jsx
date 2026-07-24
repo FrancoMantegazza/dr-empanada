@@ -169,7 +169,7 @@ function beep() {
 /* ---------------- ORDERS BOARD (KDS) ---------------- */
 const STATUS_META = {
   recibido: { label: "Recibido", color: "#e9b949", bg: "rgba(233,185,73,.12)" },
-  preparacion: { label: "En preparación", color: "#f4a804", bg: "rgba(244,168,4,.12)" },
+  preparacion: { label: "En preparación", color: "#ffd829", bg: "rgba(255,216,41,.12)" },
   listo: { label: "Listo", color: "#5aa9ff", bg: "rgba(90,169,255,.12)" },
   camino: { label: "En camino", color: "#9b7bff", bg: "rgba(155,123,255,.12)" },
   entregado: { label: "Entregado", color: "#3fae6b", bg: "rgba(63,174,107,.12)" },

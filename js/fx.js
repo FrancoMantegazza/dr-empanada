@@ -56,7 +56,7 @@
     fries: stk(
       // pastelito frito cuadrado con dulce
       '<g transform="rotate(8 50 50)">' +
-      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#ffd750" stroke="#fff" stroke-width="5"/>' +
+      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#ffe040" stroke="#fff" stroke-width="5"/>' +
       '<path d="M18 40 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
       '<path d="M18 60 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
       '<circle cx="50" cy="50" r="13" fill="#c4432b" stroke="#fff" stroke-width="4"/>' +
@@ -89,24 +89,24 @@
       // empanada con repulgue (glifo estrella de la marca)
       '<path d="M8 66 C8 38 27 22 50 22 C73 22 92 38 92 66 Z" fill="#e8a51e" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>' +
       '<path d="M14 60 C20 44 33 36 50 36 C67 36 80 44 86 60" fill="none" stroke="#c98a10" stroke-width="4" stroke-linecap="round"/>' +
-      '<circle cx="17" cy="47" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="26" cy="36" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="38" cy="28.5" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="50" cy="26" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="62" cy="28.5" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="74" cy="36" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="83" cy="47" r="4.5" fill="#ffd750" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="17" cy="47" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="26" cy="36" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="38" cy="28.5" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="50" cy="26" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="62" cy="28.5" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="74" cy="36" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="83" cy="47" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
       '<path d="M34 50 q6 6 12 0 M54 50 q6 6 12 0" stroke="#8a5a10" stroke-width="4" fill="none" stroke-linecap="round"/>' +
       '<path d="M10 66 h80" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'
     ),
     moto: stk(
       '<g stroke="#fff" stroke-width="4">' +
-      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#f4a804"/>' +
+      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#ffd829"/>' +
       '<path d="M18 30 h14 M18 38 h10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>' +
       '<path d="M42 48 h20 l10 -16 h12" fill="none" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '<circle cx="30" cy="74" r="15" fill="#2b1403"/><circle cx="30" cy="74" r="6" fill="#fff"/>' +
       '<circle cx="86" cy="74" r="15" fill="#2b1403"/><circle cx="86" cy="74" r="6" fill="#fff"/>' +
-      '<path d="M30 74 h40 l14 -22 M56 48 l8 26" fill="none" stroke="#f4a804" stroke-width="7" stroke-linecap="round"/>' +
+      '<path d="M30 74 h40 l14 -22 M56 48 l8 26" fill="none" stroke="#ffd829" stroke-width="7" stroke-linecap="round"/>' +
       '<path d="M92 46 h10" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '</g>', "0 0 110 100"
     ),
@@ -241,7 +241,7 @@
         el.appendChild(c);
         return c.querySelector("path");
       };
-      var p1 = mk("#f4a804"), p2 = mk("#f6e8d2");
+      var p1 = mk("#ffd829"), p2 = mk("#f6e8d2");
       var s1 = { yl: 101, yr: 101, yc: 101 }, s2 = { yl: 101, yr: 101, yc: 101 };
       var upd = function (p, s) { p.setAttribute("d", "M -1 -1 L 101 -1 L 101 " + s.yr + " Q 50 " + s.yc + " -1 " + s.yl + " Z"); };
       // p2 (crema, arriba de todo al final) primero invisible detrás de p1: orden DOM p1 luego p2
@@ -570,13 +570,9 @@
      hace el swap de página sin que se vea.
      ============================================================ */
   var LOGO_SVG =
-    '<span class="bfx-logobadge" style="font-size:18px">' +
-    '<svg viewBox="0 0 100 72" fill="none">' +
-    '<path d="M14 56 C14 34 30 20 50 20 C70 20 86 34 86 56 Z" stroke="#f4a804" stroke-width="5.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>' +
-    '<circle cx="22" cy="37" r="3.4" fill="#ffd750"/><circle cx="31.5" cy="27.5" r="3.4" fill="#ffd750"/><circle cx="43" cy="22.5" r="3.4" fill="#ffd750"/>' +
-    '<circle cx="57" cy="22.5" r="3.4" fill="#ffd750"/><circle cx="68.5" cy="27.5" r="3.4" fill="#ffd750"/><circle cx="78" cy="37" r="3.4" fill="#ffd750"/>' +
-    '<rect x="9" y="58" width="82" height="6" rx="3" fill="#f4a804"/></svg>' +
-    '<span class="t">DR.<br>EMPANADA</span></span>';
+    '<span class="bfx-logobadge" style="font-size:13px">' +
+    '<img src="assets/logo.png" alt="Dr. Empanada" width="100" height="100">' +
+    '</span>';
 
   FX.pageWipe = function (onCover) {
     if (!hasGsap || rm) { if (onCover) onCover(); return; }

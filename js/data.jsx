@@ -186,53 +186,36 @@ const REVIEWS = [
 ];
 
 /* ============================================================
-   Logo (SVG) — empanada con repulgue + wordmark.
-   light=true para fondos claros.
+   Logo — sello oficial de Dr. Empanada (assets/logo.png).
+   Viene de la cuenta de la marca, ya recortado en círculo con alfa.
    ============================================================ */
-function Empanada({ size = 34, color = "#f7f4ec" }) {
+const LOGO_SRC = "assets/logo.png";
+
+function Empanada({ size = 34 }) {
   return (
-    <svg width={size} height={size * 0.72} viewBox="0 0 100 72" fill="none" aria-hidden="true">
-      <path d="M14 56 C14 34 30 20 50 20 C70 20 86 34 86 56 Z" stroke={color} strokeWidth="5.5" fill="none" strokeLinejoin="round" strokeLinecap="round" />
-      <circle cx="22" cy="37" r="3.4" fill={color} />
-      <circle cx="31.5" cy="27.5" r="3.4" fill={color} />
-      <circle cx="43" cy="22.5" r="3.4" fill={color} />
-      <circle cx="57" cy="22.5" r="3.4" fill={color} />
-      <circle cx="68.5" cy="27.5" r="3.4" fill={color} />
-      <circle cx="78" cy="37" r="3.4" fill={color} />
-      <rect x="9" y="58" width="82" height="6" rx="3" fill={color} />
-    </svg>
+    <img src={LOGO_SRC} alt="" aria-hidden="true" width={size} height={size}
+      style={{ width: size, height: size, borderRadius: "50%", flexShrink: 0 }} />
   );
 }
 const Cloche = Empanada; // alias legado
 
-/* Logo de marca (círculo negro + empanada + DR. EMPANADA apilado),
-   recreado en vector para que escale sin pixelarse. El tamaño se controla
-   con font-size (width/border/textos usan em en fx.css). */
+/* Sello circular de marca. El tamaño se controla con font-size
+   (el ancho usa em en fx.css). */
 function LogoBadge({ fontSize = 8, rot = 0, className = "", style, ...rest }) {
   return (
-    <span className={"bfx-logobadge " + className} aria-label="Dr. Empanada" {...rest}
+    <span className={"bfx-logobadge " + className} {...rest}
       style={{ fontSize, "--rot": rot + "deg", transform: rot ? `rotate(${rot}deg)` : undefined, ...style }}>
-      <svg viewBox="0 0 100 72" fill="none" aria-hidden="true">
-        <path d="M14 56 C14 34 30 20 50 20 C70 20 86 34 86 56 Z" stroke="#f4a804" strokeWidth="5.5" fill="none" strokeLinejoin="round" strokeLinecap="round" />
-        <circle cx="22" cy="37" r="3.4" fill="#ffd750" />
-        <circle cx="31.5" cy="27.5" r="3.4" fill="#ffd750" />
-        <circle cx="43" cy="22.5" r="3.4" fill="#ffd750" />
-        <circle cx="57" cy="22.5" r="3.4" fill="#ffd750" />
-        <circle cx="68.5" cy="27.5" r="3.4" fill="#ffd750" />
-        <circle cx="78" cy="37" r="3.4" fill="#ffd750" />
-        <rect x="9" y="58" width="82" height="6" rx="3" fill="#f4a804" />
-      </svg>
-      <span className="t">DR.<br />EMPANADA</span>
+      <img src={LOGO_SRC} alt="Dr. Empanada" width="100" height="100" />
     </span>
   );
 }
 
 function Logo({ size = 1, light = false, stacked = false, showTagline = false }) {
-  const color = light ? "#0c0c0d" : "#f7f4ec";
+  const color = light ? "#0d0b07" : "#fffdf2";
   const accent = "var(--orange)";
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12 * size }}>
-      <Empanada size={38 * size} color={color} />
+      <Empanada size={38 * size} />
       <div style={{ lineHeight: 0.82 }}>
         <div className="display" style={{ fontSize: 20 * size, color, letterSpacing: ".02em" }}>
           <span style={{ color: accent }}>DR.</span>

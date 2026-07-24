@@ -9,8 +9,8 @@
   --bfx-cream-2: #efdcbc;
   --bfx-red:     #17130e;   /* negro de marca (acento display) */
   --bfx-red-2:   #000000;
-  --bfx-mustard: #f4a804;   /* dorado Dr. Empanada */
-  --bfx-yellow:  #ffd750;
+  --bfx-mustard: #ffd829;   /* dorado Dr. Empanada */
+  --bfx-yellow:  #ffe040;
   --bfx-green:   #60a905;
   --bfx-bordo:   #241c12;   /* marrón profundo (la vitrina) */
   --bfx-deep:    #2b1403;   /* marrón casi negro */
@@ -77,7 +77,9 @@ body.bfx-home .grain{ opacity:.35; }
   font-size: clamp(15px, 1.6vw, 24px);
   line-height: 1;
   text-transform: uppercase;
-  color:#fff;
+  /* sobre amarillo va tinta marrón (como la cinta del sello); las variantes
+     de fondo oscuro recuperan el blanco abajo. */
+  color: var(--bfx-deep);
   background: var(--bfx-mustard);
   padding: .55em .85em .4em;
   border-radius: .6em;
@@ -86,9 +88,9 @@ body.bfx-home .grain{ opacity:.35; }
   transform: rotate(var(--rot, -6deg));
   white-space: nowrap;
 }
-.bfx-badge--red{ background: var(--bfx-red); }
-.bfx-badge--green{ background: var(--bfx-green); }
-.bfx-badge--bordo{ background: var(--bfx-bordo); }
+.bfx-badge--red{ background: var(--bfx-red); color:#fff; }
+.bfx-badge--green{ background: var(--bfx-green); color:#fff; }
+.bfx-badge--bordo{ background: var(--bfx-bordo); color:#fff; }
 
 /* ---------- blob CTA (Pedir online) ---------- */
 .bfx-blob{
@@ -110,7 +112,7 @@ body.bfx-home .grain{ opacity:.35; }
   box-shadow: 0 24px 48px -14px rgba(201,47,13,.6);
 }
 .bfx-blob:active{ scale: .96; }
-.bfx-blob--ylw{ background: var(--bfx-mustard); color:#fff; box-shadow: 0 18px 40px -14px rgba(244,168,4,.55); }
+.bfx-blob--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); box-shadow: 0 18px 40px -14px rgba(255,216,41,.55); }
 
 /* ---------- polaroid / foto sticker ---------- */
 .bfx-polaroid{
@@ -158,7 +160,7 @@ body.bfx-home .grain{ opacity:.35; }
   padding: 12px 0;
   transform: rotate(-1.2deg) scale(1.02);
 }
-.bfx-marquee--ylw{ background: var(--bfx-mustard); color:#fff; }
+.bfx-marquee--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); }
 .bfx-marquee .row{ display:inline-flex; align-items:center; gap: 34px; padding-right:34px; will-change:transform; }
 .bfx-marquee .row .dot{ font-size:.7em; opacity:.8; }
 
@@ -335,27 +337,24 @@ body.bfx-home .grain{ opacity:.35; }
 @keyframes bfx-loader-bob{ 0%,100%{ transform: translateY(0) rotate(-1.5deg); } 50%{ transform: translateY(-10px) rotate(1.5deg); } }
 @keyframes bfx-loader-fill{ 0%{ width:0%; } 70%{ width:82%; } 100%{ width:96%; } }
 
-/* ---------- logo badge (logo de marca en vector) ----------
-   Círculo negro + borde dorado, como el logo real de Dr. Empanada.
-   El tamaño se controla con font-size del elemento. */
+/* ---------- logo badge (sello oficial) ----------
+   Contenedor del logo real de Dr. Empanada (assets/logo.png, ya recortado
+   en círculo). El tamaño se controla con font-size del elemento. */
 .bfx-logobadge{
-  display:inline-flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:.32em;
+  display:inline-block;
   width: 7.6em; height: 7.6em; flex-shrink:0;
-  background:#0c0c0d;
   border-radius: 50%;
-  border: .26em solid #f4a804;
   box-shadow: 0 .8em 1.8em -0.7em rgba(43,20,3,.5);
-  text-align:center; user-select:none;
+  user-select:none;
+  /* el sello ya trae su propio anillo dorado; el aro externo sólo lo despega
+     del fondo crema del home */
+  outline: .06em solid rgba(224,176,96,.55);
+  outline-offset: -.03em;
 }
-.bfx-logobadge svg{ width: 2.7em; display:block; }
-.bfx-logobadge .t{
-  font-family: var(--display);
-  font-size: .92em; line-height: 1.06; letter-spacing: .04em;
-  color:#ffd750; text-transform: uppercase;
-  /* anula el stroke/sombra heredados de .bfx-giant cuando vive dentro del hero */
-  -webkit-text-stroke: 0 !important;
-  text-shadow: none !important;
+.bfx-logobadge img{
+  width:100%; height:100%; display:block; border-radius:50%;
+  /* el origen es de 100px: suaviza el reescalado en vez de pixelarlo */
+  image-rendering: auto;
 }
 
 /* ============================================================
@@ -393,7 +392,7 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-navlink.on{ color: #fff; background: var(--bfx-red); }
 /* en páginas oscuras (checkout/admin no lo usan, pero por si acaso) */
 header:not(.bfx-header-light) .bfx-navlink{ color: var(--white); }
-header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); background: rgba(244,168,4,.12); }
+header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); background: rgba(255,216,41,.12); }
 
 /* CTA "Pedir online" — pill cartoon */
 .bfx-navcta{
@@ -553,7 +552,7 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
   padding: .4em .55em .25em; transform: rotate(-5deg);
   box-shadow: 0 6px 14px -6px rgba(43,20,3,.4);
 }
-.bfx-minitag--ylw{ background: var(--bfx-mustard); }
+.bfx-minitag--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); }
 .bfx-minitag--green{ background: var(--bfx-green); }
 
 /* filas compactas (tragos / bebidas) — claro */
