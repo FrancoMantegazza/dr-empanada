@@ -134,7 +134,7 @@ const MENU = [
     kicker: "Para compartir (o no)",
     layout: "cards",
     items: [
-      { id: "media-docena", name: "Media docena surtida", desc: "6 empanadas a elección, al horno o fritas.", price: 14000, tags: [], img: "assets/tabla-carne.jpg" },
+      { id: "media-docena", name: "Media docena surtida", desc: "6 empanadas a elección, al horno o fritas.", price: 14000, tags: [], img: "assets/media-docena.jpg" },
       { id: "docena-surtida", name: "Docena surtida", desc: "12 empanadas a elección. La que va siempre.", price: 27000, tags: ["TOP"], img: "assets/promo-docena.jpg" },
       { id: "promo-peya", name: "Promo Nueva Peya", desc: "Docena frita + salsas de la casa. Los viernes, en promo.", price: 30000, tags: ["PROMO VIERNES"], img: "assets/promo-bandeja.jpg" },
       { id: "docena-pastelitos", name: "Docena de pastelitos", desc: "12 pastelitos surtidos para la merienda.", price: 17000, tags: [], img: "assets/pastelitos-enteros.jpg" },

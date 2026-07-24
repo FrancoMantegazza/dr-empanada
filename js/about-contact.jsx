@@ -13,7 +13,7 @@ function Nosotros({ go }) {
     { tag: "MASA CASERA", cls: "bfx-badge--green", img: "assets/horno-tabla.jpg", rot: 3, txt: "Masa propia estirada en el día: finita, elástica y con el punto justo de horno." },
     { tag: "RELLENO GENEROSO", cls: "bfx-badge--red", img: "assets/carne-corte.jpg", rot: -4, txt: "Carne cortada a cuchillo, cebolla dorada lenta y rellenos que se cocinan a fuego lento." },
     { tag: "QUESO QUE SE ESTIRA", cls: "", img: "assets/empanadas/provolone.jpg", rot: 4, txt: "Muzzarella, provolone y cheddar de verdad, que se funden y se estiran en cada bocado." },
-    { tag: "REPULGUE A MANO", cls: "bfx-badge--red", img: "assets/tabla-carne.jpg", rot: -3, txt: "Cada empanada cerrada a mano, con el repulgue de siempre. Así se distingue cada sabor." },
+    { tag: "REPULGUE A MANO", cls: "bfx-badge--red", img: "assets/repulgue.jpg", rot: -3, txt: "Cada empanada cerrada a mano, con el repulgue de siempre. Así se distingue cada sabor." },
     { tag: "PASTELITOS CROCANTES", cls: "bfx-badge--green", img: "assets/pastelitos-membrillo.jpg", rot: 5, txt: "Hojaldre frito y crocante con membrillo, batata o dulce de leche. El final obligado." },
   ];
 
