@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/pedir/layout,_N_T_/pedir/pago-exitoso/layout,_N_T_/pedir/pago-exitoso/page,_N_T_/pedir/pago-exitoso"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/pedir/pago-exitoso/__PAGE__",
+    "/pedir/pago-exitoso",
+    "/pedir",
+    "/_index",
+    "/_head"
+  ]
+}

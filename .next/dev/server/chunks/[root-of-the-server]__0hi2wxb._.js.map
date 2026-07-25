@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Franco/Desktop/Claude/Dr.Empanada%20Web/lib/db.js"],"sourcesContent":["import { neon } from '@neondatabase/serverless'\n\nexport function getDb() {\n  return neon(process.env.DATABASE_URL)\n}\n"],"names":["getDb","process","env","DATABASE_URL"],"mappings":";;;;AAAA;;AAEO,SAASA;IACd,OAAO,IAAA,gKAAI,EAACC,QAAQC,GAAG,CAACC,YAAY;AACtC"}},
+    {"offset": {"line": 59, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Franco/Desktop/Claude/Dr.Empanada%20Web/app/api/custom-products/route.js"],"sourcesContent":["import { getDb } from '@/lib/db'\nimport { NextResponse } from 'next/server'\n\nexport async function GET() {\n  try {\n    const sql = getDb()\n    const products = await sql`SELECT * FROM custom_products WHERE active = true AND (archived IS NULL OR archived = false) ORDER BY created_at ASC`\n    return NextResponse.json(products)\n  } catch { return NextResponse.json([]) }\n}\n"],"names":["GET","sql","products","json"],"mappings":";;;;AAAA;AACA;;;AAEO,eAAeA;IACpB,IAAI;QACF,MAAMC,MAAM,IAAA,oHAAK;QACjB,MAAMC,WAAW,MAAMD,GAAG,CAAC,oHAAoH,CAAC;QAChJ,OAAO,gJAAY,CAACE,IAAI,CAACD;IAC3B,EAAE,OAAM;QAAE,OAAO,gJAAY,CAACC,IAAI,CAAC,EAAE;IAAE;AACzC"}}]
+}

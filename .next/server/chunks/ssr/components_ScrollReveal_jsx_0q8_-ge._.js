@@ -1,0 +1,3 @@
+module.exports=[41553,a=>{"use strict";var b=a.i(87924),c=a.i(72131);a.s(["default",0,function({children:a,className:d="",delay:e=0}){let f=(0,c.useRef)(null);return(0,c.useEffect)(()=>{let a=f.current;if(!a)return;let b=new IntersectionObserver(([c])=>{c.isIntersecting&&(setTimeout(()=>a.classList.add("visible"),e),b.unobserve(a))},{threshold:.12});return b.observe(a),()=>b.disconnect()},[e]),(0,b.jsx)("div",{ref:f,className:`reveal ${d}`,children:a})}])}];
+
+//# sourceMappingURL=components_ScrollReveal_jsx_0q8_-ge._.js.map
