@@ -220,6 +220,9 @@ body.bfx-home .grain{ opacity:.35; }
 
 /* sección mostaza (delivery) */
 .bfx-mustardsec{ background: var(--bfx-mustard); }
+/* sobre el amarillo de marca el contorno blanco casi no se ve: acá el
+   titular outline se dibuja con el marrón de marca. */
+.bfx-mustardsec .bfx-giant--outline{ -webkit-text-stroke-color: var(--bfx-deep); }
 .bfx-citycard{
   position:relative; width: clamp(180px, 19vw, 300px); aspect-ratio: .8;
   background:#fff; border-radius: 14px; padding: 8px;

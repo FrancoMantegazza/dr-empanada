@@ -265,7 +265,7 @@ function Home({ go }) {
           dangerouslySetInnerHTML={{ __html: (window.FX && FX.STICKERS.moto) || "" }} />
 
         <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
-          <div className="bfx-kicker" data-pop style={{ color: "#fff" }}>DELIVERY PROPIO + TAKE AWAY</div>
+          <div className="bfx-kicker" data-pop>DELIVERY PROPIO + TAKE AWAY</div>
           <h2 className="bfx-giant bfx-giant--lg bfx-giant--outline" style={{ marginTop: 14, textAlign: "left" }}>
             <span data-split="chars" style={{ display: "block" }}>DEL HORNO</span>
             <span data-split="chars" style={{ display: "block" }}>A TU PUERTA</span>
