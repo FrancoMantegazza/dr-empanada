@@ -157,7 +157,7 @@ function Header({ route, go }) {
         borderBottom: home ? undefined : ("1px solid " + (scrolled ? "var(--line-dark)" : "transparent")),
       }}>
         <div className="wrap" style={{ height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-          <a href="#/" aria-label="Inicio" style={{ flexShrink: 0, display: "flex" }}><LogoBadge fontSize={7} /></a>
+          <a href="#/" aria-label="Inicio" className="bfx-logolink" style={{ flexShrink: 0, display: "flex" }}><LogoBadge fontSize={8.2} /></a>
 
           <nav className="bf-desktop-nav" style={{ display: "flex", gap: 4, alignItems: "center" }}>
             {links.map(([href, label]) => (
@@ -182,12 +182,12 @@ function Header({ route, go }) {
 
         {/* mobile drawer */}
         {open && (
-          <div className="bf-mobile-nav" style={{ borderTop: "2px solid rgba(43,20,3,.1)", background: "var(--bfx-cream)", padding: "10px 24px 22px" }}>
+          <div className="bf-mobile-nav" style={{ borderTop: "2px solid var(--bfx-hair)", background: "var(--bfx-cream)", padding: "10px 24px 22px" }}>
             {links.map(([href, label], i) => (
               <a key={href} href={href} style={{
-                display: "block", fontSize: 34, padding: "13px 0", color: route === href ? "var(--bfx-red)" : "var(--bfx-deep)",
+                display: "block", fontSize: 34, padding: "13px 0", color: route === href ? "var(--bfx-mustard)" : "var(--bfx-ink)",
                 fontFamily: "var(--bfx-round)", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".01em",
-                borderBottom: "2px solid rgba(43,20,3,.08)",
+                borderBottom: "2px solid var(--bfx-hair)",
                 animation: `bf-slidein .35s ${i * 60}ms both`,
               }}>{label}</a>
             ))}
@@ -243,7 +243,7 @@ function Footer({ go }) {
           <div>
             <span className="lbl">Estado</span>
             <OpenBadge /><br />
-            <span style={{ color: "var(--bfx-red)" }}>★ Promo mediodía · {HAPPY.when.toLowerCase()}</span>
+            <span style={{ color: "var(--bfx-mustard)" }}>★ Promo mediodía · {HAPPY.when.toLowerCase()}</span>
           </div>
         </div>
       </div>

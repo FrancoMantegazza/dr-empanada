@@ -93,7 +93,7 @@ function MenuPage({ go }) {
                 {cat.items.length} {cat.items.length === 1 ? "opción" : "opciones"}
               </span>
             </div>
-            <p className="bfx-hand" style={{ fontSize: 19, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--bfx-red)", margin: "6px 0 6px" }}>{cat.kicker}</p>
+            <p className="bfx-hand" style={{ fontSize: 19, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--bfx-mustard)", margin: "6px 0 6px" }}>{cat.kicker}</p>
             {cat.note && (
               <p className="bfx-copy" style={{ fontSize: 18, margin: "0 0 10px", maxWidth: 640, display: "flex", gap: 8, alignItems: "center" }}>
                 <Ic.leaf style={{ color: "var(--bfx-green)", flexShrink: 0 }} /> {cat.note}
@@ -290,7 +290,7 @@ function HappyBanner({ go }) {
       <div className="bfx-panel" style={{ marginTop: 28, background: "var(--bfx-mustard)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "#fff" }}>Promo mediodía</h3>
+            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "var(--bfx-deep)" }}>Promo mediodía</h3>
             <span className="bfx-minitag" style={{ transform: "rotate(-3deg)", background: active ? "var(--bfx-green)" : "var(--bfx-red)" }}>
               {active ? "ACTIVA AHORA" : HAPPY.when.toUpperCase()}
             </span>

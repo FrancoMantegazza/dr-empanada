@@ -47,7 +47,7 @@ function Nosotros({ go }) {
 
       {/* historia por capas — mostaza estilo crav */}
       <section className="bfx-mustardsec" style={{ padding: "0 0 clamp(70px,8vw,120px)", overflow: "clip" }} aria-label="Una historia en cada capa">
-        <Wave fill="#ffd829" style={{ background: "var(--bfx-cream)" }} />
+        <Wave fill="#f2900d" style={{ background: "var(--bfx-cream)" }} />
         <div className="wrap" style={{ position: "relative", paddingTop: "clamp(40px,5vw,70px)" }}>
           <h2 className="bfx-giant bfx-giant--lg bfx-giant--outline" style={{ textAlign: "left" }}>
             <span data-split="chars" style={{ display: "block" }}>UNA HISTORIA</span>
@@ -151,7 +151,7 @@ function Contacto({ go }) {
 
       {/* info + mapa sobre crema */}
       <section style={{ paddingBottom: "clamp(40px,5vw,70px)" }} aria-label="Dónde estamos">
-        <Wave fill="#f6e8d2" style={{ background: "#e23d16" }} />
+        <Wave fill="#1a1611" style={{ background: "#e23d16" }} />
         <div className="wrap" style={{ paddingTop: "clamp(30px,4vw,60px)" }}>
           <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(24px,4vw,50px)", alignItems: "start" }}>
             <div style={{ display: "grid", gap: 16 }}>

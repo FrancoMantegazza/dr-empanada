@@ -107,7 +107,7 @@ function Checkout({ go }) {
                   ["sena", "Seña + efectivo", "Señás online y el resto en efectivo", Ic.bag],
                 ].map(([val, t, d, Icon]) => (
                   <button key={val} onClick={() => set("pay", val)} className={"bfx-choice" + (form.pay === val ? " on" : "")} style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                    <span style={{ width: 46, height: 46, borderRadius: 12, display: "grid", placeItems: "center", background: form.pay === val ? "var(--bfx-red)" : "var(--bfx-cream)", color: form.pay === val ? "#fff" : "rgba(43,20,3,.5)", flexShrink: 0 }}><Icon width={21} height={21} /></span>
+                    <span style={{ width: 46, height: 46, borderRadius: 12, display: "grid", placeItems: "center", background: form.pay === val ? "var(--bfx-red)" : "#f2ece0", color: form.pay === val ? "#fff" : "rgba(43,20,3,.5)", flexShrink: 0 }}><Icon width={21} height={21} /></span>
                     <div style={{ flex: 1, textAlign: "left" }}>
                       <div className="t" style={{ marginTop: 0 }}>{t}</div>
                       <div className="d">{d}</div>
@@ -179,7 +179,7 @@ function TransferData() {
   const copy = (txt, key) => { navigator.clipboard?.writeText(txt); setCopied(key); setTimeout(() => setCopied(""), 1500); };
   const rows = [["Alias", BIZ.pay.alias, "alias"], ["CBU", BIZ.pay.cbu, "cbu"], ["Titular", BIZ.pay.titular, null]];
   return (
-    <div style={{ background: "var(--bfx-cream)", border: "2.5px dashed rgba(43,20,3,.2)", borderRadius: 16, padding: 18, marginTop: 16 }}>
+    <div style={{ background: "#f2ece0", border: "2.5px dashed rgba(43,20,3,.2)", borderRadius: 16, padding: 18, marginTop: 16 }}>
       <div className="bfx-seclabel" style={{ marginBottom: 12 }}>Datos para transferir</div>
       <div style={{ display: "grid", gap: 8 }}>
         {rows.map(([k, v, key]) => (

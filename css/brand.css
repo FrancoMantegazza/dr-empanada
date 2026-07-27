@@ -20,9 +20,9 @@
   --muted:      #9c9488;   /* muted text on dark */
   --muted-d:    #6f6a5e;   /* muted text on light */
 
-  --orange:     #ffd829;   /* acento: amarillo de la mascota */
-  --orange-2:   #ffeeab;   /* tint */
-  --orange-deep:#c08a12;   /* versión para fondos claros */
+  --orange:     #f2900d;   /* acento de marca */
+  --orange-2:   #ffd9a4;   /* tint */
+  --orange-deep:#b86c07;   /* versión para fondos claros */
   --beer:       #e0b060;   /* dorado metálico del anillo/cinta */
   --foam:       #f6e9c8;
 
@@ -109,7 +109,7 @@ p{ text-wrap:pretty; }
 }
 .btn:active{ transform:translateY(1px) scale(.98); }
 .btn-orange{ background:var(--orange); color:#1a1206; }
-.btn-orange:hover:not(:active){ background:#ffbe2a; transform:translateY(-1px); box-shadow:0 12px 26px -14px rgba(255,216,41,.7); }
+.btn-orange:hover:not(:active){ background:#ffa733; transform:translateY(-1px); box-shadow:0 12px 26px -14px rgba(242,144,13,.7); }
 .btn-white{ background:var(--white); color:var(--ink); }
 .btn-white:hover:not(:active){ background:#fff; transform:translateY(-1px); box-shadow:0 12px 26px -16px rgba(0,0,0,.6); }
 .btn-ghost{ background:transparent; color:var(--white); border-color:var(--line-dark); }
@@ -259,7 +259,7 @@ html{ scroll-behavior:smooth; }
   transition:border-color .15s, background .15s;
 }
 .opt:hover{ border-color:#4a4a52; }
-.opt.on{ border-color:var(--orange); background:rgba(255,216,41,.08); }
+.opt.on{ border-color:var(--orange); background:rgba(242,144,13,.08); }
 .opt-check{
   width:20px; height:20px; border-radius:6px; border:2px solid var(--line-dark);
   display:grid; place-items:center; color:#1a1206; flex-shrink:0; transition:all .15s;
@@ -339,7 +339,7 @@ html{ scroll-behavior:smooth; }
 .lift:hover{
   box-shadow:
     0 26px 52px -22px rgba(0,0,0,.72),
-    0 18px 60px -30px rgba(255,216,41,.35);
+    0 18px 60px -30px rgba(242,144,13,.35);
 }
 
 /* --- Happy hour deals: feedback al hover --- */
@@ -452,7 +452,7 @@ html{ scroll-behavior:smooth; }
 .tour-spot{
   border-radius:12px; pointer-events:none;
   border:2px solid var(--orange);
-  box-shadow:0 0 0 9999px rgba(0,0,0,.76), 0 0 24px rgba(255,216,41,.35);
+  box-shadow:0 0 0 9999px rgba(0,0,0,.76), 0 0 24px rgba(242,144,13,.35);
   transition:left .35s var(--ease-out), top .35s var(--ease-out), width .35s var(--ease-out), height .35s var(--ease-out);
 }
 .tour-card{

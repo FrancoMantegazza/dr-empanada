@@ -103,12 +103,8 @@ function Home({ go }) {
           <div className="bfx-hero-title">
             <h1 className="bfx-giant bfx-giant--xl" aria-label="Somos Dr. Empanada y somos riquísimos" style={{ position: "relative" }}>
               <span aria-hidden="true" data-split="chars" style={{ display: "block" }}>SOMOS</span>
-              {/* la marca va con el logo real, no con texto */}
-              <span aria-hidden="true" data-pop data-pop-delay=".35" style={{ display: "block", padding: "clamp(8px,1vw,18px) 0" }}>
-                {/* tope en 19.5px → 148px de sello: el PNG de marca es de 100px,
-                    más grande que esto se empieza a notar blando. */}
-                <LogoBadge fontSize="clamp(13px,1.55vw,19.5px)" rot={-4} data-idle />
-              </span>
+              {/* el sello vive sólo en el header; acá la marca va en texto */}
+              <span aria-hidden="true" data-split="chars" style={{ display: "block" }}>DR. EMPANADA</span>
               <span aria-hidden="true" data-split="chars" style={{ display: "block" }}>Y SOMOS <span className="ylw">RIQUÍSIMOS.</span></span>
             </h1>
             <span className="bfx-badge bfx-badge--green" data-pop data-pop-delay=".9" data-idle
@@ -225,7 +221,7 @@ function Home({ go }) {
           <img data-float=".08" src="assets/horno-fila.jpg" alt="Empanadas recién salidas del horno"
             loading="lazy" style={{ width: "100%", height: "114%", objectFit: "cover" }} />
         </div>
-        <Wave fill="#f6e8d2" style={{ position: "absolute", bottom: -1, left: 0, right: 0, zIndex: 2 }} />
+        <Wave fill="#1a1611" style={{ position: "absolute", bottom: -1, left: 0, right: 0, zIndex: 2 }} />
       </div>
 
       {/* ================= CADA SABOR (ingredientes flotando) ================= */}
@@ -288,7 +284,7 @@ function Home({ go }) {
 
       {/* ================= LA VITRINA (oscuro) ================= */}
       <section className="bfx-bar" style={{ padding: "0 0 clamp(80px,9vw,130px)" }} aria-label="Los sabores de la casa">
-        <Wave fill="#241c12" style={{ background: "#ffd829" }} />
+        <Wave fill="#241c12" style={{ background: "#f2900d" }} />
         <div className="wrap" style={{ textAlign: "center", paddingTop: "clamp(50px,6vw,90px)", position: "relative" }}>
           <Sticker name="burger" size={120} data-pop data-idle style={{ position: "absolute", right: "4%", top: -20, "--rot": "12deg" }} />
           <div className="bfx-kicker" data-pop style={{ color: "#f6e8d2" }}>LA VITRINA · ELABORACIÓN PROPIA</div>
@@ -327,7 +323,7 @@ function Home({ go }) {
 
       {/* ================= CTA FINAL ================= */}
       <section style={{ textAlign: "center", overflow: "clip", paddingBottom: "clamp(60px,7vw,100px)" }} aria-label="Pedí ahora">
-        <Wave fill="#f6e8d2" style={{ background: "#241c12", marginBottom: "clamp(60px,8vw,110px)" }} />
+        <Wave fill="#1a1611" style={{ background: "#241c12", marginBottom: "clamp(60px,8vw,110px)" }} />
         <div className="wrap" style={{ position: "relative" }}>
           <Sticker name="burger" size={150} data-pop data-idle style={{ position: "absolute", left: "3%", top: "-10%", "--rot": "-10deg" }} />
           <Sticker name="fries" size={120} data-pop data-idle style={{ position: "absolute", right: "5%", bottom: "0%", "--rot": "12deg" }} />

@@ -1,7 +1,7 @@
 /* ============================================================
    fx.js — Motor de animaciones de Dr. Empanada (GSAP + Lenis)
    Sistema de stickers, pops, split text, parallax, fountain,
-   loader cinemático y cursor con estela.
+   loader cinemático.
    Sin build: JS plano, corre antes de React.
    ============================================================ */
 (function () {
@@ -101,12 +101,12 @@
     ),
     moto: stk(
       '<g stroke="#fff" stroke-width="4">' +
-      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#ffd829"/>' +
+      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#f2900d"/>' +
       '<path d="M18 30 h14 M18 38 h10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>' +
       '<path d="M42 48 h20 l10 -16 h12" fill="none" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '<circle cx="30" cy="74" r="15" fill="#2b1403"/><circle cx="30" cy="74" r="6" fill="#fff"/>' +
       '<circle cx="86" cy="74" r="15" fill="#2b1403"/><circle cx="86" cy="74" r="6" fill="#fff"/>' +
-      '<path d="M30 74 h40 l14 -22 M56 48 l8 26" fill="none" stroke="#ffd829" stroke-width="7" stroke-linecap="round"/>' +
+      '<path d="M30 74 h40 l14 -22 M56 48 l8 26" fill="none" stroke="#f2900d" stroke-width="7" stroke-linecap="round"/>' +
       '<path d="M92 46 h10" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '</g>', "0 0 110 100"
     ),
@@ -241,7 +241,7 @@
         el.appendChild(c);
         return c.querySelector("path");
       };
-      var p1 = mk("#ffd829"), p2 = mk("#f6e8d2");
+      var p1 = mk("#f2900d"), p2 = mk("#1a1611");
       var s1 = { yl: 101, yr: 101, yc: 101 }, s2 = { yl: 101, yr: 101, yc: 101 };
       var upd = function (p, s) { p.setAttribute("d", "M -1 -1 L 101 -1 L 101 " + s.yr + " Q 50 " + s.yc + " -1 " + s.yl + " Z"); };
       // p2 (crema, arriba de todo al final) primero invisible detrás de p1: orden DOM p1 luego p2
@@ -594,44 +594,9 @@
     gsap.delayedCall(.6, cover);
   };
 
-  /* ============================================================
-     CURSOR — estela de mini-ingredientes
-     ============================================================ */
-  function initCursor() {
-    if (touch || rm || !hasGsap) return;
-    var wrap = document.createElement("div");
-    wrap.className = "bfx-cursor";
-    var keys = ["tomato", "cheese", "pickle", "bacon", "lettuce"];
-    var dots = keys.map(function (k, i) {
-      var d = document.createElement("div");
-      d.className = "trail";
-      d.innerHTML = STICKERS[k];
-      d.style.width = d.style.height = (30 - i * 4) + "px";
-      wrap.appendChild(d);
-      return d;
-    });
-    document.body.appendChild(wrap);
-    var qs = dots.map(function (d, i) {
-      return {
-        x: gsap.quickTo(d, "x", { duration: .25 + i * .11, ease: "power2.out" }),
-        y: gsap.quickTo(d, "y", { duration: .25 + i * .11, ease: "power2.out" }),
-      };
-    });
-    var idleT = 0;
-    window.addEventListener("mousemove", function (e) {
-      for (var i = 0; i < qs.length; i++) { qs[i].x(e.clientX); qs[i].y(e.clientY); }
-      gsap.to(dots, { opacity: .95, duration: .2, stagger: .02, overwrite: "auto" });
-      clearTimeout(idleT);
-      idleT = setTimeout(function () {
-        gsap.to(dots, { opacity: 0, duration: .5, stagger: .04, overwrite: "auto" });
-      }, 900);
-    }, { passive: true });
-  }
-
   /* ---------- arranque ---------- */
   function start() {
     initLenis();
-    initCursor();
     runLoader();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);

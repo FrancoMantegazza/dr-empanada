@@ -2,7 +2,7 @@
    app.jsx — router + montaje
    ============================================================ */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "accent": "#ffd829",
+  "accent": "#f2900d",
   "displayFont": "Anton"
 }/*EDITMODE-END*/;
 
@@ -73,7 +73,7 @@ function App() {
     <TweaksPanel title="Tweaks">
       <TweakSection label="Marca" />
       <TweakColor label="Color de acento" value={t.accent}
-        options={["#ffd829", "#ffe040", "#e0b060", "#d8533c", "#3fae6b"]}
+        options={["#f2900d", "#ffe040", "#e0b060", "#d8533c", "#3fae6b"]}
         onChange={(v) => setTweak("accent", v)} />
       <TweakSelect label="Tipografía display" value={t.displayFont}
         options={["Anton", "Archivo Black", "Oswald", "Bebas Neue"]}
