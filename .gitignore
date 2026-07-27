@@ -7,6 +7,12 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Artefactos de build/deploy: no son parte del sitio y rompen el deploy.
+# La cache de turbopack traia archivos de 89MB y 60MB, y Cloudflare Pages
+# corta en 25MB por archivo, asi que fallaban todos los builds.
+.next/
+.vercel/
+
 # Skills instaladas localmente (no forman parte del sitio)
 .agents/
 skills-lock.json
