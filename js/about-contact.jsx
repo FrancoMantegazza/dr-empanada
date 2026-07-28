@@ -142,17 +142,21 @@ function Contacto({ go }) {
             <input className="bfx-input" placeholder="Tu WhatsApp (opcional)" value={f.tel} onChange={set("tel")} aria-label="WhatsApp" />
             <textarea className="bfx-input" required rows={4} placeholder="Contanos qué se te antoja…" value={f.msg} onChange={set("msg")} aria-label="Mensaje" style={{ resize: "vertical" }} />
             <div style={{ textAlign: "center", marginTop: 6 }}>
-              <button type="submit" className="bfx-pill-ylw" data-squash>Enviar antojo 🥟</button>
+              <button type="submit" className="bfx-pill-ylw" data-squash>Enviar</button>
             </div>
           </form>
           <div style={{ height: "clamp(40px,5vw,70px)" }} />
         </div>
       </section>
 
-      {/* info + mapa sobre crema */}
-      <section style={{ paddingBottom: "clamp(40px,5vw,70px)" }} aria-label="Dónde estamos">
-        <Wave fill="#1a1611" style={{ background: "#f29110" }} />
-        <div className="wrap" style={{ paddingTop: "clamp(30px,4vw,60px)" }}>
+      {/* info + mapa sobre naranja de marca.
+          El wave entra al revés que antes: arriba el negro de la sección del
+          formulario y abajo el naranja. El fondo del wave usa #17130e (el
+          color exacto de .bfx-red, la sección de arriba) y no #1a1611, para
+          que no quede el escalón entre dos negros parecidos. */}
+      <section className="bfx-contactinfo" aria-label="Dónde estamos">
+        <Wave fill="#f29212" style={{ background: "#17130e" }} />
+        <div className="wrap" style={{ paddingTop: "clamp(20px,3vw,40px)" }}>
           <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(24px,4vw,50px)", alignItems: "start" }}>
             <div style={{ display: "grid", gap: 16 }}>
               {[
@@ -160,18 +164,18 @@ function Contacto({ go }) {
                 ["WhatsApp", BIZ.phoneDisplay, "Pedidos y consultas", waLink("¡Hola Dr. Empanada! Tengo una consulta 🥟")],
                 ["Instagram", "@" + BIZ.ig, "Novedades y promos", "https://instagram.com/" + BIZ.ig],
               ].map(([t, m, s, href], i) => (
-                <a key={t} href={href} target="_blank" rel="noopener" className="bfx-panel" data-pop data-pop-delay={i * 0.08}
+                <a key={t} href={href} target="_blank" rel="noopener" className="bfx-panel bfx-panel--ink" data-pop data-pop-delay={i * 0.08}
                   style={{ rotate: ((i % 2 ? 1 : -1) * 1.2) + "deg", display: "block" }}>
-                  <div className="bfx-hand" style={{ fontSize: 14, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--bfx-red)", marginBottom: 4 }}>{t}</div>
+                  <div className="bfx-hand" style={{ fontSize: 14, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--bfx-brand)", marginBottom: 4 }}>{t}</div>
                   <div className="bfx-bubble" style={{ fontSize: 24 }}>{m}</div>
-                  <div className="bfx-hand" style={{ fontSize: 16, opacity: .6 }}>{s}</div>
+                  <div className="bfx-hand" style={{ fontSize: 16, opacity: .65 }}>{s}</div>
                 </a>
               ))}
-              <div className="bfx-panel" data-pop data-pop-delay=".24" style={{ rotate: "1.2deg" }}>
-                <div className="bfx-hand" style={{ fontSize: 14, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--bfx-red)", marginBottom: 8 }}>Horarios</div>
+              <div className="bfx-panel bfx-panel--ink" data-pop data-pop-delay=".24" style={{ rotate: "1.2deg" }}>
+                <div className="bfx-hand" style={{ fontSize: 14, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--bfx-brand)", marginBottom: 8 }}>Horarios</div>
                 {BIZ.hours.map((h) => (
-                  <div key={h.d} className="bfx-hand" style={{ display: "flex", justifyContent: "space-between", fontSize: 18, padding: "4px 0", borderTop: "2px dashed rgba(43,20,3,.12)", opacity: h.closed ? .5 : 1 }}>
-                    <span>{h.d}</span><span style={{ color: h.closed ? "var(--bfx-red)" : "inherit" }}>{h.h}</span>
+                  <div key={h.d} className="bfx-hand" style={{ display: "flex", justifyContent: "space-between", fontSize: 18, padding: "4px 0", borderTop: "2px dashed rgba(242,146,17,.28)", opacity: h.closed ? .6 : 1 }}>
+                    <span>{h.d}</span><span style={{ color: h.closed ? "var(--bfx-brand)" : "inherit" }}>{h.h}</span>
                   </div>
                 ))}
                 <div className="bfx-hand" style={{ fontSize: 16, color: "var(--bfx-green)", marginTop: 8 }}>★ Promo mediodía · {HAPPY.when.toLowerCase()}</div>
@@ -187,6 +191,8 @@ function Contacto({ go }) {
             </div>
           </div>
         </div>
+        {/* y vuelta al fondo oscuro para el CTA final */}
+        <Wave fill="#1a1611" style={{ background: "#f29212", marginTop: "clamp(40px,5vw,70px)" }} />
       </section>
 
       <AntojoCTA go={go} />

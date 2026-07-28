@@ -14,6 +14,7 @@
   --bfx-ink-mut: rgba(246,232,210,.62);
   --bfx-hair:    rgba(246,232,210,.14);
   --bfx-red:     #17130e;   /* negro de marca (acento display) */
+  --bfx-dark-sec:#191510;   /* fondo de las secciones oscuras (.bfx-red) */
   --bfx-red-2:   #000000;
   --bfx-mustard: #f2900d;   /* naranja de marca Dr. Empanada */
   --bfx-yellow:  #f29211;
@@ -34,6 +35,37 @@
    el texto se vuelve ilegible ("Carne Cuchillo", "Tu pedido"...). Sin
    síntesis de peso se usa el trazo real y las letras conservan su hueco. */
 html{ font-synthesis-weight: none; -webkit-font-synthesis: style small-caps; }
+
+/* ---------- Modak: abrir las contraformas ----------
+   Modak es un display bien graso y sus huecos (el de la a, la e, la o) casi
+   se cierran solos, y encima las letras van pegadas: a tamaño chico el texto
+   se lee como una mancha.
+   Dos ajustes, sin cambiar de tipografía:
+   1) --bfx-counter-w: un trazo del COLOR DEL FONDO pintado ENCIMA del relleno
+      (paint-order por defecto = fill → stroke). Como va centrado en el
+      contorno, la mitad que cae hacia adentro adelgaza el palo y agranda el
+      hueco. OJO: pasarse lo come todo — medido sobre "Carne", a .045em se
+      pierde el 47% de la tinta y la letra queda mordida; a .03em el hueco es
+      casi el mismo (35 vs 43 px² a 19px) conservando bastante más cuerpo.
+   2) letter-spacing: despega las letras entre sí, que es la otra mitad del
+      problema de lectura.
+   Este es EL número para tocar si hay que ajustar de nuevo: más alto = más
+   hueco pero letra más flaca; más bajo = letra más gorda pero más cerrada. */
+:root{ --bfx-counter-w: .03em; }
+
+/* Cada contexto declara --bfx-counter con el color que tiene detrás; si no lo
+   declara, el trazo es transparente y no pasa nada. */
+.bfx-bubble, .bfx-badge, .bfx-minitag, .bfx-blob, .bfx-citycard .tagname,
+.bfx-menucard .name, .bfx-beercard .name, .bfx-beercard .price,
+.bfx-cartline .nm, .bfx-cart-head h2, .bfx-choice .t, #bfx-loader .pct{
+  font-family: var(--bfx-modak);
+  font-weight: 400;
+  paint-order: normal;
+  letter-spacing: .015em;
+  -webkit-text-stroke: var(--bfx-counter-w) var(--bfx-counter, transparent);
+}
+/* los dos más chicos necesitan un pelín más de apertura */
+.bfx-minitag, .bfx-cartline .nm{ --bfx-counter-w: .035em; }
 
 /* ---------- page scaffolding ---------- */
 body.bfx-home{ background: var(--bfx-cream); color: var(--bfx-ink); }
@@ -75,17 +107,11 @@ body.bfx-home .grain{ opacity:.35; }
   color: transparent; -webkit-text-stroke: 2px #fff;
   text-shadow: none; paint-order: stroke;
 }
-/* Modak es precioso pero sus contraformas se cierran por debajo de ~26px:
-   la a, la e y la o quedan macizas y no se leen. Queda reservado para el
-   display grande (.bfx-hero-word y el título del modal); todo lo demás usa
-   Baloo 2 ExtraBold, que es igual de cartoon pero con el hueco abierto. */
+/* por defecto vive sobre superficies blancas (paneles, polaroids) */
 .bfx-bubble{
-  font-family: var(--bfx-round);
-  font-weight: 800;
-  line-height: 1.05;
+  --bfx-counter: #fff;
+  line-height: .95;
   color: var(--bfx-red);
-  -webkit-text-stroke: .025em #fff;
-  paint-order: stroke fill;
   margin: 0;
 }
 .bfx-hand{ font-family: var(--bfx-mouse); }
@@ -109,33 +135,34 @@ body.bfx-home .grain{ opacity:.35; }
 /* ---------- sticker badges (pills rotadas) ---------- */
 .bfx-badge{
   display:inline-block;
-  font-family: var(--bfx-round); font-weight: 800;
-  font-size: clamp(15px, 1.6vw, 24px);
-  line-height: 1.1;
+  --bfx-counter: var(--bfx-mustard);
+  font-size: clamp(16px, 1.6vw, 24px);
+  line-height: 1;
   text-transform: uppercase;
   /* sobre amarillo va tinta marrón (como la cinta del sello); las variantes
      de fondo oscuro recuperan el blanco abajo. */
   color: var(--bfx-deep);
   background: var(--bfx-mustard);
-  padding: .5em .85em .45em;
+  padding: .55em .85em .4em;
   border-radius: .6em;
   border: 3px solid #fff;
   box-shadow: 0 10px 24px -10px rgba(43,20,3,.45);
   transform: rotate(var(--rot, -6deg));
   white-space: nowrap;
 }
-.bfx-badge--red{ background: var(--bfx-red); color:#fff; }
-.bfx-badge--green{ background: var(--bfx-green); color:#fff; }
-.bfx-badge--bordo{ background: var(--bfx-bordo); color:#fff; }
+.bfx-badge--red{ background: var(--bfx-red); color:#fff; --bfx-counter: var(--bfx-red); }
+.bfx-badge--green{ background: var(--bfx-green); color:#fff; --bfx-counter: var(--bfx-green); }
+.bfx-badge--bordo{ background: var(--bfx-bordo); color:#fff; --bfx-counter: var(--bfx-bordo); }
 
 /* ---------- blob CTA (Pedir online) ---------- */
 .bfx-blob{
   position: relative;
   display: inline-flex; align-items:center; justify-content:center;
-  font-family: var(--bfx-round); font-weight: 800; text-transform: uppercase;
-  font-size: clamp(20px, 2.4vw, 30px); line-height:1.1; color:#f29211;
+  --bfx-counter: var(--bfx-red);
+  text-transform: uppercase;
+  font-size: clamp(20px, 2.4vw, 30px); line-height:1; color:#f29211;
   background: var(--bfx-red);
-  padding: .8em 1.8em;
+  padding: .95em 1.9em .8em;
   border: 4px solid #f29211;
   border-radius: 49% 51% 47% 53% / 61% 59% 41% 39%;
   box-shadow: 0 18px 40px -14px rgba(242,145,15,.55);
@@ -148,7 +175,7 @@ body.bfx-home .grain{ opacity:.35; }
   box-shadow: 0 24px 48px -14px rgba(242,145,15,.6);
 }
 .bfx-blob:active{ scale: .96; }
-.bfx-blob--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); box-shadow: 0 18px 40px -14px rgba(242,144,13,.55); }
+.bfx-blob--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); --bfx-counter: var(--bfx-mustard); box-shadow: 0 18px 40px -14px rgba(242,144,13,.55); }
 
 /* ---------- polaroid / foto sticker ---------- */
 .bfx-polaroid{
@@ -196,8 +223,9 @@ body.bfx-home .grain{ opacity:.35; }
 /* ---------- marquee ---------- */
 .bfx-marquee{
   overflow:hidden; white-space:nowrap;
-  background: var(--bfx-red); color:#fff;
-  border-top: 3px solid #fff; border-bottom: 3px solid #fff;
+  /* el fondo queda negro; texto y filetes en el naranja de marca */
+  background: var(--bfx-red); color: #f29212;
+  border-top: 3px solid #f29212; border-bottom: 3px solid #f29212;
   font-family: var(--bfx-mouse); text-transform:uppercase;
   font-size: clamp(20px, 2.4vw, 32px); letter-spacing:.06em;
   padding: 12px 0;
@@ -234,8 +262,8 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-hero-word{
   position:relative; z-index:1; text-align:center;
   margin-top: clamp(-20px, -1.5vw, -44px);
-  /* acá sí: a 78px+ el Modak respira y es la firma de la marca */
-  font-family: var(--bfx-modak); font-weight: 400;
+  /* a 78px+ el Modak respira solo: sin trazo que le adelgace los palos */
+  --bfx-counter: transparent;
   font-size: clamp(78px, 15vw, 260px);
   color: var(--bfx-mustard);
   line-height:.72;
@@ -249,8 +277,13 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-hero-copy p{ max-width: 330px; margin:0; }
 .bfx-hero-copy p:last-child{ text-align:right; }
 
-/* sección roja */
-.bfx-red{ background: var(--bfx-red); color:#f6e8d2; }
+/* Sección oscura (la experiencia / hero de contacto).
+   Su fondo es --bfx-dark-sec, NO --bfx-red: todo lo que la acompaña (los
+   fills de los waves que entran y salen de ella, y el fondo del bloque de la
+   foto full) tiene que llevar exactamente este mismo valor o se ve el
+   escalón entre dos negros parecidos. Si se cambia acá, hay que cambiarlo
+   también en los fills de home.jsx y en el wave de contacto. */
+.bfx-red{ background: var(--bfx-dark-sec); color:#f6e8d2; }
 .bfx-red .bfx-copy{ color:#f6e8d2; }
 
 /* chips (badges de features) */
@@ -277,8 +310,9 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-citycard img{ width:100%; height:100%; object-fit:cover; border-radius:9px; }
 .bfx-citycard .tagname{
   position:absolute; top:-16px; left:-14px;
-  font-family: var(--bfx-round); font-weight:800; font-size: clamp(18px,2vw,28px); color:#fff;
-  background:var(--bfx-red); padding:.35em .55em .3em; border-radius:.45em;
+  --bfx-counter: var(--bfx-red);
+  font-size: clamp(18px,2vw,28px); color:#fff;
+  background:var(--bfx-red); padding:.4em .5em .25em; border-radius:.45em;
   border:3px solid #fff; transform: rotate(-6deg);
   box-shadow: 0 10px 24px -10px rgba(43,20,3,.45);
 }
@@ -290,12 +324,13 @@ body.bfx-home .grain{ opacity:.35; }
   border-radius: 16px; padding: 16px 16px 14px;
   box-shadow: 0 20px 44px -18px rgba(0,0,0,.5);
   transform: rotate(var(--rot, 0deg));
+  will-change: transform;   /* igual que .bfx-polaroid: comparten data-inertia */
   display:flex; flex-direction:column; gap:8px;
 }
-.bfx-beercard .name{ font-family: var(--bfx-round); font-weight:800; font-size:clamp(20px,2vw,27px); color:var(--bfx-red); line-height:1.1; }
+.bfx-beercard .name{ --bfx-counter:#fff; font-size:clamp(20px,2vw,27px); color:var(--bfx-red); line-height:1; }
 .bfx-beercard .brew{ font-family: var(--bfx-mouse); text-transform:uppercase; letter-spacing:.1em; font-size:15px; opacity:.65; }
 .bfx-beercard .row{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-family:var(--bfx-mouse); font-size:18px; }
-.bfx-beercard .price{ font-family: var(--bfx-round); font-weight:800; font-size:22px; color: var(--bfx-deep); }
+.bfx-beercard .price{ --bfx-counter:#fff; font-size:22px; color: var(--bfx-deep); }
 .bfx-beercard .hh{ color: var(--bfx-green); font-family:var(--bfx-mouse); font-size:16px; }
 .bfx-meter{ height:8px; border-radius:6px; background: rgba(246,232,210,.18); overflow:hidden; }
 .bfx-meter > span{ display:block; height:100%; background: var(--bfx-mustard); border-radius:6px; }
@@ -388,7 +423,7 @@ body.bfx-home .grain{ opacity:.35; }
 }
 #bfx-loader.is-running .bar > span{ animation: bfx-loader-fill var(--dur) linear forwards; }
 #bfx-loader .pct{
-  font-family: var(--bfx-round); font-weight: 800;
+  --bfx-counter: var(--bfx-cream);
   font-size: 22px; color: var(--bfx-ink);
   margin-top: 10px; min-height: 26px;
 }
@@ -607,9 +642,9 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 }
 /* tinta plena, sin contorno: el Modak con stroke se volvía ilegible */
 .bfx-cart-head h2{
-  font-family: var(--bfx-round); font-weight: 800;
-  font-size: 26px; margin: 0; line-height: 1.1;
-  color: var(--bfx-night); -webkit-text-stroke: 0; text-shadow: none;
+  --bfx-counter: var(--bfx-brand);
+  font-size: 26px; margin: 0; line-height: 1;
+  color: var(--bfx-night); text-shadow: none;
 }
 .bfx-cart-head .count{
   font-family: var(--bfx-round); font-weight: 700; font-size: 13px;
@@ -633,7 +668,8 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 }
 .bfx-cartline .thumb{ width: 66px; height: 66px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: #000; }
 .bfx-cartline .thumb img{ width: 100%; height: 100%; object-fit: cover; }
-.bfx-cartline .nm{ font-family: var(--bfx-round); font-weight: 800; color: var(--bfx-brand); font-size: 19px; line-height: 1.15; }
+/* el fondo real es rgba(242,146,17,.07) sobre --bfx-night */
+.bfx-cartline .nm{ --bfx-counter: #2b2113; color: var(--bfx-brand); font-size: 19px; line-height: 1; }
 .bfx-cartline .sub{ font-family: var(--bfx-mouse); font-size: 15px; letter-spacing: .02em; color: rgba(246,232,210,.6); margin-top: 3px; }
 .bfx-cartline .lt{ font-family: var(--bfx-round); font-weight: 800; font-size: 17px; color: var(--bfx-ink); }
 .bfx-qty{ display: inline-flex; align-items: center; background: rgba(242,146,17,.12); border: 2px solid rgba(242,146,17,.42); border-radius: 100px; }
@@ -647,10 +683,10 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
   background: var(--bfx-night); color: var(--bfx-ink);
   border-top: 2px dashed rgba(242,146,17,.38);
 }
-.bfx-cart-foot .bfx-bubble{ color: var(--bfx-brand); -webkit-text-stroke: 0; }
+.bfx-cart-foot .bfx-bubble{ color: var(--bfx-brand); --bfx-counter: var(--bfx-night); }
 /* el drawer es oscuro: el vacío va en tinta clara */
 .bfx-cart-empty{ flex: 1; display: grid; place-items: center; padding: 30px; text-align: center; color: var(--bfx-ink); }
-.bfx-cart-empty .bfx-bubble{ color: var(--bfx-ink); -webkit-text-stroke: 0; }
+.bfx-cart-empty .bfx-bubble{ color: var(--bfx-ink); --bfx-counter: var(--bfx-night); }
 
 /* ---------- páginas claras (menú / nosotros / contacto) ---------- */
 .bfx-page-hero{ padding: 120px 0 30px; text-align:center; }
@@ -688,7 +724,7 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 .bfx-menucard .photo{ position:relative; border-radius: 13px; overflow:hidden; aspect-ratio: 16/11; }
 .bfx-menucard .photo img{ width:100%; height:100%; object-fit:cover; transition: scale .5s var(--ease-out); }
 .bfx-menucard:hover .photo img{ scale: 1.06; }
-.bfx-menucard .name{ font-family: var(--bfx-round); font-weight:800; color: var(--bfx-red); font-size: 23px; line-height:1.15; }
+.bfx-menucard .name{ --bfx-counter:#fff; color: var(--bfx-red); font-size: 23px; line-height:1; }
 .bfx-menucard .desc{ font-family: var(--bfx-mouse); font-size: 17px; line-height:1.25; color: rgba(43,20,3,.75); letter-spacing:.02em; flex:1; }
 .bfx-menucard .price{ font-family: var(--bfx-mouse); font-size: 24px; color: var(--bfx-deep); }
 .bfx-addbtn{
@@ -702,14 +738,15 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 .bfx-addbtn:active{ scale: .92; }
 .bfx-addbtn.ghost{ background:#fff; border-color: rgba(43,20,3,.15); }
 .bfx-minitag{
-  display:inline-block; font-family: var(--bfx-round); font-weight: 800;
-  font-size: 13px; letter-spacing: .02em; color:#fff;
+  display:inline-block;
+  --bfx-counter: var(--bfx-red);
+  font-size: 15px; color:#fff;
   background: var(--bfx-red); border: 2.5px solid #fff; border-radius: .5em;
-  padding: .35em .6em .3em; transform: rotate(-5deg);
+  padding: .4em .55em .25em; transform: rotate(-5deg);
   box-shadow: 0 6px 14px -6px rgba(43,20,3,.4);
 }
-.bfx-minitag--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); }
-.bfx-minitag--green{ background: var(--bfx-green); }
+.bfx-minitag--ylw{ background: var(--bfx-mustard); color: var(--bfx-deep); --bfx-counter: var(--bfx-mustard); }
+.bfx-minitag--green{ background: var(--bfx-green); --bfx-counter: var(--bfx-green); }
 
 /* filas compactas (tragos / bebidas) — van sobre la superficie oscura */
 .bfx-lrow{
@@ -723,6 +760,21 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 .bfx-panel{
   background:#fff; border-radius: 18px; padding: 22px 24px;
   box-shadow: 0 16px 36px -18px rgba(43,20,3,.25);
+}
+/* variante tinta: los datos del negocio viven sobre el naranja de marca, así
+   que la tarjeta va en el negro de marca para hacer contraste */
+.bfx-panel--ink{
+  background: var(--bfx-night); color: var(--bfx-ink);
+  box-shadow: 0 18px 40px -16px rgba(0,0,0,.55);
+}
+.bfx-panel--ink .bfx-bubble{ color: var(--bfx-ink); --bfx-counter: var(--bfx-night); }
+.bfx-panel--ink .bfx-hand{ color: var(--bfx-ink); }
+
+/* ---------- sección de contacto sobre naranja ---------- */
+.bfx-contactinfo{ background: #f29212; }
+.bfx-contactinfo .bfx-stickerframe{
+  background: var(--bfx-night);
+  box-shadow: 0 24px 55px -20px rgba(0,0,0,.5);
 }
 .bfx-chip2{
   display:inline-flex; align-items:center; gap:7px;
@@ -792,7 +844,7 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
   .bfx-hero{ padding-top: 92px; }
   .bfx-hero-burger{ width: 50vw; transform: translate(-50%,-16%); }
   .bfx-hero-word{ font-size: 23vw; margin-top: 2vw; }
-  .bfx-badge{ font-size: 13px; border-width: 2.5px; }
+  .bfx-badge{ font-size: 15px; border-width: 2.5px; }
   .bfx-hero-copy{ flex-direction:column; gap: 16px; padding-bottom: 26px; margin-top: clamp(110px, 42vw, 240px); }
   .bfx-hero-copy p, .bfx-hero-copy p:last-child{ max-width: none; text-align:left; }
   .bfx-polaroid-row{ flex-direction: column; align-items:center; }
@@ -935,7 +987,9 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 .bfx-choice.on{ border-color: var(--bfx-brand); background: rgba(242,146,17,.16); box-shadow: 0 10px 24px -14px rgba(242,146,17,.5); }
 .bfx-choice .ico{ color: rgba(246,232,210,.45); display:inline-flex; }
 .bfx-choice.on .ico{ color: var(--bfx-brand); }
-.bfx-choice .t{ font-family: var(--bfx-round); font-weight: 800; color: var(--bfx-brand); font-size: 20px; line-height:1.1; margin-top:8px; }
+/* el fondo real es el naranja translúcido sobre --bfx-night */
+.bfx-choice .t{ --bfx-counter: #29200f; color: var(--bfx-brand); font-size: 20px; line-height:1; margin-top:8px; }
+.bfx-choice.on .t{ --bfx-counter: #3e2c17; }
 .bfx-choice .d{ font-size: 15px; color: rgba(246,232,210,.6); margin-top: 3px; }
 
 /* ---------- form field ---------- */
@@ -959,7 +1013,7 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
   box-shadow: 0 18px 44px -22px rgba(0,0,0,.7);
   border: 2px solid rgba(242,146,17,.28);
 }
-.bfx-card .bfx-bubble{ color: var(--bfx-brand); -webkit-text-stroke: 0; }
+.bfx-card .bfx-bubble{ color: var(--bfx-brand); --bfx-counter: var(--bfx-night); }
 .bfx-card .bfx-copy, .bfx-card .bfx-hand{ color: var(--bfx-ink); }
 /* separadores punteados dentro de las cards */
 .bfx-card .bfx-dash{ border-color: rgba(242,146,17,.3) !important; }

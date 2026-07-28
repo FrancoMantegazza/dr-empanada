@@ -94,7 +94,7 @@ function Home({ go }) {
     { n: "SANTA RITA", img: "assets/empanadas/humita.jpg", rot: -6 },
   ];
 
-  const sabores = MENU.find((c) => c.id === "empanadas").items.slice(0, 6);
+  const sabores = MENU.find((c) => c.id === "empanadas").items.slice(0, 4);
   const reviews = REVIEWS.slice(0, 3);
 
   return (
@@ -170,10 +170,12 @@ function Home({ go }) {
             <a href="#/menu" className="bfx-blob" data-squash>Pedir online</a>
           </div>
 
-          <div className="bfx-polaroid-row" style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(18px,3vw,44px)", marginTop: "clamp(44px,6vw,80px)", flexWrap: "wrap" }}>
+          {/* zIndex 2 + las laterales a la misma altura: la de la derecha
+              caía sobre el wave de abajo y le comía la esquina */}
+          <div className="bfx-polaroid-row" style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(18px,3vw,44px)", marginTop: "clamp(44px,6vw,80px)", flexWrap: "wrap" }}>
             {polaroids.map((p, i) => (
               <figure key={p.name} className="bfx-polaroid" data-pop data-pop-delay={i * 0.12} data-inertia
-                style={{ "--rot": p.rot + "deg", width: "clamp(220px,20vw,330px)", margin: 0, marginTop: i === 1 ? -26 : i * 30 }}>
+                style={{ "--rot": p.rot + "deg", width: "clamp(220px,20vw,330px)", margin: 0, marginTop: i === 1 ? -26 : 0 }}>
                 <img src={p.img} alt={p.name} loading="lazy" style={{ aspectRatio: ".82" }} />
                 <figcaption><span>{p.name}</span><b>{p.price}</b></figcaption>
               </figure>
@@ -198,14 +200,17 @@ function Home({ go }) {
           </p>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 30, position: "relative", zIndex: 3 }}>
-            {["100% caseras", "Repulgue a mano", "Al horno o fritas", "13 sabores", "Delivery propio", "Promo mediodía 12–14:30", "4.4★ en Google"].map((c, i) => (
+            {["100% caseras", "Repulgue a mano", "Al horno o fritas", "13 sabores", "Delivery propio", "4.4★ en Google"].map((c, i) => (
               <span key={c} className={"bfx-chip" + (i % 3 === 0 ? " bfx-chip--solid" : "")} data-pop data-pop-delay={i * 0.06}>{c}</span>
             ))}
           </div>
         </div>
 
-        {/* empanada gigante asomando con ojos y guantes */}
-        <div style={{ position: "relative", width: "min(760px,86vw)", margin: "clamp(30px,4vw,60px) auto -6px" }}>
+        {/* Empanada gigante asomando con ojos y guantes.
+            El margen de arriba tiene que cubrir el recorrido del parallax
+            (data-float .14 sube la foto hasta un 14% de su alto, ~85px), si no
+            los ojos se meten entre los chips. */}
+        <div style={{ position: "relative", width: "min(760px,86vw)", margin: "clamp(95px,11vw,155px) auto -6px" }}>
           <div data-float=".14" style={{ position: "relative" }}>
             <div className="bfx-blobphoto" style={{ aspectRatio: "1.25", border: "9px solid #fff", borderBottom: "none", borderRadius: "46% 54% 0 0 / 74% 66% 0 0" }}>
               <img src="assets/empanadas/cheese.jpg" alt="Empanada cheese de cerca" loading="lazy" />
@@ -213,6 +218,9 @@ function Home({ go }) {
             <GooglyEyes style={{ left: "27%", top: "4%", width: "46%" }} />
             <Glove side="left" style={{ left: "-7%", bottom: "8%", width: "clamp(90px,14vw,150px)" }} data-pop />
             <Glove side="right" style={{ right: "-7%", bottom: "10%", width: "clamp(90px,14vw,150px)" }} data-pop />
+            {/* la foto terminaba cortada a cuchillo: este wave del color de la
+                sección la disuelve en el fondo */}
+            <Wave fill="#17130e" style={{ position: "absolute", left: -12, right: -12, bottom: -1, zIndex: 2 }} />
           </div>
         </div>
       </section>
@@ -306,9 +314,9 @@ function Home({ go }) {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(215px, 1fr))", gap: 20, marginTop: "clamp(40px,5vw,64px)", textAlign: "left" }}>
             {sabores.map((b, i) => (
-              <div key={b.id} className="bfx-beercard" data-pop data-pop-delay={i * 0.07} style={{ "--rot": ((i % 3) - 1) * 2 + "deg" }}>
+              <div key={b.id} className="bfx-beercard" data-pop data-pop-delay={i * 0.07} data-inertia style={{ "--rot": ((i % 3) - 1) * 2 + "deg" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ width: 20, height: 30, borderRadius: "3px 3px 6px 6px", background: b.color, border: "2px solid #efdcbc", flexShrink: 0 }} />
+                  <Sticker name="burger" size={30} style={{ position: "relative", flexShrink: 0, filter: "none" }} />
                   <div>
                     <div className="name">{b.name}</div>
                     <div className="brew">Al horno o frita</div>

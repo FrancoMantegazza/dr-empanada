@@ -80,7 +80,7 @@ function MenuPage({ go }) {
         {visible.length === 0 && (
           <div style={{ padding: "80px 0", textAlign: "center" }}>
             <Sticker name="pickle" size={90} style={{ position: "relative", margin: "0 auto 16px" }} />
-            <p className="bfx-bubble" style={{ fontSize: 34, margin: "0 0 8px", color: "var(--bfx-brand)", WebkitTextStroke: 0 }}>Nada con “{query}”</p>
+            <p className="bfx-bubble" style={{ fontSize: 34, margin: "0 0 8px", color: "var(--bfx-brand)", "--bfx-counter": "var(--bfx-cream)" }}>Nada con “{query}”</p>
             <p className="bfx-copy" style={{ margin: "0 0 22px" }}>Probá con otra palabra, o mirá la carta completa.</p>
             <button className="bfx-blob" style={{ fontSize: 20 }} onClick={() => setQuery("")}>Ver todo el menú</button>
           </div>
@@ -254,7 +254,7 @@ function HappyBanner({ go }) {
       <div className="bfx-panel" style={{ marginTop: 28, background: "var(--bfx-mustard)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "var(--bfx-deep)" }}>Promo mediodía</h3>
+            <h3 className="bfx-bubble" style={{ fontSize: 28, margin: 0, color: "var(--bfx-deep)", "--bfx-counter": "var(--bfx-mustard)" }}>Promo mediodía</h3>
             <span className="bfx-minitag" style={{ transform: "rotate(-3deg)", background: active ? "var(--bfx-green)" : "var(--bfx-red)" }}>
               {active ? "ACTIVA AHORA" : HAPPY.when.toUpperCase()}
             </span>
