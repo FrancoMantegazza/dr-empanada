@@ -44,7 +44,7 @@ function Checkout({ go }) {
 
   return (
     <div className="bfx wrap" style={{ padding: "40px 24px 90px" }}>
-      <button onClick={() => go("#/menu")} className="bfx-hand" style={{ background: "none", border: "none", color: "var(--bfx-deep)", opacity: .7, display: "flex", alignItems: "center", gap: 6, marginBottom: 18, fontSize: 18, letterSpacing: ".04em", cursor: "pointer", textTransform: "uppercase" }}>‹ Seguir agregando</button>
+      <button onClick={() => go("#/menu")} className="bfx-hand" style={{ background: "none", border: "none", color: "var(--bfx-brand)", display: "flex", alignItems: "center", gap: 6, marginBottom: 18, fontSize: 18, letterSpacing: ".04em", cursor: "pointer", textTransform: "uppercase" }}>‹ Seguir agregando</button>
       <h1 className="bfx-giant bfx-giant--md" style={{ fontSize: "clamp(40px,6.5vw,88px)", margin: "0 0 8px" }}>Finalizar pedido</h1>
 
       {/* steps */}
@@ -107,7 +107,7 @@ function Checkout({ go }) {
                   ["sena", "Seña + efectivo", "Señás online y el resto en efectivo", Ic.bag],
                 ].map(([val, t, d, Icon]) => (
                   <button key={val} onClick={() => set("pay", val)} className={"bfx-choice" + (form.pay === val ? " on" : "")} style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                    <span style={{ width: 46, height: 46, borderRadius: 12, display: "grid", placeItems: "center", background: form.pay === val ? "var(--bfx-red)" : "#f2ece0", color: form.pay === val ? "#fff" : "rgba(43,20,3,.5)", flexShrink: 0 }}><Icon width={21} height={21} /></span>
+                    <span style={{ width: 46, height: 46, borderRadius: 12, display: "grid", placeItems: "center", background: form.pay === val ? "var(--bfx-brand)" : "rgba(246,232,210,.1)", color: form.pay === val ? "var(--bfx-night)" : "rgba(246,232,210,.5)", flexShrink: 0 }}><Icon width={21} height={21} /></span>
                     <div style={{ flex: 1, textAlign: "left" }}>
                       <div className="t" style={{ marginTop: 0 }}>{t}</div>
                       <div className="d">{d}</div>
@@ -145,14 +145,14 @@ function Checkout({ go }) {
               <div key={l.id + l.variant + (l.modsLabel || "")} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                 <span className="bfx-qtychip">{l.qty}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "var(--bfx-modak)", color: "var(--bfx-red)", fontSize: 17, lineHeight: 1 }}>{l.item.name}{l.variant === "double" ? " · Docena" : ""}</div>
-                  {l.modsLabel && <div className="bfx-hand" style={{ fontSize: 14, color: "rgba(43,20,3,.6)", lineHeight: 1.35, marginTop: 3 }}>{l.modsLabel}</div>}
+                  <div style={{ fontFamily: "var(--bfx-round)", fontWeight: 800, color: "var(--bfx-brand)", fontSize: 17, lineHeight: 1.15 }}>{l.item.name}{l.variant === "double" ? " · Docena" : ""}</div>
+                  {l.modsLabel && <div className="bfx-hand bfx-mut" style={{ fontSize: 14, lineHeight: 1.35, marginTop: 3 }}>{l.modsLabel}</div>}
                 </div>
                 <div className="bfx-hand" style={{ fontSize: 17 }}>{money(l.lineTotal)}</div>
               </div>
             ))}
           </div>
-          <div style={{ borderTop: "2px dashed rgba(43,20,3,.15)", paddingTop: 14, display: "grid", gap: 8 }}>
+          <div style={{ borderTop: "2px dashed rgba(242,146,17,.3)", paddingTop: 14, display: "grid", gap: 8 }}>
             <Row k="Subtotal" v={money(subtotal)} />
             <Row k={form.mode === "delivery" ? "Envío" : "Take away"} v={shipping ? money(shipping) : "Gratis"} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 6 }}>
@@ -167,7 +167,7 @@ function Checkout({ go }) {
 }
 
 function Row({ k, v }) {
-  return <div style={{ display: "flex", justifyContent: "space-between" }}><span className="bfx-hand" style={{ fontSize: 17, color: "rgba(43,20,3,.65)" }}>{k}</span><span className="bfx-hand" style={{ fontSize: 17 }}>{v}</span></div>;
+  return <div style={{ display: "flex", justifyContent: "space-between" }}><span className="bfx-hand bfx-mut" style={{ fontSize: 17 }}>{k}</span><span className="bfx-hand" style={{ fontSize: 17 }}>{v}</span></div>;
 }
 
 function TField({ label, children }) {
@@ -179,20 +179,20 @@ function TransferData() {
   const copy = (txt, key) => { navigator.clipboard?.writeText(txt); setCopied(key); setTimeout(() => setCopied(""), 1500); };
   const rows = [["Alias", BIZ.pay.alias, "alias"], ["CBU", BIZ.pay.cbu, "cbu"], ["Titular", BIZ.pay.titular, null]];
   return (
-    <div style={{ background: "#f2ece0", border: "2.5px dashed rgba(43,20,3,.2)", borderRadius: 16, padding: 18, marginTop: 16 }}>
+    <div style={{ background: "rgba(242,146,17,.08)", border: "2.5px dashed rgba(242,146,17,.4)", borderRadius: 16, padding: 18, marginTop: 16 }}>
       <div className="bfx-seclabel" style={{ marginBottom: 12 }}>Datos para transferir</div>
       <div style={{ display: "grid", gap: 8 }}>
         {rows.map(([k, v, key]) => (
-          <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, borderBottom: "1.5px dashed rgba(43,20,3,.15)", paddingBottom: 8 }}>
-            <span className="bfx-hand" style={{ fontSize: 15, color: "rgba(43,20,3,.6)", letterSpacing: ".04em" }}>{k}</span>
+          <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, borderBottom: "1.5px dashed rgba(242,146,17,.28)", paddingBottom: 8 }}>
+            <span className="bfx-hand bfx-mut" style={{ fontSize: 15, letterSpacing: ".04em" }}>{k}</span>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontFamily: "var(--bfx-round)", fontWeight: 700, fontSize: 16, color: "var(--bfx-deep)" }}>{v}</span>
-              {key && <button onClick={() => copy(v, key)} aria-label={"Copiar " + k} style={{ background: "none", border: "none", color: copied === key ? "var(--bfx-green)" : "rgba(43,20,3,.4)", cursor: "pointer", display: "grid" }}>{copied === key ? <Ic.check width={16} height={16} /> : <Ic.copy width={16} height={16} />}</button>}
+              <span style={{ fontFamily: "var(--bfx-round)", fontWeight: 700, fontSize: 16, color: "var(--bfx-ink)" }}>{v}</span>
+              {key && <button onClick={() => copy(v, key)} aria-label={"Copiar " + k} style={{ background: "none", border: "none", color: copied === key ? "var(--bfx-green)" : "var(--bfx-brand)", cursor: "pointer", display: "grid" }}>{copied === key ? <Ic.check width={16} height={16} /> : <Ic.copy width={16} height={16} />}</button>}
             </div>
           </div>
         ))}
       </div>
-      <p className="bfx-hand" style={{ fontSize: 14, color: "rgba(43,20,3,.55)", margin: "12px 0 0", letterSpacing: ".03em" }}>Enviá el comprobante por WhatsApp al confirmar el pedido.</p>
+      <p className="bfx-hand bfx-mut" style={{ fontSize: 14, margin: "12px 0 0", letterSpacing: ".03em" }}>Enviá el comprobante por WhatsApp al confirmar el pedido.</p>
     </div>
   );
 }
@@ -212,9 +212,9 @@ function Summary({ form }) {
 }
 function SumRow({ label, value }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, borderBottom: "2px dashed rgba(43,20,3,.15)", padding: "11px 0" }}>
-      <span className="bfx-hand" style={{ fontSize: 15, letterSpacing: ".06em", textTransform: "uppercase", color: "rgba(43,20,3,.55)", flexShrink: 0 }}>{label}</span>
-      <span style={{ fontFamily: "var(--bfx-mouse)", fontSize: 18, textAlign: "right", color: "var(--bfx-deep)" }}>{value}</span>
+    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, borderBottom: "2px dashed rgba(242,146,17,.28)", padding: "11px 0" }}>
+      <span className="bfx-hand bfx-mut" style={{ fontSize: 15, letterSpacing: ".06em", textTransform: "uppercase", flexShrink: 0 }}>{label}</span>
+      <span style={{ fontFamily: "var(--bfx-mouse)", fontSize: 18, textAlign: "right", color: "var(--bfx-ink)" }}>{value}</span>
     </div>
   );
 }
@@ -237,36 +237,36 @@ function OrderSuccess({ order, go }) {
         <div style={{ width: 84, height: 84, borderRadius: "50%", background: "var(--bfx-green)", color: "#fff", display: "grid", placeItems: "center", margin: "0 auto 18px", border: "4px solid #fff", boxShadow: "0 16px 34px -14px rgba(96,169,5,.6)" }}><Ic.check width={40} height={40} /></div>
         <span className="bfx-badge bfx-badge--green" style={{ "--rot": "-4deg" }}>Pedido confirmado</span>
         <h1 className="bfx-giant bfx-giant--md" style={{ fontSize: "clamp(38px,6vw,80px)", margin: "16px 0 0" }}>¡Gracias, {order.name.split(" ")[0]}!</h1>
-        <p className="bfx-copy" style={{ marginTop: 12, opacity: .8 }}>Tu pedido <b style={{ color: "var(--bfx-red)", fontFamily: "var(--bfx-round)", fontWeight: 800 }}>{order.id}</b> ya entró a la cocina.</p>
+        <p className="bfx-copy" style={{ marginTop: 12, opacity: .8 }}>Tu pedido <b style={{ color: "var(--bfx-brand)", fontFamily: "var(--bfx-round)", fontWeight: 800 }}>{order.id}</b> ya entró a la cocina.</p>
       </div>
 
       {/* tracking */}
       <div className="bfx-card" style={{ marginBottom: 18 }}>
         <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 24px" }}>Seguimiento</h3>
         <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
-          <div style={{ position: "absolute", top: 19, left: 24, right: 24, height: 4, background: "rgba(43,20,3,.12)", borderRadius: 4 }} />
-          <div style={{ position: "absolute", top: 19, left: 24, height: 4, background: "var(--bfx-red)", borderRadius: 4, width: `calc(${(curIdx / (flow.length - 1)) * 100}% - 48px * ${curIdx / (flow.length - 1)})`, transition: "width .4s", maxWidth: "calc(100% - 48px)" }} />
+          <div style={{ position: "absolute", top: 19, left: 24, right: 24, height: 4, background: "rgba(246,232,210,.16)", borderRadius: 4 }} />
+          <div style={{ position: "absolute", top: 19, left: 24, height: 4, background: "var(--bfx-brand)", borderRadius: 4, width: `calc(${(curIdx / (flow.length - 1)) * 100}% - 48px * ${curIdx / (flow.length - 1)})`, transition: "width .4s", maxWidth: "calc(100% - 48px)" }} />
           {flow.map((s, i) => {
             const done = i <= curIdx;
             const Icon = [Ic.check, Ic.fire, Ic.bag, Ic.truck][i];
             return (
               <div key={s} style={{ position: "relative", textAlign: "center", flex: 1, zIndex: 1 }}>
-                <div style={{ width: 42, height: 42, borderRadius: "50%", margin: "0 auto", display: "grid", placeItems: "center", background: done ? "var(--bfx-red)" : "#fff", color: done ? "#fff" : "rgba(43,20,3,.4)", border: "3px solid " + (done ? "var(--bfx-red)" : "rgba(43,20,3,.15)") }}>
+                <div style={{ width: 42, height: 42, borderRadius: "50%", margin: "0 auto", display: "grid", placeItems: "center", background: done ? "var(--bfx-brand)" : "transparent", color: done ? "var(--bfx-night)" : "rgba(246,232,210,.4)", border: "3px solid " + (done ? "var(--bfx-brand)" : "rgba(246,232,210,.2)") }}>
                   <Icon width={19} height={19} />
                 </div>
-                <div className="bfx-hand" style={{ fontSize: 13.5, marginTop: 8, color: done ? "var(--bfx-deep)" : "rgba(43,20,3,.4)", letterSpacing: ".06em", textTransform: "uppercase" }}>{store.STATUS_LABEL[s]}</div>
+                <div className="bfx-hand" style={{ fontSize: 13.5, marginTop: 8, color: done ? "var(--bfx-ink)" : "rgba(246,232,210,.4)", letterSpacing: ".06em", textTransform: "uppercase" }}>{store.STATUS_LABEL[s]}</div>
               </div>
             );
           })}
         </div>
-        <p className="bfx-hand" style={{ fontSize: 15, color: "rgba(43,20,3,.55)", textAlign: "center", marginTop: 24, marginBottom: 0, letterSpacing: ".03em" }}>
+        <p className="bfx-hand bfx-mut" style={{ fontSize: 15, textAlign: "center", marginTop: 24, marginBottom: 0, letterSpacing: ".03em" }}>
           Te vamos avisando cada cambio de estado por WhatsApp. Esta página se actualiza sola.
         </p>
       </div>
 
       <div className="bfx-card" style={{ marginBottom: 18 }}>
         <Summary form={{ name: order.name.split(" ")[0], lastname: order.name.split(" ").slice(1).join(" "), phone: order.phone, mode: order.mode, address: order.address, bell: order.bell, pay: order.pay, notes: order.notes }} />
-        <div style={{ borderTop: "2px dashed rgba(43,20,3,.15)", marginTop: 14, paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <div style={{ borderTop: "2px dashed rgba(242,146,17,.3)", marginTop: 14, paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span className="bfx-bubble" style={{ fontSize: 22 }}>Total</span>
           <span className="bfx-bubble" style={{ fontSize: 34 }}>{money(order.total)}</span>
         </div>

@@ -80,7 +80,7 @@ function MenuPage({ go }) {
         {visible.length === 0 && (
           <div style={{ padding: "80px 0", textAlign: "center" }}>
             <Sticker name="pickle" size={90} style={{ position: "relative", margin: "0 auto 16px" }} />
-            <p className="bfx-bubble" style={{ fontSize: 34, margin: "0 0 8px" }}>Nada con “{query}”</p>
+            <p className="bfx-bubble" style={{ fontSize: 34, margin: "0 0 8px", color: "var(--bfx-brand)", WebkitTextStroke: 0 }}>Nada con “{query}”</p>
             <p className="bfx-copy" style={{ margin: "0 0 22px" }}>Probá con otra palabra, o mirá la carta completa.</p>
             <button className="bfx-blob" style={{ fontSize: 20 }} onClick={() => setQuery("")}>Ver todo el menú</button>
           </div>
@@ -228,8 +228,9 @@ function LightList({ items }) {
               <div style={{ fontSize: 21 }}>{it.name}</div>
               {it.desc && <div style={{ fontSize: 16, opacity: .6 }}>{it.desc}</div>}
               {it.hh && (
-                <div style={{ fontSize: 15, color: happy ? "var(--bfx-green)" : "rgba(43,20,3,.45)" }}>
-                  Happy hour · 2 × {money(it.hh)}
+                /* la lista vive sobre el fondo oscuro: la tinta apagada va clara */
+                <div style={{ fontSize: 15, color: happy ? "var(--bfx-green)" : "rgba(246,232,210,.55)" }}>
+                  Promo mediodía · 2 × {money(it.hh)}
                 </div>
               )}
             </div>

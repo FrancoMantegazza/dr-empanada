@@ -219,7 +219,9 @@ function Home({ go }) {
 
       {/* ================= FOTO FULL (parallax) ================= */}
       <div style={{ position: "relative" }}>
-        <Wave fill="#191510" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
+        {/* el fill tiene que ser EXACTO al fondo de la sección de arriba
+            (.bfx-red) o se ve el escalón entre los dos negros */}
+        <Wave fill="#17130e" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
         <div style={{ height: "80vh", overflow: "hidden", position: "relative" }}>
           <img data-float=".08" src="assets/horno-fila.jpg" alt="Empanadas recién salidas del horno"
             loading="lazy" style={{ width: "100%", height: "114%", objectFit: "cover" }} />
@@ -249,7 +251,10 @@ function Home({ go }) {
       </section>
 
       {/* ================= DELIVERY (mostaza) ================= */}
-      <section className="bfx-mustardsec" data-path-scene style={{ padding: "clamp(70px,9vw,120px) 0 clamp(90px,10vw,150px)", overflow: "clip" }} aria-label="Delivery por Villa Devoto y alrededores">
+      <section className="bfx-mustardsec" data-path-scene style={{ padding: "0 0 clamp(90px,10vw,150px)", overflow: "clip" }} aria-label="Delivery por Villa Devoto y alrededores">
+        {/* la entrada al naranja va con wave, como el resto de los cortes.
+            zIndex 3: por encima de la ruta punteada y de la moto. */}
+        <Wave fill="#f2900d" style={{ background: "var(--bfx-cream)", position: "relative", zIndex: 3 }} />
         {/* ruta punteada + moto */}
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
           {/* desktop: serpentina horizontal */}
@@ -263,7 +268,7 @@ function Home({ go }) {
         <div className="bfx-rider" aria-hidden="true" style={{ position: "absolute", left: 0, top: 0, width: "clamp(80px,9vw,130px)", zIndex: 1, filter: "drop-shadow(0 14px 22px rgba(43,20,3,.3))" }}
           dangerouslySetInnerHTML={{ __html: (window.FX && FX.STICKERS.moto) || "" }} />
 
-        <div className="wrap" style={{ position: "relative", zIndex: 2 }}>
+        <div className="wrap" style={{ position: "relative", zIndex: 2, paddingTop: "clamp(40px,5vw,70px)" }}>
           <div className="bfx-kicker" data-pop>DELIVERY PROPIO + TAKE AWAY</div>
           <h2 className="bfx-giant bfx-giant--lg bfx-giant--outline" style={{ marginTop: 14, textAlign: "left" }}>
             <span data-split="chars" style={{ display: "block" }}>DEL HORNO</span>

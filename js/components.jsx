@@ -191,6 +191,10 @@ function Footer({ go }) {
   const ings = ["lettuce", "tomato", "cheese", "patty", "fries", "beer", "pickle", "bacon"];
   return (
     <footer ref={ref} className="bfx-footer">
+      {/* el corte con la página va con wave, como el resto del sitio (antes
+          era un hairline que cruzaba la pantalla de lado a lado). zIndex 1 y
+          antes de la fuente en el DOM: los ingredientes le pasan por encima. */}
+      <Wave fill="#241c12" style={{ background: "var(--bfx-cream)", position: "relative", zIndex: 1 }} />
       {/* fuente de ingredientes saltando desde abajo (queda por detrás del contenido) */}
       <div className="bfx-fountain" data-fountain aria-hidden="true">
         {ings.map((k, i) => (
@@ -227,6 +231,7 @@ function Footer({ go }) {
         </div>
       </div>
 
+      <Wave fill="#17130e" style={{ background: "#241c12", position: "relative", zIndex: 4, marginTop: "clamp(50px,7vw,110px)" }} />
       <div className="bfx-footer-legal">
         <p>Desde 1989 · Elaboración propia, masa casera y repulgue a mano.</p>
         <p>
