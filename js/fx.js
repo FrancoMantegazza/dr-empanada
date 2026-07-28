@@ -139,7 +139,29 @@
   FX.toTop = function () {
     if (FX.lenis) FX.lenis.scrollTo(0, { immediate: true });
     else window.scrollTo({ top: 0 });
+    FX.refresh();
   };
+  /* Re-medir los ScrollTrigger. Hace falta porque los triggers se crean
+     cuando React monta la página, con el layout todavía a medio armar
+     (fuentes, imágenes lazy, el wipe de transición encima): si no se
+     re-miden, sus start/end quedan a miles de píxeles del lugar real y la
+     animación se dispara donde no toca — la moto del delivery, por ejemplo,
+     terminaba el recorrido antes de que la sección entrara en pantalla.
+     Va con debounce para no re-medir una vez por cada FX.bind. */
+  var refreshT1 = null, refreshT2 = null;
+  function doRefresh() {
+    if (FX.lenis && typeof FX.lenis.resize === "function") FX.lenis.resize();
+    ScrollTrigger.refresh();
+  }
+  FX.refresh = function () {
+    if (!hasGsap) return;
+    clearTimeout(refreshT1); clearTimeout(refreshT2);
+    // dos pasadas: la primera cuando Lenis ya aplicó el scroll y la segunda
+    // cuando terminaron de acomodarse fuentes e imágenes
+    refreshT1 = setTimeout(doRefresh, 280);
+    refreshT2 = setTimeout(doRefresh, 950);
+  };
+
   FX.scrollTo = function (target) {
     if (FX.lenis) FX.lenis.scrollTo(target, { duration: 1 });
     else if (hasGsap && window.ScrollToPlugin) gsap.to(window, { duration: .9, scrollTo: target, ease: "power3.inOut" });
@@ -163,97 +185,114 @@
     if (hasGsap) ScrollTrigger.refresh();
   }
 
+  /* Coreografía: barra, stickers y cortinas van por CSS (transform/opacity,
+     en el compositor) así siguen fluidos mientras Babel compila los .jsx y
+     bloquea el hilo principal. El JS sólo pinta el número y decide cuándo
+     salir, siempre con temporizadores (no rAF) para que el loader no pueda
+     quedarse pegado si se pierden frames. */
+  var LOAD_DUR = 2600;      // el contador SIEMPRE recorre 0 → 100 en este tiempo
+  var LOAD_WAIT = 3500;     // margen extra esperando a que React monte
+  var LOAD_MAX = 10000;     // tope duro: pase lo que pase, el loader se va
+
   function runLoader() {
     var el = document.getElementById("bfx-loader");
     if (!el) { FX.loaded = true; window.dispatchEvent(new Event("bfx-loader-done")); return; }
-    if (!hasGsap || rm) {
-      // salida simple: espera app o timeout, fade CSS
-      var t0 = setInterval(function () {
-        if (appReady || performance.now() > 7000) {
-          clearInterval(t0);
-          el.style.transition = "opacity .4s"; el.style.opacity = "0";
-          setTimeout(killLoader, 420);
-        }
-      }, 120);
-      return;
-    }
 
     var stage = el.querySelector(".stage");
     var statusEl = el.querySelector(".status");
     var pctEl = el.querySelector(".pct");
-    var barEl = el.querySelector(".bar > span");
-    var word = el.querySelector(".word");
+    var exiting = false;
 
-    // stickers que caen alrededor del logo
+    // tope duro, independiente de todo lo demás
+    setTimeout(killLoader, LOAD_MAX);
+
+    if (rm) {
+      // reduced motion: sin coreografía, sólo el número y un fundido
+      var bar = el.querySelector(".bar > span");
+      if (bar) bar.style.transform = "scaleX(1)";
+      pctEl.textContent = "100%";
+      statusEl.textContent = "¡A COMER!";
+      waitForApp(function () {
+        el.style.transition = "opacity .35s"; el.style.opacity = "0";
+        setTimeout(killLoader, 380);
+      });
+      return;
+    }
+
+    el.style.setProperty("--dur", (LOAD_DUR / 1000) + "s");
+
+    // stickers que caen alrededor del logo (los anima el CSS)
     var drops = ["burger", "fries", "tomato", "beer", "cheese"];
     var spots = [[-190, -60, -14], [175, -80, 12], [-235, 55, 8], [230, 40, -10], [0, -150, 5]];
-    var dropEls = drops.map(function (k, i) {
+    drops.forEach(function (k, i) {
       var d = document.createElement("div");
       d.className = "drop";
       d.innerHTML = STICKERS[k];
-      d.style.left = "50%"; d.style.top = "50%";
+      d.style.setProperty("--x", spots[i][0] + "px");
+      d.style.setProperty("--y", spots[i][1] + "px");
+      d.style.setProperty("--r", spots[i][2] + "deg");
+      // el último tiene que aterrizar antes de que arranque la salida
+      d.style.animationDelay = (.22 + i * .34).toFixed(2) + "s";
       stage.appendChild(d);
-      gsap.set(d, { xPercent: -50, yPercent: -50, x: spots[i][0], y: -420, rotation: spots[i][2] + rand(-40, 40), opacity: 0, scale: .7 });
-      return d;
     });
 
-    var statuses = ["PRENDIENDO EL HORNO…", "ESTIRANDO LA MASA…", "HACIENDO EL REPULGUE…", "¡AL HORNO!"];
-    var st = { v: 0 };
-    var tl = gsap.timeline();
-
-    tl.to(st, {
-      v: 100, duration: 2.7, ease: "power1.inOut",
-      onUpdate: function () {
-        var v = Math.floor(st.v);
-        pctEl.textContent = v + "%";
-        barEl.style.animation = "none";
-        barEl.style.width = v + "%";
-        statusEl.textContent = statuses[Math.min(statuses.length - 1, Math.floor(v / (100 / statuses.length)))];
-      },
-    }, 0);
-
-    dropEls.forEach(function (d, i) {
-      var t = .25 + i * .38;
-      tl.to(d, { opacity: 1, y: spots[i][1], scale: 1, duration: .45, ease: "power2.in" }, t);
-      tl.to(d, { rotation: spots[i][2], duration: .5, ease: "back.out(2.5)" }, t + .4);
-      // squash del logo al recibir el golpe
-      tl.to(word, { scaleY: .92, scaleX: 1.05, duration: .07, ease: "power2.out" }, t + .42)
-        .to(word, { scaleY: 1, scaleX: 1, duration: .18, ease: "power2.out" }, t + .5);
+    // las cortinas de salida ya viven en el DOM: cuando toque irse basta con
+    // una clase, sin crear ni medir nada en un momento sensible
+    ["a", "b"].forEach(function (n) {
+      var c = document.createElement("div");
+      c.className = "curtain curtain--" + n;
+      el.appendChild(c);
     });
 
-    tl.call(function () { statusEl.textContent = "¡A COMER!"; }, null, 2.75);
+    // un frame de aire para que el navegador pinte el estado inicial antes de
+    // arrancar las animaciones (si no, empiezan a mitad de camino)
+    requestAnimationFrame(function () {
+      el.classList.add("is-running");
+      startCounter();
+    });
+    // ...salvo que ese frame nunca llegue (pestaña en segundo plano)
+    setTimeout(function () {
+      if (!el.classList.contains("is-running")) { el.classList.add("is-running"); startCounter(); }
+    }, 200);
 
-    // espera a que la app esté montada (o timeout) y dispara la salida
-    tl.call(function () {
-      var waited = 0;
-      var iv = setInterval(function () {
-        waited += 100;
-        if (appReady || waited > 4500) { clearInterval(iv); exitLoader(); }
-      }, 100);
-    }, null, 2.9);
+    var counterOn = false;
+    function startCounter() {
+      if (counterOn) return;
+      counterOn = true;
+      var statuses = ["PRENDIENDO EL HORNO…", "ESTIRANDO LA MASA…", "HACIENDO EL REPULGUE…", "¡AL HORNO!"];
+      var t0 = performance.now(), lastTxt = "";
+      // el valor sale del reloj, no de la cantidad de frames: si el hilo se
+      // bloquea el número retoma donde corresponde y nunca se queda corto
+      var paint = function (now) {
+        var p = Math.min(1, (now - t0) / LOAD_DUR);
+        pctEl.textContent = Math.round(p * 100) + "%";
+        var txt = p >= 1 ? "¡A COMER!" : statuses[Math.min(statuses.length - 1, Math.floor(p * statuses.length))];
+        if (txt !== lastTxt) { statusEl.textContent = txt; lastTxt = txt; }
+        if (p < 1) requestAnimationFrame(paint);
+      };
+      requestAnimationFrame(paint);
+      // la salida la manda un temporizador, no el rAF del contador
+      setTimeout(function () { waitForApp(exitLoader); }, LOAD_DUR);
+    }
 
     function exitLoader() {
-      // cortinas SVG con panza (bezier) — 2 capas
-      var mk = function (color) {
-        var c = document.createElement("div");
-        c.className = "curtain";
-        c.innerHTML = '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="' + color + '" d="M -1 -1 L 101 -1 L 101 101 Q 50 101 -1 101 Z"/></svg>';
-        el.appendChild(c);
-        return c.querySelector("path");
-      };
-      var p1 = mk("#f2900d"), p2 = mk("#1a1611");
-      var s1 = { yl: 101, yr: 101, yc: 101 }, s2 = { yl: 101, yr: 101, yc: 101 };
-      var upd = function (p, s) { p.setAttribute("d", "M -1 -1 L 101 -1 L 101 " + s.yr + " Q 50 " + s.yc + " -1 " + s.yl + " Z"); };
-      // p2 (crema, arriba de todo al final) primero invisible detrás de p1: orden DOM p1 luego p2
-      var out = gsap.timeline({ onComplete: killLoader });
-      out.to([stage], { y: -70, opacity: 0, duration: .4, ease: "power2.in" }, 0);
-      out.to(s1, { yl: -1, yr: -1, duration: .7, ease: "power2.inOut", onUpdate: function () { upd(p1, s1); } }, .12)
-        .to(s1, { yc: -1, duration: .95, ease: "power4.inOut", onUpdate: function () { upd(p1, s1); } }, .12);
-      out.to(s2, { yl: -1, yr: -1, duration: .7, ease: "power2.inOut", onUpdate: function () { upd(p2, s2); } }, .26)
-        .to(s2, { yc: -1, duration: .95, ease: "power4.inOut", onUpdate: function () { upd(p2, s2); } }, .26);
-      // el fondo del loader se vuelve transparente para revelar la página bajo las cortinas
-      out.set(el, { background: "transparent", pointerEvents: "none" }, .3);
+      if (exiting) return;
+      exiting = true;
+      pctEl.textContent = "100%";
+      statusEl.textContent = "¡A COMER!";
+      el.classList.add("is-out");
+      setTimeout(killLoader, 1250);
     }
+  }
+
+  // espera a que React monte, con techo, y sin depender de requestAnimationFrame
+  function waitForApp(done) {
+    if (appReady) { done(); return; }
+    var waited = 0;
+    var iv = setInterval(function () {
+      waited += 100;
+      if (appReady || waited >= LOAD_WAIT) { clearInterval(iv); done(); }
+    }, 100);
   }
 
   /* ============================================================
@@ -551,28 +590,10 @@
 
     }, root);
 
-    return function () { ctx.revert(); };
-  };
+    // el layout todavía se está acomodando (fuentes, imágenes lazy): re-medir
+    FX.refresh();
 
-  /* ============================================================
-     NAV — se esconde al bajar, aparece al subir
-     ============================================================ */
-  FX.navAutoHide = function (header) {
-    if (!hasGsap || rm || !header) return function () {};
-    var last = 0, hidden = false;
-    var show = function () { hidden = false; gsap.to(header, { yPercent: 0, duration: .38, ease: "power3.out", overwrite: "auto" }); };
-    var hide = function () { hidden = true; gsap.to(header, { yPercent: -105, duration: .38, ease: "power3.out", overwrite: "auto" }); };
-    var st = ScrollTrigger.create({
-      start: 0, end: "max",
-      onUpdate: function (self) {
-        var y = self.scroll();
-        if (y < 90) { if (hidden) show(); }
-        else if (y - last > 8 && !hidden) hide();
-        else if (last - y > 8 && hidden) show();
-        last = y;
-      },
-    });
-    return function () { st.kill(); gsap.set(header, { yPercent: 0 }); };
+    return function () { ctx.revert(); };
   };
 
   /* ============================================================

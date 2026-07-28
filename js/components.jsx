@@ -60,7 +60,7 @@ const KIND_IMG = {
   cheers: "assets/horno-fila.jpg",
   tap: "assets/horno-tabla.jpg",
 };
-const CAT_ICON = { salsas: Ic.glass, drinks: Ic.glass };
+const CAT_ICON = { drinks: Ic.glass };
 function Photo({ item, src, kind, alt = "", className = "", style }) {
   const [ld, setLd] = useState(false);
   const url = src || (item && item.img) || (kind && KIND_IMG[kind]) || null;
@@ -102,7 +102,6 @@ function Header({ route, go }) {
   const [open, setOpen] = useState(false);     // mobile menu
   const [scrolled, setScrolled] = useState(false);
   const [bump, setBump] = useState(false);
-  const headRef = useRef(null);
   // páginas con tema claro cartoon (header crema)
   const home = ["#/", "", "#/menu", "#/nosotros", "#/contacto", "#/checkout"].includes(route);
   const count = store.cartCount();
@@ -117,8 +116,6 @@ function Header({ route, go }) {
     io.observe(s);
     return () => io.disconnect();
   }, []);
-  // nav que se esconde al bajar y vuelve al subir (estilo crav)
-  useEffect(() => (window.FX ? FX.navAutoHide(headRef.current) : undefined), []);
   useEffect(() => { setOpen(false); }, [route]);
   useEffect(() => {
     const b = () => { setBump(true); setTimeout(() => setBump(false), 380); };
@@ -127,7 +124,7 @@ function Header({ route, go }) {
   }, []);
 
   return (
-    <header ref={headRef} className={"bfx-head" + (home ? " bfx-header-light" : "") + (scrolled ? " is-scrolled" : "")}>
+    <header className={"bfx-head" + (home ? " bfx-header-light" : "") + (scrolled ? " is-scrolled" : "")}>
       <div className="bfx-head-bar" style={{
         background: home ? undefined : (scrolled ? "rgba(12,12,13,.92)" : "rgba(12,12,13,.75)"),
         backdropFilter: home ? undefined : "blur(12px)",
@@ -350,7 +347,6 @@ function Customizer() {
   const [size, setSize] = useState("single");
   const [medallon, setMedallon] = useState(MEDALLONES[0]);
   const [protein, setProtein] = useState(PROTEINAS[0]);
-  const [papas, setPapas] = useState("clasicas");
   const [extras, setExtras] = useState([]);
   const [qty, setQty] = useState(1);
 
@@ -362,7 +358,7 @@ function Customizer() {
       if (!it) return;
       cbRef.current = d.cb || null; // modo POS: entrega la línea a un callback en vez del carrito
       setItem(it); setSize("single"); setMedallon(MEDALLONES[0]); setProtein(PROTEINAS[0]);
-      setPapas("clasicas"); setExtras([]); setQty(1);
+      setExtras([]); setQty(1);
     };
     window.addEventListener("bf-customize", onOpen);
     return () => window.removeEventListener("bf-customize", onOpen);
@@ -382,7 +378,6 @@ function Customizer() {
   const mods = {
     medallon: isBurger ? medallon : null,
     protein: item.protein ? protein : null,
-    papas: isBurger ? papas : null,
     extras,
   };
   const total = (base + modsTotal(mods)) * qty;
@@ -463,22 +458,8 @@ function Customizer() {
             </Sec>
           )}
 
-          {isBurger && (
-            <Sec label="Sumale una salsa">
-              <div style={{ display: "grid", gap: 8 }}>
-                {PAPAS_UPGRADES.map((p) => (
-                  <button key={p.id} className={"bfx-opt" + (papas === p.id ? " on" : "")} onClick={() => setPapas(p.id)}>
-                    <span className="bfx-tick"><span className="dot" /></span>
-                    <span className="nm">{p.name}</span>
-                    <span className={"pr" + (p.price ? "" : " free")}>{p.price ? "+" + money(p.price) : "—"}</span>
-                  </button>
-                ))}
-              </div>
-            </Sec>
-          )}
-
           <Sec label="Agregados">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }} className="bf-two">
+            <div style={{ display: "grid", gap: 8 }}>
               {EXTRAS.map((e) => {
                 const on = extras.includes(e.id);
                 return (

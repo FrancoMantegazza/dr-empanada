@@ -26,6 +26,9 @@ function Wave({ fill, flip = false, style }) {
       <svg viewBox="0 0 1440 140" preserveAspectRatio="none">
         <path fill={fill} d="M0,86 C220,132 420,36 720,62 C1020,88 1240,28 1440,72 L1440,141 L0,141 Z" />
       </svg>
+      {/* el svg "respira" con un scaleY y su borde recortado deja un hilo de
+          fondo a la vista: esta franja del mismo color lo tapa. */}
+      <span className="bfx-wave-seal" style={{ background: fill }} />
     </div>
   );
 }

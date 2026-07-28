@@ -64,32 +64,14 @@ function isHappyNow(now = new Date()) {
 }
 
 /* ============================================================
-   Agregados / salsas / upgrades (carta real)
+   Agregados / upgrades (carta real)
    ============================================================ */
 const EXTRAS = [
-  { id: "criolla", name: "Salsa criolla", price: 800 },
-  { id: "chimichurri", name: "Chimichurri casero", price: 800 },
-  { id: "picante", name: "Picante de la casa", price: 800 },
-  { id: "alioli", name: "Alioli", price: 800 },
-  { id: "barbacoa", name: "Barbacoa", price: 800 },
   { id: "cheddar-extra", name: "Cheddar fundido aparte", price: 1200 },
-];
-
-const PAPAS_UPGRADES = [
-  { id: "clasicas", name: "Sin salsa (como viene)", price: 0 },
-  { id: "up-criolla", name: "Con salsa criolla", price: 800 },
-  { id: "up-chimi", name: "Con chimichurri casero", price: 800 },
-  { id: "up-picante", name: "Con picante de la casa", price: 800 },
 ];
 
 const MEDALLONES = ["Al horno", "Frita"];
 const PROTEINAS = ["Carne", "Pollo"];
-
-const DIPS = {
-  price: 800,
-  items: ["Salsa criolla", "Chimichurri", "Picante", "Alioli", "Barbacoa"],
-  note: "Precio únicamente delivery — en salón, salsas sin cargo.",
-};
 
 const HAPPY = {
   where: "Sucursal Villa Devoto · Melincué 4399",
@@ -154,19 +136,6 @@ const MENU = [
     ],
   },
   {
-    id: "salsas",
-    name: "Salsas caseras",
-    kicker: "Para mojar el repulgue",
-    layout: "list",
-    items: [
-      { id: "salsa-criolla", name: "Salsa criolla", desc: "Tomate, cebolla y morrón. Fresca y justa de ácido.", price: 800, tags: [] },
-      { id: "salsa-chimi", name: "Chimichurri casero", desc: "Receta de la casa, con orégano y ají molido.", price: 800, tags: [] },
-      { id: "salsa-picante", name: "Picante de la casa", desc: "Para valientes. Avisá si lo querés nuclear.", price: 800, tags: [] },
-      { id: "salsa-alioli", name: "Alioli", desc: "Cremoso, con ajo asado.", price: 800, tags: [] },
-      { id: "salsa-bbq", name: "Barbacoa", desc: "Dulzona y ahumada, ideal para la bondiola.", price: 800, tags: [] },
-    ],
-  },
-  {
     id: "drinks",
     name: "Bebidas",
     kicker: "Para acompañar",
@@ -186,7 +155,6 @@ const PROMO_VIERNES = { price: 27000 };
 const FLAT_ITEMS = MENU.flatMap((c) => c.items.map((i) => ({ ...i, cat: c.id, catName: c.name, draft: !!c.draft })));
 const findItem = (id) => FLAT_ITEMS.find((i) => i.id === id);
 const findExtra = (id) => EXTRAS.find((e) => e.id === id);
-const findPapas = (id) => PAPAS_UPGRADES.find((p) => p.id === id);
 
 /* ---- Reseñas de Google (reales en espíritu, editables) ---- */
 const REVIEWS = [
@@ -282,6 +250,6 @@ const Ic = {
 
 Object.assign(window, {
   BIZ, MENU, FLAT_ITEMS, findItem, REVIEWS, money, Empanada, Cloche, Logo, LogoBadge, Ic, IMG,
-  EXTRAS, PAPAS_UPGRADES, MEDALLONES, PROTEINAS, DIPS, HAPPY, PROMO_VIERNES,
-  findExtra, findPapas, isOpenNow, isHappyNow,
+  EXTRAS, MEDALLONES, PROTEINAS, HAPPY, PROMO_VIERNES,
+  findExtra, isOpenNow, isHappyNow,
 });

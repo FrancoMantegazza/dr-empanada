@@ -151,7 +151,7 @@ function Contacto({ go }) {
 
       {/* info + mapa sobre crema */}
       <section style={{ paddingBottom: "clamp(40px,5vw,70px)" }} aria-label="Dónde estamos">
-        <Wave fill="#1a1611" style={{ background: "#e23d16" }} />
+        <Wave fill="#1a1611" style={{ background: "#f29110" }} />
         <div className="wrap" style={{ paddingTop: "clamp(30px,4vw,60px)" }}>
           <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(24px,4vw,50px)", alignItems: "start" }}>
             <div style={{ display: "grid", gap: 16 }}>

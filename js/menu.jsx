@@ -113,7 +113,6 @@ function MenuPage({ go }) {
             {cat.layout === "taps" && <BeerGrid items={cat.items} />}
             {cat.layout === "list" && <LightList items={cat.items} />}
 
-            {cat.id === "empanadas" && !q && <ExtrasPanel />}
             {cat.id === "promos" && !q && <HappyBanner go={go} />}
           </section>
         ))}
@@ -243,43 +242,6 @@ function LightList({ items }) {
         </Reveal>
       ))}
     </div>
-  );
-}
-
-/* ---------- Agregados ---------- */
-function ExtrasPanel() {
-  return (
-    <Reveal>
-      <div className="bfx-panel" style={{ marginTop: 28 }}>
-        <h3 className="bfx-bubble" style={{ fontSize: 24, margin: "0 0 4px" }}>Salsas & agregados</h3>
-        <p className="bfx-copy" style={{ fontSize: 17, margin: "4px 0 14px", opacity: .75 }}>
-          Los elegís al personalizar tu pedido: tocá el <b>+</b> en cualquier empanada y armala a tu gusto.
-        </p>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {EXTRAS.map((e) => (
-            <span key={e.id} className="bfx-chip2">{e.name} <b>+{money(e.price)}</b></span>
-          ))}
-        </div>
-      </div>
-    </Reveal>
-  );
-}
-
-/* ---------- Dips ---------- */
-function DipsPanel() {
-  return (
-    <Reveal>
-      <div className="bfx-panel" style={{ marginTop: 28 }}>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
-          <h3 className="bfx-bubble" style={{ fontSize: 24, margin: 0 }}>Dips & salsas</h3>
-          <span className="bfx-hand" style={{ fontSize: 19, color: "var(--bfx-red)" }}>{money(DIPS.price)} c/u</span>
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
-          {DIPS.items.map((d) => <span key={d} className="bfx-chip2">{d}</span>)}
-        </div>
-        <p className="bfx-hand" style={{ fontSize: 15, opacity: .5, margin: "12px 0 0", letterSpacing: ".04em" }}>{DIPS.note}</p>
-      </div>
-    </Reveal>
   );
 }
 

@@ -2,7 +2,7 @@
    store.jsx — estado global persistente (carrito, órdenes, auth, stock)
    Persiste en localStorage. Sincroniza entre pestañas con 'storage'
    y dentro de la misma pestaña con un EventTarget.
-   Las líneas del carrito soportan mods: { medallon, papas, extras[], protein }
+   Las líneas del carrito soportan mods: { medallon, extras[], protein }
    ============================================================ */
 
 const LS = {
@@ -35,7 +35,6 @@ function defaultStock() {
 function modsTotal(mods) {
   if (!mods) return 0;
   let t = 0;
-  if (mods.papas) t += (findPapas(mods.papas) || {}).price || 0;
   (mods.extras || []).forEach((id) => { t += (findExtra(id) || {}).price || 0; });
   return t;
 }
@@ -44,7 +43,6 @@ function modsLabel(mods) {
   const parts = [];
   if (mods.medallon && mods.medallon !== MEDALLONES[0]) parts.push(mods.medallon);
   if (mods.protein && mods.protein !== "Carne") parts.push("De " + mods.protein.toLowerCase());
-  if (mods.papas && mods.papas !== "clasicas") { const p = findPapas(mods.papas); if (p) parts.push(p.name); }
   (mods.extras || []).forEach((id) => { const e = findExtra(id); if (e) parts.push("+ " + e.name); });
   return parts.join(" · ");
 }
@@ -53,10 +51,9 @@ const normMods = (mods) => {
   const m = {
     medallon: mods.medallon || null,
     protein: mods.protein || null,
-    papas: mods.papas && mods.papas !== "clasicas" ? mods.papas : null,
     extras: [...(mods.extras || [])].sort(),
   };
-  if (!m.medallon && !m.protein && !m.papas && !m.extras.length) return null;
+  if (!m.medallon && !m.protein && !m.extras.length) return null;
   return m;
 };
 
@@ -262,10 +259,10 @@ const Store = {
     };
     const paidAgo = (mins, method, extra = {}) => ({ paid: true, payMethod: method, paidAt: Date.now() - mins * 60000, ...extra });
     const demo = [
-      mk(4, "recibido", "Julián Pérez", [L("carne-cuchillo", "double", 1, { extras: ["criolla"] }), L("salsa-chimi", "single", 1), L("gaseosa", "single", 2)], "delivery", "mp"),
+      mk(4, "recibido", "Julián Pérez", [L("carne-cuchillo", "double", 1, { extras: ["cheddar-extra"] }), L("pastelito-membrillo", "single", 2), L("gaseosa", "single", 2)], "delivery", "mp"),
       mk(8, "preparacion", "Mesa 3", [L("matambre-pizza", "double", 1), L("humita", "single", 2), L("gaseosa-15", "single", 1)], "salon", "efectivo", { table: 3, by: "cajero" }),
       mk(11, "preparacion", "Mostrador", [L("cheese", "single", 6), L("pastelito-membrillo", "single", 3)], "takeaway", "efectivo"),
-      mk(19, "camino", "Romina Díaz", [L("docena-surtida", "single", 1), L("salsa-criolla", "single", 1)], "delivery", "transferencia"),
+      mk(19, "camino", "Romina Díaz", [L("docena-surtida", "single", 1), L("gaseosa-15", "single", 1)], "delivery", "transferencia"),
       mk(24, "listo", "Mesa 7", [L("vacio", "single", 4), L("provolone", "single", 2), L("limonada", "single", 2)], "salon", "efectivo", { table: 7, by: "cajero" }),
       mk(42, "entregado", "Franco S.", [L("humita", "double", 1), L("pastelito-batata", "single", 3), L("agua", "single", 1)], "takeaway", "transferencia", paidAgo(38, "transferencia")),
       mk(55, "entregado", "Mesa 2", [L("carne-suave", "single", 6), L("caprese", "single", 3), L("gaseosa", "single", 2)], "salon", "efectivo", { table: 2, by: "cajero", ...paidAgo(20, "efectivo", { cashReceived: 30000, change: 2000 }) }),
