@@ -92,7 +92,7 @@ function OpenBadge({ compact = false }) {
       color: open ? "var(--ok)" : "var(--danger)",
     }}>
       <span style={{ width: 8, height: 8, borderRadius: "50%", background: "currentColor", boxShadow: open ? "0 0 0 3px rgba(63,174,107,.2)" : "none" }} />
-      {open ? "Abierto ahora" : "Cerrado"}{!compact && !open && " · Mar–Sáb desde 9:00"}
+      {open ? "Abierto ahora" : "Cerrado"}{!compact && !open && " · Mar–Sáb desde las 12"}
     </span>
   );
 }
@@ -211,7 +211,7 @@ function Footer({ go }) {
         <div className="bfx-footer-info">
           <div>
             <span className="lbl">Dónde</span>
-            <a href="https://maps.google.com/?q=Av.+Boedo+1600+CABA" target="_blank" rel="noopener">{BIZ.address}<br />{BIZ.city}</a>
+            <a href="https://maps.google.com/?q=Melincu%C3%A9+4399+Villa+Devoto+CABA" target="_blank" rel="noopener">{BIZ.address}<br />{BIZ.city}</a>
           </div>
           <div>
             <span className="lbl">Horarios</span>
@@ -233,7 +233,7 @@ function Footer({ go }) {
       <div className="bfx-footer-legal">
         <p>Desde 1989 · Elaboración propia, masa casera y repulgue a mano.</p>
         <p>
-          © {new Date().getFullYear()} Dr. Empanada · Boedo, CABA · El especialista en sabor ·{" "}
+          © {new Date().getFullYear()} Dr. Empanada · Villa Devoto, CABA · El especialista en sabor ·{" "}
           <a href="#/privacidad">Privacidad</a> · <a href="#/admin">Panel ›</a> · Hecho con hambre 🥟
         </p>
       </div>
@@ -421,7 +421,8 @@ function Customizer() {
           </div>
         </div>
 
-        <div className="bfx-modal-body">
+        {/* data-lenis-prevent: sin esto Lenis se come la rueda y el modal no scrollea */}
+        <div className="bfx-modal-body" data-lenis-prevent>
           {item.priceDouble && (
             <Sec label="Cantidad">
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>

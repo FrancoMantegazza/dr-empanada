@@ -53,7 +53,7 @@ function CartDrawer({ go }) {
           </div>
         ) : (
           <>
-            <div className="bfx-cart-body">
+            <div className="bfx-cart-body" data-lenis-prevent>
               {lines.map((l) => (
                 <div key={lineKey(l)} className="bfx-cartline">
                   <div className="thumb">

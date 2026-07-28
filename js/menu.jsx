@@ -47,8 +47,9 @@ function MenuPage({ go }) {
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "22px auto 0" }}>
             Sumá lo que quieras al carrito y pedí online: delivery propio o take away. Al horno o fritas, al mismo precio.
           </p>
-          <div style={{ marginTop: 24, display: "flex", justifyContent: "center", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-            <div style={{ position: "relative" }}>
+          {/* el buscador acompaña el ancho del párrafo de arriba (520px) */}
+          <div style={{ marginTop: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+            <div style={{ position: "relative", width: "min(520px, 100%)" }}>
               <input className="bfx-searchbox" value={query} onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscá… (humita, cuchillo, membrillo)" aria-label="Buscar en el menú" />
               {query && (

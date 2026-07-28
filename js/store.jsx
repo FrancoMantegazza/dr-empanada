@@ -249,7 +249,7 @@ const Store = {
         createdAt: Date.now() - mins * 60000, status,
         lines, subtotal, shipping, total: subtotal + shipping,
         mode, pay, name, phone: mode === "salon" ? "" : "11 5555-" + (1000 + seq),
-        address: mode === "delivery" ? "Av. Boedo " + (1400 + seq * 7) : "",
+        address: mode === "delivery" ? "Melincué " + (4200 + seq * 7) : "",
         bell: mode === "delivery" ? String(2 + (seq % 6)) : "", notes: "",
         paid: false,
         ...extra,

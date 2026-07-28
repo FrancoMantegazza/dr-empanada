@@ -34,7 +34,7 @@ function Nosotros({ go }) {
             Desde 1989 haciendo la empanada que nos gustaría comer.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 28 }}>
-            {[["+35", "años de historia"], ["4.7★", "en Google"], ["13", "sabores"], ["100%", "casero"]].map(([n, l], i) => (
+            {[["+35", "años de historia"], [BIZ.rating + "★", "en Google"], ["13", "sabores"], ["100%", "casero"]].map(([n, l], i) => (
               <div key={l} className="bfx-panel" data-pop data-pop-delay={i * 0.08}
                 style={{ padding: "14px 22px 12px", rotate: ((i % 2 ? 1 : -1) * 2) + "deg", textAlign: "center" }}>
                 <div className="bfx-bubble" style={{ fontSize: 30 }}>{n}</div>
@@ -81,11 +81,11 @@ function Nosotros({ go }) {
         </div>
       </section>
 
-      {/* de boedo para el barrio */}
-      <section style={{ padding: "clamp(70px,9vw,120px) 0 0", textAlign: "center" }} aria-label="De Boedo">
+      {/* de villa devoto para el barrio */}
+      <section style={{ padding: "clamp(70px,9vw,120px) 0 0", textAlign: "center" }} aria-label="De Villa Devoto">
         <div className="wrap" style={{ position: "relative" }}>
           <Sticker name="beer" size={110} data-pop data-idle style={{ position: "absolute", right: "3%", top: -20, "--rot": "10deg" }} />
-          <span className="bfx-badge bfx-badge--red" data-pop data-idle style={{ "--rot": "-6deg" }}>AV. BOEDO 1600</span>
+          <span className="bfx-badge bfx-badge--red" data-pop data-idle style={{ "--rot": "-6deg" }}>MELINCUÉ 4399</span>
           <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 18 }}>
             <span data-split="chars" style={{ display: "block" }}>DESDE 1989,</span>
             <span data-split="chars" style={{ display: "block" }}><span className="ylw">CON HAMBRE.</span></span>
@@ -93,7 +93,7 @@ function Nosotros({ go }) {
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0" }}>
             Arrancamos con un horno, una masa casera y cero vueltas. Hoy servimos en el salón, llevamos con delivery propio
             y horneamos todos los días menos los lunes. Docenas surtidas para juntadas, docena en promo los viernes y
-            promo mediodía de martes a domingo.
+            promo mediodía de martes a sábado.
           </p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 30, flexWrap: "wrap" }}>
             <a href={"https://instagram.com/" + BIZ.ig} target="_blank" rel="noopener" className="bfx-pill-ylw" style={{ fontSize: 18 }}>
@@ -156,7 +156,7 @@ function Contacto({ go }) {
           <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(24px,4vw,50px)", alignItems: "start" }}>
             <div style={{ display: "grid", gap: 16 }}>
               {[
-                ["Dónde", BIZ.address, BIZ.city, "https://www.google.com/maps/search/?api=1&query=Av.+Boedo+1600+CABA"],
+                ["Dónde", BIZ.address, BIZ.city, "https://www.google.com/maps/search/?api=1&query=Melincu%C3%A9+4399+Villa+Devoto+CABA"],
                 ["WhatsApp", BIZ.phoneDisplay, "Pedidos y consultas", waLink("¡Hola Dr. Empanada! Tengo una consulta 🥟")],
                 ["Instagram", "@" + BIZ.ig, "Novedades y promos", "https://instagram.com/" + BIZ.ig],
               ].map(([t, m, s, href], i) => (
@@ -181,7 +181,7 @@ function Contacto({ go }) {
             <div className="bfx-stickerframe" data-pop style={{ rotate: "-.8deg" }}>
               <iframe
                 title="Mapa Dr. Empanada"
-                src="https://maps.google.com/maps?q=Av.%20Boedo%201600%2C%20CABA&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=Melincu%C3%A9%204399%2C%20Villa%20Devoto%2C%20CABA&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 style={{ border: 0, width: "100%", height: "100%", minHeight: 520 }}
                 loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
             </div>

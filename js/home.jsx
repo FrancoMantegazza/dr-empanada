@@ -72,7 +72,7 @@ function Home({ go }) {
   const happy = isHappyNow();
 
   const marqueeMsgs = [
-    "Promo mediodía · mar a dom · 11 a 15 hs", "Delivery propio en Boedo",
+    "Promo mediodía · mar a sáb · 12 a 14:30", "Delivery propio en Villa Devoto",
     "Al horno o fritas, como quieras", "13 sabores + pastelitos",
     "Viernes docena en promo", "Desde 1989 · El especialista en sabor",
   ];
@@ -84,11 +84,11 @@ function Home({ go }) {
   ];
 
   const barrios = [
-    { n: "BOEDO", img: "assets/horno-tabla.jpg", rot: -4 },
-    { n: "ALMAGRO", img: "assets/tabla-carne.jpg", rot: 3 },
-    { n: "SAN CRISTÓBAL", img: "assets/empanadas/caprese.jpg", rot: -3 },
-    { n: "CABALLITO", img: "assets/promo-docena.jpg", rot: 5 },
-    { n: "PQUE. PATRICIOS", img: "assets/empanadas/humita.jpg", rot: -6 },
+    { n: "VILLA DEVOTO", img: "assets/horno-tabla.jpg", rot: -4 },
+    { n: "VILLA DEL PARQUE", img: "assets/tabla-carne.jpg", rot: 3 },
+    { n: "VILLA PUEYRREDÓN", img: "assets/empanadas/caprese.jpg", rot: -3 },
+    { n: "MONTE CASTRO", img: "assets/promo-docena.jpg", rot: 5 },
+    { n: "SANTA RITA", img: "assets/empanadas/humita.jpg", rot: -6 },
   ];
 
   const sabores = MENU.find((c) => c.id === "empanadas").items.slice(0, 6);
@@ -191,11 +191,11 @@ function Home({ go }) {
             <span data-split="chars" style={{ display: "block" }}><span className="soft">SE SIENTE</span> BIEN</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "24px auto 0" }}>
-            Ingredientes de verdad, masa casera y una parada obligada en Av. Boedo 1600. Vení al salón, pedí take away o delivery propio.
+            Ingredientes de verdad, masa casera y una parada obligada en Melincué 4399. Vení al salón, pedí take away o delivery propio.
           </p>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 30, position: "relative", zIndex: 3 }}>
-            {["100% caseras", "Repulgue a mano", "Al horno o fritas", "13 sabores", "Delivery propio", "Promo mediodía 11–15", "4.7★ en Google"].map((c, i) => (
+            {["100% caseras", "Repulgue a mano", "Al horno o fritas", "13 sabores", "Delivery propio", "Promo mediodía 12–14:30", "4.4★ en Google"].map((c, i) => (
               <span key={c} className={"bfx-chip" + (i % 3 === 0 ? " bfx-chip--solid" : "")} data-pop data-pop-delay={i * 0.06}>{c}</span>
             ))}
           </div>
@@ -216,7 +216,7 @@ function Home({ go }) {
 
       {/* ================= FOTO FULL (parallax) ================= */}
       <div style={{ position: "relative" }}>
-        <Wave fill="#f2910f" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
+        <Wave fill="#191510" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
         <div style={{ height: "80vh", overflow: "hidden", position: "relative" }}>
           <img data-float=".08" src="assets/horno-fila.jpg" alt="Empanadas recién salidas del horno"
             loading="lazy" style={{ width: "100%", height: "114%", objectFit: "cover" }} />
@@ -246,7 +246,7 @@ function Home({ go }) {
       </section>
 
       {/* ================= DELIVERY (mostaza) ================= */}
-      <section className="bfx-mustardsec" data-path-scene style={{ padding: "clamp(70px,9vw,120px) 0 clamp(90px,10vw,150px)", overflow: "clip" }} aria-label="Delivery por Boedo y alrededores">
+      <section className="bfx-mustardsec" data-path-scene style={{ padding: "clamp(70px,9vw,120px) 0 clamp(90px,10vw,150px)", overflow: "clip" }} aria-label="Delivery por Villa Devoto y alrededores">
         {/* ruta punteada + moto */}
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
           {/* desktop: serpentina horizontal */}
@@ -267,7 +267,7 @@ function Home({ go }) {
             <span data-split="chars" style={{ display: "block" }}>A TU PUERTA</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, marginTop: 22, color: "#4a2c00" }}>
-            Salen calentitas del horno y llegan calentitas a tu casa: repartidores propios, sin apps de por medio. ¿Estás cerca? Pasá a buscarlas por Av. Boedo 1600.
+            Salen calentitas del horno y llegan calentitas a tu casa: repartidores propios, sin apps de por medio. ¿Estás cerca? Pasá a buscarlas por Melincué 4399.
           </p>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(20px,3vw,40px)", justifyContent: "center", marginTop: "clamp(40px,5vw,70px)" }}>
@@ -288,12 +288,12 @@ function Home({ go }) {
         <div className="wrap" style={{ textAlign: "center", paddingTop: "clamp(50px,6vw,90px)", position: "relative" }}>
           <Sticker name="burger" size={120} data-pop data-idle style={{ position: "absolute", right: "4%", top: -20, "--rot": "12deg" }} />
           <div className="bfx-kicker" data-pop style={{ color: "#f6e8d2" }}>LA VITRINA · ELABORACIÓN PROPIA</div>
-          <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 16, color: "#f2910f" }}>
+          <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 16, color: "#f29211" }}>
             <span data-split="chars" style={{ display: "block" }}>13 SABORES,</span>
             <span data-split="chars" style={{ display: "block" }}>SIEMPRE CALENTITOS.</span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 560, margin: "22px auto 0", color: "#f6e8d2" }}>
-            De la carne cuchillo a la humita cremosa, todas con masa casera y repulgue a mano. En la promo del mediodía (mar a dom, 11 a 15) la docena clásica sale {money(24000)}.
+            De la carne cuchillo a la humita cremosa, todas con masa casera y repulgue a mano. En la promo del mediodía (mar a sáb, 12 a 14:30) la docena clásica sale {money(24000)}.
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(215px, 1fr))", gap: 20, marginTop: "clamp(40px,5vw,64px)", textAlign: "left" }}>
@@ -333,7 +333,7 @@ function Home({ go }) {
             <span data-split="chars" style={{ display: "block" }}><span className="ylw">AHORA.</span></span>
           </h2>
           <p className="bfx-copy" data-split="lines" style={{ maxWidth: 520, margin: "24px auto 34px" }}>
-            Armá tu pedido online en un minuto: elegís los sabores, armás tu docena y te avisamos cuando sale del horno. {isOpenNow() ? "Estamos abiertos ahora mismo." : "Abrimos de martes a sábado desde las 9."}
+            Armá tu pedido online en un minuto: elegís los sabores, armás tu docena y te avisamos cuando sale del horno. {isOpenNow() ? "Estamos abiertos ahora mismo." : "Abrimos de martes a sábado desde las 12."}
           </p>
           <a href="#/menu" className="bfx-blob" data-squash style={{ fontSize: "clamp(26px,3.2vw,40px)" }}>Pedir online →</a>
 
@@ -349,7 +349,7 @@ function Home({ go }) {
             ))}
           </div>
           <div className="bfx-hand" style={{ marginTop: 22, fontSize: 19, textTransform: "uppercase", letterSpacing: ".14em", opacity: .7 }}>
-            4.7★ · {BIZ.reviewsCount} reseñas en Google
+            {BIZ.rating}★ · {BIZ.reviewsCount} reseñas en Google
           </div>
         </div>
       </section>

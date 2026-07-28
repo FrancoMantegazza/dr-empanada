@@ -8,17 +8,19 @@ const BIZ = {
   suffix: "",
   tagline: "El especialista en sabor",
   since: 1989,
-  address: "Av. Boedo 1600",
-  city: "Boedo · CABA",
-  phoneDisplay: "11 6195-3406",
-  phoneE164: "5491161953406",          // +54 9 11 6195-3406
-  rating: 4.7,
-  reviewsCount: 353,
+  address: "Melincué 4399",
+  city: "Villa Devoto · CABA",
+  mapsQuery: "Melincué 4399, Villa Devoto, CABA",
+  phoneDisplay: "11 4639-5578",
+  phoneE164: "541146395578",           // +54 11 4639-5578
+  rating: 4.4,
+  reviewsCount: 230,
   ig: "drempanada.arg",
   hours: [
     { d: "Lunes", h: "Cerrado", closed: true },
-    { d: "Mar – Sáb", h: "09:00 – 00:00" },
-    { d: "Domingo", h: "19:00 – 00:00" },
+    { d: "Mar – Jue", h: "12:00 – 14:30 · 20:00 – 23:00" },
+    { d: "Vie – Sáb", h: "12:00 – 14:30 · 20:00 – 23:30" },
+    { d: "Domingo", h: "20:00 – 23:00" },
   ],
   // datos de pago (editables a mano)
   pay: {
@@ -36,18 +38,29 @@ const money = (n) =>
 const IMG = (id, w = 900) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
-/* ---- Horarios en vivo ---- */
-// dom=0 · lun=1 (cerrado) · mar–sáb 09–00 · dom 19–00
+/* ---- Horarios en vivo ----
+   Dos turnos por día (mediodía y noche), en minutos desde las 00:00.
+   dom=0 · lun=1 (cerrado) · mar–jue 12–14:30 y 20–23 · vie–sáb 12–14:30 y
+   20–23:30 · dom sólo noche 20–23. */
+const SHIFTS = {
+  0: [[20 * 60, 23 * 60]],                                  // domingo
+  1: [],                                                    // lunes cerrado
+  2: [[12 * 60, 14 * 60 + 30], [20 * 60, 23 * 60]],
+  3: [[12 * 60, 14 * 60 + 30], [20 * 60, 23 * 60]],
+  4: [[12 * 60, 14 * 60 + 30], [20 * 60, 23 * 60]],
+  5: [[12 * 60, 14 * 60 + 30], [20 * 60, 23 * 60 + 30]],    // viernes
+  6: [[12 * 60, 14 * 60 + 30], [20 * 60, 23 * 60 + 30]],    // sábado
+};
+const minutesOf = (now) => now.getHours() * 60 + now.getMinutes();
+
 function isOpenNow(now = new Date()) {
-  const d = now.getDay(), h = now.getHours();
-  if (d === 1) return false;
-  if (d === 0) return h >= 19;
-  return h >= 9;
+  const m = minutesOf(now);
+  return (SHIFTS[now.getDay()] || []).some(([a, b]) => m >= a && m < b);
 }
-// promo mediodía: martes a domingo, 11 a 15 hs
+// promo mediodía: acompaña el turno del mediodía, martes a sábado
 function isHappyNow(now = new Date()) {
-  const d = now.getDay(), h = now.getHours();
-  return d !== 1 && h >= 11 && h < 15;
+  const d = now.getDay(), m = minutesOf(now);
+  return d >= 2 && d <= 6 && m >= 12 * 60 && m < 14 * 60 + 30;
 }
 
 /* ============================================================
@@ -79,8 +92,8 @@ const DIPS = {
 };
 
 const HAPPY = {
-  where: "Sucursal Boedo · Av. Boedo 1600",
-  when: "Martes a domingo · 11 a 15 hs",
+  where: "Sucursal Villa Devoto · Melincué 4399",
+  when: "Martes a sábado · 12 a 14:30 hs",
   deals: [
     { name: "Docena clásica", price: 24000 },
     { name: "Media docena clásica", price: 12500 },
@@ -177,7 +190,7 @@ const findPapas = (id) => PAPAS_UPGRADES.find((p) => p.id === id);
 
 /* ---- Reseñas de Google (reales en espíritu, editables) ---- */
 const REVIEWS = [
-  { name: "Martín G.", stars: 5, when: "hace 2 semanas", text: "Las mejores empanadas de Boedo. La de carne cuchillo es un escándalo y la masa se nota casera. Atención de 10." },
+  { name: "Martín G.", stars: 5, when: "hace 2 semanas", text: "Las mejores empanadas de Villa Devoto. La de carne cuchillo es un escándalo y la masa se nota casera. Atención de 10." },
   { name: "Caro P.", stars: 5, when: "hace 1 mes", text: "Pedí por delivery propio y llegaron calentitas y rapidísimo. La de matambre a la pizza es otra cosa." },
   { name: "Lucas D.", stars: 4, when: "hace 1 mes", text: "Muy ricas, el repulgue se nota hecho a mano. Pedimos la docena surtida entre amigos. Volvería." },
   { name: "Sofía R.", stars: 5, when: "hace 3 semanas", text: "La de humita es la mejor que probé en CABA. Encima los viernes la docena está en promo. Recomendadísimo." },

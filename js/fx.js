@@ -56,7 +56,7 @@
     fries: stk(
       // pastelito frito cuadrado con dulce
       '<g transform="rotate(8 50 50)">' +
-      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#f2910f" stroke="#fff" stroke-width="5"/>' +
+      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#f29211" stroke="#fff" stroke-width="5"/>' +
       '<path d="M18 40 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
       '<path d="M18 60 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
       '<circle cx="50" cy="50" r="13" fill="#c4432b" stroke="#fff" stroke-width="4"/>' +
@@ -89,13 +89,13 @@
       // empanada con repulgue (glifo estrella de la marca)
       '<path d="M8 66 C8 38 27 22 50 22 C73 22 92 38 92 66 Z" fill="#e8a51e" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>' +
       '<path d="M14 60 C20 44 33 36 50 36 C67 36 80 44 86 60" fill="none" stroke="#c98a10" stroke-width="4" stroke-linecap="round"/>' +
-      '<circle cx="17" cy="47" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="26" cy="36" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="38" cy="28.5" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="50" cy="26" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="62" cy="28.5" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="74" cy="36" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="83" cy="47" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="17" cy="47" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="26" cy="36" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="38" cy="28.5" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="50" cy="26" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="62" cy="28.5" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="74" cy="36" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="83" cy="47" r="4.5" fill="#f29211" stroke="#fff" stroke-width="3"/>' +
       '<path d="M34 50 q6 6 12 0 M54 50 q6 6 12 0" stroke="#8a5a10" stroke-width="4" fill="none" stroke-linecap="round"/>' +
       '<path d="M10 66 h80" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'
     ),
@@ -605,9 +605,38 @@
     gsap.delayedCall(.6, cover);
   };
 
+  /* ---------- refresco de ScrollTrigger ante cambios de alto ----------
+     Casi todas las fotos son loading="lazy" y sin alto reservado: al
+     cargarse la página crece y todo lo de abajo se corre. Los start/end
+     que ScrollTrigger cacheó quedan desfasados hacia arriba, así que al
+     llegar a una sección el scrub ya está en progress=1 (la moto, por
+     ejemplo, quedaba estacionada al final del recorrido, fuera de
+     pantalla). Refrescamos —con debounce— cada vez que el documento
+     cambia de alto o termina de cargar una imagen. */
+  function watchLayout() {
+    if (!hasGsap) return;
+    var t = null, lastH = 0;
+    var ping = function () {
+      clearTimeout(t);
+      t = setTimeout(function () { ScrollTrigger.refresh(); }, 180);
+    };
+    window.addEventListener("load", ping);
+    // los load de <img> no burbujean: hay que escucharlos en captura
+    document.addEventListener("load", function (e) {
+      if (e.target && e.target.tagName === "IMG") ping();
+    }, true);
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () {
+        var h = document.documentElement.scrollHeight;
+        if (Math.abs(h - lastH) > 4) { lastH = h; ping(); }
+      }).observe(document.body);
+    }
+  }
+
   /* ---------- arranque ---------- */
   function start() {
     initLenis();
+    watchLayout();
     runLoader();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);

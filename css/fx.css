@@ -16,7 +16,9 @@
   --bfx-red:     #17130e;   /* negro de marca (acento display) */
   --bfx-red-2:   #000000;
   --bfx-mustard: #f2900d;   /* naranja de marca Dr. Empanada */
-  --bfx-yellow:  #f2910f;
+  --bfx-yellow:  #f29211;
+  --bfx-brand:   #f29211;   /* naranja de marca (oficial) */
+  --bfx-night:   #1c1813;   /* negro de marca (oficial) */
   --bfx-green:   #60a905;
   --bfx-bordo:   #241c12;   /* marrón profundo (la vitrina) */
   --bfx-deep:    #2b1403;   /* marrón casi negro */
@@ -30,7 +32,7 @@ body.bfx-home{ background: var(--bfx-cream); color: var(--bfx-ink); }
 /* Las superficies blancas fijan su propia tinta oscura: si no, heredan la
    tinta clara del body y su contenido queda invisible. */
 .bfx-polaroid, .bfx-panel, .bfx-citycard, .bfx-stickerframe,
-.bfx-card, .bfx-menucard, .bfx-cartline, .bfx-cart-foot, .bfx-beercard{
+.bfx-card, .bfx-menucard, .bfx-beercard{
   color: var(--bfx-deep);
 }
 /* .bfx-copy y .bfx-kicker fijan tinta clara por su cuenta, así que dentro de
@@ -119,10 +121,10 @@ body.bfx-home .grain{ opacity:.35; }
   position: relative;
   display: inline-flex; align-items:center; justify-content:center;
   font-family: var(--bfx-modak); text-transform: uppercase;
-  font-size: clamp(20px, 2.4vw, 30px); line-height:1; color:#f2910f;
+  font-size: clamp(20px, 2.4vw, 30px); line-height:1; color:#f29211;
   background: var(--bfx-red);
   padding: .95em 1.9em .8em;
-  border: 4px solid #f2910f;
+  border: 4px solid #f29211;
   border-radius: 49% 51% 47% 53% / 61% 59% 41% 39%;
   box-shadow: 0 18px 40px -14px rgba(242,145,15,.55);
   cursor: pointer;
@@ -460,8 +462,8 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 .bfx-navcta{
   font-family: var(--bfx-round); font-weight: 800; font-size: 15px;
   letter-spacing: .02em; text-transform: uppercase;
-  color: #f2910f; background: var(--bfx-red);
-  border: 2.5px solid #f2910f; border-radius: 100px;
+  color: #f29211; background: var(--bfx-red);
+  border: 2.5px solid #f29211; border-radius: 100px;
   padding: 9px 20px; white-space: nowrap;
   box-shadow: 0 10px 22px -10px rgba(242,145,15,.6);
   transition: scale .18s var(--ease-out), background .15s, box-shadow .2s;
@@ -473,8 +475,8 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 .bfx-headbtn{
   position: relative; display: grid; place-items: center;
   width: 46px; height: 46px; border-radius: 50%;
-  background: var(--bfx-red); color: #f2910f;
-  border: 2.5px solid #f2910f;
+  background: var(--bfx-red); color: #f29211;
+  border: 2.5px solid #f29211;
   transition: scale .18s var(--ease-out), border-color .15s, background .15s;
   cursor: pointer;
 }
@@ -482,7 +484,7 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 .bfx-headbtn:active{ scale: .95; }
 .bfx-headbtn .badge{
   position: absolute; top: -5px; right: -5px; min-width: 21px; height: 21px; padding: 0 5px;
-  border-radius: 20px; background: #f2910f; color: var(--bfx-deep);
+  border-radius: 20px; background: #f29211; color: var(--bfx-deep);
   font-family: var(--bfx-round); font-weight: 800; font-size: 12px;
   display: grid; place-items: center; border: 2.5px solid var(--bfx-cream);
 }
@@ -510,55 +512,65 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 @keyframes bfx-route-in{ from{ opacity:0; transform: translateY(16px); } to{ opacity:1; transform:none; } }
 
 /* ============================================================
-   CARRITO — re-skin cartoon (crema, sticker)
+   CARRITO — paleta de marca: naranja #f29211 sobre negro #1c1813.
+   El blanco queda sólo para detalles puntuales (nunca como fondo).
    ============================================================ */
 .bfx-cart{
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 71;
   width: min(430px, 94vw);
-  background: var(--bfx-cream);
-  border-left: 3px solid #fff;
-  box-shadow: -20px 0 60px -20px rgba(43,20,3,.5);
+  background: var(--bfx-night);
+  border-left: 3px solid var(--bfx-brand);
+  box-shadow: -20px 0 60px -20px rgba(0,0,0,.75);
   display: flex; flex-direction: column;
   transition: transform .35s var(--ease-drawer);
 }
 .bfx-cart-head{
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 18px 20px; background: var(--bfx-red); color: #fff;
+  padding: 18px 20px;
+  background: var(--bfx-brand); color: var(--bfx-night);
 }
-.bfx-cart-head h2{ font-family: var(--bfx-modak); font-size: 26px; margin: 0; line-height: 1; }
+/* tinta plena, sin contorno: el Modak con stroke se volvía ilegible */
+.bfx-cart-head h2{
+  font-family: var(--bfx-modak); font-size: 26px; margin: 0; line-height: 1;
+  color: var(--bfx-night); -webkit-text-stroke: 0; text-shadow: none;
+}
 .bfx-cart-head .count{
   font-family: var(--bfx-round); font-weight: 700; font-size: 13px;
-  background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.6);
+  background: rgba(28,24,19,.16); border: 2px solid rgba(28,24,19,.45);
+  color: var(--bfx-night);
   border-radius: 100px; padding: 3px 10px;
 }
 .bfx-cart-close{
   width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
-  background: rgba(255,255,255,.16); border: 2px solid rgba(255,255,255,.5); color: #fff;
+  background: var(--bfx-night); border: 2px solid var(--bfx-night); color: var(--bfx-brand);
   transition: scale .15s, background .15s; cursor: pointer;
 }
-.bfx-cart-close:hover{ scale: 1.08; background: rgba(255,255,255,.28); }
-.bfx-cart-body{ flex: 1; overflow-y: auto; padding: 14px 16px; }
+.bfx-cart-close:hover{ scale: 1.08; background: #000; }
+.bfx-cart-body{ flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 14px 16px; }
 .bfx-cartline{
   display: flex; gap: 12px; padding: 12px; margin-bottom: 12px;
-  background: #fff; border-radius: 16px;
-  box-shadow: 0 10px 24px -14px rgba(43,20,3,.3);
+  background: rgba(242,146,17,.07);
+  border: 2px solid rgba(242,146,17,.3);
+  border-radius: 16px;
+  color: var(--bfx-ink);
 }
-.bfx-cartline .thumb{ width: 66px; height: 66px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: var(--bfx-cream); }
+.bfx-cartline .thumb{ width: 66px; height: 66px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: #000; }
 .bfx-cartline .thumb img{ width: 100%; height: 100%; object-fit: cover; }
-.bfx-cartline .nm{ font-family: var(--bfx-modak); color: var(--bfx-red); font-size: 19px; line-height: 1; }
-.bfx-cartline .sub{ font-family: var(--bfx-mouse); font-size: 15px; letter-spacing: .02em; color: rgba(43,20,3,.6); margin-top: 3px; }
-.bfx-cartline .lt{ font-family: var(--bfx-round); font-weight: 800; font-size: 17px; color: var(--bfx-deep); }
-/* vive dentro de la tarjeta blanca del carrito, así que sigue en claro */
-.bfx-qty{ display: inline-flex; align-items: center; background: #f2ece0; border: 2px solid rgba(43,20,3,.12); border-radius: 100px; }
-.bfx-qty button{ width: 32px; height: 32px; display: grid; place-items: center; background: none; border: none; color: var(--bfx-deep); cursor: pointer; transition: color .15s; }
-.bfx-qty button:hover{ color: var(--bfx-red); }
-.bfx-qty span{ font-family: var(--bfx-round); font-weight: 800; width: 26px; text-align: center; }
-.bfx-cartline .rm{ background: none; border: none; color: rgba(43,20,3,.35); cursor: pointer; transition: color .15s; flex-shrink: 0; }
-.bfx-cartline .rm:hover{ color: var(--bfx-red); }
+.bfx-cartline .nm{ font-family: var(--bfx-modak); color: var(--bfx-brand); font-size: 19px; line-height: 1; }
+.bfx-cartline .sub{ font-family: var(--bfx-mouse); font-size: 15px; letter-spacing: .02em; color: rgba(246,232,210,.6); margin-top: 3px; }
+.bfx-cartline .lt{ font-family: var(--bfx-round); font-weight: 800; font-size: 17px; color: var(--bfx-ink); }
+.bfx-qty{ display: inline-flex; align-items: center; background: rgba(242,146,17,.12); border: 2px solid rgba(242,146,17,.42); border-radius: 100px; }
+.bfx-qty button{ width: 32px; height: 32px; display: grid; place-items: center; background: none; border: none; color: var(--bfx-brand); cursor: pointer; transition: color .15s; }
+.bfx-qty button:hover{ color: #fff; }
+.bfx-qty span{ font-family: var(--bfx-round); font-weight: 800; width: 26px; text-align: center; color: var(--bfx-ink); }
+.bfx-cartline .rm{ background: none; border: none; color: rgba(246,232,210,.4); cursor: pointer; transition: color .15s; flex-shrink: 0; }
+.bfx-cartline .rm:hover{ color: var(--bfx-brand); }
 .bfx-cart-foot{
   padding: 18px 20px calc(18px + env(safe-area-inset-bottom, 0px));
-  background: #fff; border-top: 2px dashed rgba(43,20,3,.15);
+  background: var(--bfx-night); color: var(--bfx-ink);
+  border-top: 2px dashed rgba(242,146,17,.38);
 }
+.bfx-cart-foot .bfx-bubble{ color: var(--bfx-brand); -webkit-text-stroke: 0; }
 /* el drawer es oscuro: el vacío va en tinta clara */
 .bfx-cart-empty{ flex: 1; display: grid; place-items: center; padding: 30px; text-align: center; color: var(--bfx-ink); }
 .bfx-cart-empty .bfx-bubble{ color: var(--bfx-ink); -webkit-text-stroke: 0; }
@@ -566,7 +578,7 @@ header:not(.bfx-header-light) .bfx-navlink:hover{ color: var(--orange); backgrou
 /* ---------- páginas claras (menú / nosotros / contacto) ---------- */
 .bfx-page-hero{ padding: 120px 0 30px; text-align:center; }
 .bfx-searchbox{
-  width: min(460px, 100%);
+  width: 100%;
   padding: 15px 46px 13px 22px;
   border-radius: 100px; border: 3px solid rgba(43,20,3,.15);
   background: #fff; color: var(--bfx-deep);
@@ -769,11 +781,18 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 .bfx-modal-head img{ width:100%; height:100%; object-fit: cover; display:block; }
 .bfx-modal-head .veil{ position:absolute; inset:0; background: linear-gradient(to top, var(--bfx-cream) 3%, rgba(43,20,3,.12) 58%, rgba(43,20,3,.34)); }
 .bfx-modal-head .ttl{ position:absolute; left: 22px; right: 70px; bottom: 12px; }
+/* el modal es oscuro: el nombre iba en tinta casi negra sobre la foto
+   velada y no se leía. Naranja de marca + sombra dura para despegarlo. */
 .bfx-modal-head .ttl h2{
   font-family: var(--bfx-modak); font-size: 34px; line-height:.9; margin:0;
-  color: var(--bfx-red); -webkit-text-stroke:.04em #fff; paint-order: stroke fill;
+  color: var(--bfx-brand); -webkit-text-stroke:0;
+  text-shadow: 0 2px 0 rgba(0,0,0,.65), 0 0 18px rgba(0,0,0,.5);
 }
-.bfx-modal-head .ttl p{ font-family: var(--bfx-mouse); font-size: 17px; letter-spacing:.02em; color: var(--bfx-deep); margin: 6px 0 0; opacity:.85; }
+.bfx-modal-head .ttl p{
+  font-family: var(--bfx-mouse); font-size: 17px; letter-spacing:.02em;
+  color: var(--bfx-ink); margin: 6px 0 0; opacity:1;
+  text-shadow: 0 1px 3px rgba(0,0,0,.75);
+}
 .bfx-modal-close{
   position:absolute; top: 14px; right: 14px; z-index:2;
   width: 42px; height:42px; border-radius:50%;
@@ -783,9 +802,10 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 }
 .bfx-modal-close:hover{ scale:1.08; color: var(--bfx-red); border-color: var(--bfx-red); }
 .bfx-modal-close:active{ scale:.94; }
-.bfx-modal-body{ flex:1; overflow-y:auto; padding: 20px 22px 10px; }
+.bfx-modal-body{ flex:1; overflow-y:auto; overscroll-behavior: contain; padding: 20px 22px 10px; }
 .bfx-modal-foot{
-  flex-shrink:0; background:#fff; border-top: 2px dashed rgba(43,20,3,.15);
+  flex-shrink:0; background: var(--bfx-night); color: var(--bfx-ink);
+  border-top: 2px dashed rgba(242,146,17,.38);
   padding: 14px 20px calc(14px + env(safe-area-inset-bottom,0px));
   display:flex; align-items:center; gap:12px;
 }
@@ -793,7 +813,7 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 /* ---------- section label ---------- */
 .bfx-seclabel{
   font-family: var(--bfx-mouse); font-size: 16px; letter-spacing:.12em; text-transform:uppercase;
-  color: var(--bfx-red); margin: 0 0 10px;
+  color: var(--bfx-brand); margin: 0 0 10px;
 }
 
 /* ---------- option rows (radios / checks) ---------- */
@@ -854,10 +874,11 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 }
 
 /* ---------- qty box (footer modal) ---------- */
-.bfx-qtybox{ display:inline-flex; align-items:center; background: var(--bfx-cream); border: 2.5px solid rgba(43,20,3,.14); border-radius: 100px; flex-shrink:0; }
-.bfx-qtybox button{ width:42px; height:44px; display:grid; place-items:center; background:none; border:none; color: var(--bfx-deep); cursor:pointer; transition: color .15s; }
-.bfx-qtybox button:hover{ color: var(--bfx-red); }
-.bfx-qtybox span{ font-family: var(--bfx-round); font-weight:800; width:30px; text-align:center; font-size: 18px; }
+/* vive en el pie oscuro del modal: tinta naranja, no marrón sobre marrón */
+.bfx-qtybox{ display:inline-flex; align-items:center; background: rgba(242,146,17,.12); border: 2.5px solid rgba(242,146,17,.42); border-radius: 100px; flex-shrink:0; }
+.bfx-qtybox button{ width:42px; height:44px; display:grid; place-items:center; background:none; border:none; color: var(--bfx-brand); cursor:pointer; transition: color .15s; }
+.bfx-qtybox button:hover{ color: #fff; }
+.bfx-qtybox span{ font-family: var(--bfx-round); font-weight:800; width:30px; text-align:center; font-size: 18px; color: var(--bfx-ink); }
 
 /* ---------- qty chip (resumen) ---------- */
 .bfx-qtychip{ min-width:28px; height:28px; padding:0 7px; border-radius:8px; background: var(--bfx-red); color:#fff; font-family: var(--bfx-round); font-weight:800; font-size:14px; display:grid; place-items:center; flex-shrink:0; }
