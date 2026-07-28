@@ -97,28 +97,6 @@ function OpenBadge({ compact = false }) {
   );
 }
 
-function AnnouncementBar() {
-  const happy = isHappyNow();
-  const msgs = [
-    happy ? "Promo mediodía activa · docenas a precio especial hasta las 15" : "Promo mediodía · mar a dom · 11 a 15 hs",
-    "Delivery propio en Boedo y alrededores",
-    "Al horno o fritas, al mismo precio",
-    "Viernes docena en promo",
-  ];
-  const row = [...msgs, ...msgs, ...msgs];
-  return (
-    <div className="annbar">
-      <div style={{ display: "flex", whiteSpace: "nowrap", animation: "bf-marquee 30s linear infinite", padding: "7px 0", width: "max-content" }}>
-        {row.map((m, i) => (
-          <span key={i} style={{ padding: "0 26px", display: "inline-flex", alignItems: "center", gap: 26 }}>
-            {m} <span style={{ opacity: .45 }}>✦</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Header({ route, go }) {
   const store = useStore();
   const [open, setOpen] = useState(false);     // mobile menu
@@ -150,20 +128,24 @@ function Header({ route, go }) {
 
   return (
     <header ref={headRef} className={"bfx-head" + (home ? " bfx-header-light" : "") + (scrolled ? " is-scrolled" : "")}>
-      {!scrolled && <AnnouncementBar />}
       <div className="bfx-head-bar" style={{
         background: home ? undefined : (scrolled ? "rgba(12,12,13,.92)" : "rgba(12,12,13,.75)"),
         backdropFilter: home ? undefined : "blur(12px)",
         borderBottom: home ? undefined : ("1px solid " + (scrolled ? "var(--line-dark)" : "transparent")),
       }}>
-        <div className="wrap" style={{ height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-          <a href="#/" aria-label="Inicio" className="bfx-logolink" style={{ flexShrink: 0, display: "flex" }}><LogoBadge fontSize={8.2} /></a>
-
+        {/* Orden del DOM: nav · logo · acciones.
+            Desktop: la nav queda a la izquierda y el sello se centra en
+            absoluto (ver .bfx-logolink en fx.css), sobresaliendo de la barra.
+            Mobile: la nav está oculta, así que el sello cae primero = a la
+            izquierda, como siempre. */}
+        <div className="wrap" style={{ height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, position: "relative" }}>
           <nav className="bf-desktop-nav" style={{ display: "flex", gap: 4, alignItems: "center" }}>
             {links.map(([href, label]) => (
               <a key={href} href={href} className={"bfx-navlink" + (route === href ? " on" : "")}>{label}</a>
             ))}
           </nav>
+
+          <a href="#/" aria-label="Inicio" className="bfx-logolink" style={{ flexShrink: 0, display: "flex" }}><LogoBadge fontSize={8.2} /></a>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span className="bf-desktop-nav bfx-openpill"><OpenBadge compact /></span>

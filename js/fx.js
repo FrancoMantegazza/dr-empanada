@@ -56,7 +56,7 @@
     fries: stk(
       // pastelito frito cuadrado con dulce
       '<g transform="rotate(8 50 50)">' +
-      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#ffe040" stroke="#fff" stroke-width="5"/>' +
+      '<rect x="18" y="18" width="64" height="64" rx="10" fill="#f2910f" stroke="#fff" stroke-width="5"/>' +
       '<path d="M18 40 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
       '<path d="M18 60 q16 -10 32 0 q16 10 32 0" stroke="#e8a51e" stroke-width="5" fill="none"/>' +
       '<circle cx="50" cy="50" r="13" fill="#c4432b" stroke="#fff" stroke-width="4"/>' +
@@ -89,19 +89,19 @@
       // empanada con repulgue (glifo estrella de la marca)
       '<path d="M8 66 C8 38 27 22 50 22 C73 22 92 38 92 66 Z" fill="#e8a51e" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>' +
       '<path d="M14 60 C20 44 33 36 50 36 C67 36 80 44 86 60" fill="none" stroke="#c98a10" stroke-width="4" stroke-linecap="round"/>' +
-      '<circle cx="17" cy="47" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="26" cy="36" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="38" cy="28.5" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="50" cy="26" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="62" cy="28.5" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="74" cy="36" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
-      '<circle cx="83" cy="47" r="4.5" fill="#ffe040" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="17" cy="47" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="26" cy="36" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="38" cy="28.5" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="50" cy="26" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="62" cy="28.5" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="74" cy="36" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
+      '<circle cx="83" cy="47" r="4.5" fill="#f2910f" stroke="#fff" stroke-width="3"/>' +
       '<path d="M34 50 q6 6 12 0 M54 50 q6 6 12 0" stroke="#8a5a10" stroke-width="4" fill="none" stroke-linecap="round"/>' +
       '<path d="M10 66 h80" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'
     ),
     moto: stk(
       '<g stroke="#fff" stroke-width="4">' +
-      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#f2900d"/>' +
+      '<rect x="8" y="18" width="34" height="30" rx="7" fill="#f2004d"/>' +
       '<path d="M18 30 h14 M18 38 h10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>' +
       '<path d="M42 48 h20 l10 -16 h12" fill="none" stroke="#2b1403" stroke-width="6" stroke-linecap="round"/>' +
       '<circle cx="30" cy="74" r="15" fill="#2b1403"/><circle cx="30" cy="74" r="6" fill="#fff"/>' +
@@ -467,6 +467,13 @@
           gsap.set(rider, { left: P[5][0] + "%", top: P[5][1] + "%", rotation: R[5] });
           return;
         }
+        // La ruta no ocupa toda la sección: en desktop la serpentina vive en
+        // una banda del 22% al 50% de la altura. Si el scrub se ata a la
+        // sección entera, media animación ocurre con esa banda fuera de
+        // pantalla y al llegar ya está a mitad de camino. Atamos el scrub a la
+        // banda: arranca cuando entra por abajo y termina cuando llega arriba,
+        // así el recorrido se ve entero de punta a punta.
+        var band = isM ? [0, 1] : [.22, .50];
         gsap.to(rider, {
           ease: "none",
           keyframes: {
@@ -475,9 +482,13 @@
             rotation: R,
             easeEach: "none",
           },
-          // termina cuando el fondo de la sección llega al 85% del viewport
-          // → el recorrido se COMPLETA mientras la sección sigue a la vista
-          scrollTrigger: { trigger: scene, start: "top 80%", end: "bottom 85%", scrub: .8, invalidateOnRefresh: true },
+          scrollTrigger: {
+            trigger: scene,
+            start: function () { return "top+=" + (scene.offsetHeight * band[0]) + " 88%"; },
+            end: function () { return "top+=" + (scene.offsetHeight * band[1]) + " 22%"; },
+            scrub: .8,
+            invalidateOnRefresh: true,
+          },
         });
       });
 

@@ -216,7 +216,7 @@ function Home({ go }) {
 
       {/* ================= FOTO FULL (parallax) ================= */}
       <div style={{ position: "relative" }}>
-        <Wave fill="#17130e" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
+        <Wave fill="#f2910f" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
         <div style={{ height: "80vh", overflow: "hidden", position: "relative" }}>
           <img data-float=".08" src="assets/horno-fila.jpg" alt="Empanadas recién salidas del horno"
             loading="lazy" style={{ width: "100%", height: "114%", objectFit: "cover" }} />
@@ -288,7 +288,7 @@ function Home({ go }) {
         <div className="wrap" style={{ textAlign: "center", paddingTop: "clamp(50px,6vw,90px)", position: "relative" }}>
           <Sticker name="burger" size={120} data-pop data-idle style={{ position: "absolute", right: "4%", top: -20, "--rot": "12deg" }} />
           <div className="bfx-kicker" data-pop style={{ color: "#f6e8d2" }}>LA VITRINA · ELABORACIÓN PROPIA</div>
-          <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 16, color: "#ffe040" }}>
+          <h2 className="bfx-giant bfx-giant--lg" style={{ marginTop: 16, color: "#f2910f" }}>
             <span data-split="chars" style={{ display: "block" }}>13 SABORES,</span>
             <span data-split="chars" style={{ display: "block" }}>SIEMPRE CALENTITOS.</span>
           </h2>

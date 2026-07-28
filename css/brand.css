@@ -277,12 +277,6 @@ html{ scroll-behavior:smooth; }
 }
 @keyframes toast-in{ from{ transform:translate(-50%, 20px); opacity:0; } }
 
-/* --- Announcement bar --- */
-.annbar{
-  background:var(--orange); color:#1a1206; overflow:hidden;
-  font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-}
-
 /* --- Hero float --- */
 @keyframes bf-float{ 0%,100%{ transform:translateY(0) rotate(-2deg); } 50%{ transform:translateY(-12px) rotate(-2deg); } }
 .hero-float{ animation:bf-float 5.5s ease-in-out infinite; }
