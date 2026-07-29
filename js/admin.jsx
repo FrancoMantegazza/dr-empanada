@@ -18,27 +18,32 @@ function AdminLogin({ go }) {
   const [err, setErr] = React.useState(false);
   const submit = (e) => { e.preventDefault(); if (store.login(user, pass)) setErr(false); else setErr(true); };
   return (
-    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24, background: "radial-gradient(circle at 50% 12%, #fff, var(--ink) 62%)" }}>
-      <div style={{ width: "min(400px,100%)" }}>
-        <div style={{ textAlign: "center", marginBottom: 26 }}>
-          <a href="#/"><Logo size={1.1} light /></a>
-          <div className="mono" style={{ fontSize: 12, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--muted)", marginTop: 18 }}>Panel de gestión · caja y cocina</div>
+    <div className="adm-login">
+      <div style={{ width: "min(410px,100%)" }}>
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <a href="#/" style={{ display: "inline-flex" }}><LogoBadge fontSize={11} /></a>
+          <div className="display" style={{ fontSize: 30, marginTop: 14, color: "var(--white)" }}>Panel de gestión</div>
+          <div className="mono" style={{ fontSize: 11.5, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--orange)", marginTop: 6 }}>Caja · cocina · salón</div>
         </div>
-        <form onSubmit={submit} style={{ ...card, padding: 28 }}>
-          <h1 className="display" style={{ fontSize: 26, margin: "0 0 4px" }}>Iniciar sesión</h1>
-          <p style={{ color: "var(--muted)", fontSize: 14, margin: "0 0 22px" }}>Cada empleado entra con su usuario.</p>
+
+        <form onSubmit={submit} className="adm-login-card">
           <Field label="Usuario">
             <input style={inp} value={user} onChange={(e) => setUser(e.target.value)} placeholder="Tu usuario" autoFocus autoCapitalize="none" />
           </Field>
-          <div style={{ marginTop: 16 }}>
+          <div style={{ marginTop: 14 }}>
             <Field label="Contraseña"><input type="password" style={inp} value={pass} onChange={(e) => setPass(e.target.value)} placeholder="••••" /></Field>
           </div>
-          {err && <div style={{ color: "var(--danger)", fontSize: 13, marginTop: 12, display: "flex", alignItems: "center", gap: 6 }}><Ic.lock width={15} height={15} /> Usuario o contraseña incorrectos</div>}
+          {err && (
+            <div style={{ color: "var(--danger)", fontSize: 13, marginTop: 14, display: "flex", alignItems: "center", gap: 7, background: "rgba(216,83,60,.1)", border: "1px solid rgba(216,83,60,.35)", padding: "10px 12px", borderRadius: 10 }}>
+              <Ic.lock width={15} height={15} /> Usuario o contraseña incorrectos
+            </div>
+          )}
           <button className="btn btn-orange btn-block btn-lg" style={{ marginTop: 20 }}><Ic.lock width={16} height={16} /> Entrar</button>
-          <div className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)", textAlign: "center", marginTop: 16, lineHeight: 1.6 }}>
-            Demo · <b style={{ color: "var(--muted)" }}>dueño</b> o <b style={{ color: "var(--muted)" }}>cajero</b> · clave <b style={{ color: "var(--muted)" }}>1234</b>
+          <div className="mono" style={{ fontSize: 11.5, color: "var(--muted-d)", textAlign: "center", marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--line-dark)", lineHeight: 1.7 }}>
+            Demo · <b style={{ color: "var(--orange)" }}>dueño</b> o <b style={{ color: "var(--orange)" }}>cajero</b> · clave <b style={{ color: "var(--orange)" }}>1234</b>
           </div>
         </form>
+
         <button onClick={() => go("#/")} className="mono" style={{ background: "none", border: "none", color: "var(--muted)", display: "block", margin: "18px auto 0", fontSize: 12.5, cursor: "pointer" }}>‹ Volver al sitio</button>
       </div>
     </div>
@@ -81,48 +86,73 @@ function AdminShell({ go, auth }) {
   const occupied = Array.from({ length: store.tableCount() }, (_, i) => i + 1).filter((n) => store.tableOrder(n)).length;
   const pendingPay = orders.filter((o) => !o.paid && o.status !== "cancelado").length;
 
-  const nav = [
-    ["salon", "Salón", Ic.user, occupied || null],
-    ["ordenes", "Pedidos", Ic.list, activeOrders.length || null],
-    ["caja", "Caja", Ic.copy, pendingPay || null],
-    ["stock", "Stock", Ic.box, null],
-    ...(isOwner ? [["reportes", "Reportes", Ic.chart, null], ["ajustes", "Ajustes", Ic.sliders, null]] : []),
+  /* La navegación va agrupada: arriba lo del día a día (lo que se toca cada
+     dos minutos con el local abierto) y abajo lo de gestión, que se mira de
+     vez en cuando. Antes eran seis botones sueltos sin jerarquía. */
+  const navGroups = [
+    ["Operación", [
+      ["salon", "Salón", Ic.user, occupied || null],
+      ["ordenes", "Pedidos", Ic.list, activeOrders.length || null],
+      ["caja", "Caja", Ic.copy, pendingPay || null],
+    ]],
+    ...(isOwner
+      ? [["Gestión", [
+          ["stock", "Stock", Ic.box, null],
+          ["reportes", "Reportes", Ic.chart, null],
+          ["ajustes", "Ajustes", Ic.sliders, null],
+        ]]]
+      : [["Gestión", [["stock", "Stock", Ic.box, null]]]]),
   ];
 
   const isPos = tab === "salon"; // el POS maneja su propio layout full-height
 
   return (
-    <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: "228px 1fr", background: "var(--ink)" }} className="bf-admin">
+    <div className="adm-shell bf-admin">
       {/* sidebar */}
-      <aside style={{ borderRight: "1px solid var(--line-dark)", background: "var(--ink-2)", display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh" }} className="bf-admin-side">
-        <div style={{ padding: "20px 18px", borderBottom: "1px solid var(--line-dark)" }}><a href="#/"><Logo size={0.78} light /></a></div>
-        <nav style={{ padding: 12, display: "grid", gap: 4, flex: 1, alignContent: "start" }}>
-          {nav.map(([id, label, Icon, badge]) => (
-            <button key={id} onClick={() => setTab(id)} data-tour={"nav-" + id} className={"adm-nav" + (tab === id ? " on" : "")} style={{
-              display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 10, border: "none", cursor: "pointer",
-              fontFamily: "var(--mono)", fontSize: 13, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", textAlign: "left",
-            }}>
-              <Icon width={18} height={18} /> {label}
-              {badge != null && (
-                <span className="tabular" style={{ marginLeft: "auto", background: tab === id ? "#1a1206" : "var(--orange)", color: tab === id ? "var(--orange)" : "#1a1206", borderRadius: 100, padding: "1px 8px", fontSize: 12 }}>{badge}</span>
-              )}
-            </button>
+      <aside className="adm-side bf-admin-side">
+        <div className="adm-side-head">
+          <a href="#/" style={{ display: "flex", alignItems: "center", gap: 11 }}>
+            <LogoBadge fontSize={4.2} />
+            <span className="display" style={{ fontSize: 19, color: "var(--white)", lineHeight: 1 }}>
+              <span style={{ color: "var(--orange)" }}>DR.</span> EMPANADA
+            </span>
+          </a>
+        </div>
+
+        <nav style={{ padding: "6px 12px 12px", flex: 1, alignContent: "start", overflowY: "auto" }}>
+          {navGroups.map(([group, items]) => (
+            <React.Fragment key={group}>
+              <div className="adm-navgroup">{group}</div>
+              <div style={{ display: "grid", gap: 3 }}>
+                {items.map(([id, label, Icon, badge]) => (
+                  <button key={id} onClick={() => setTab(id)} data-tour={"nav-" + id}
+                    className={"adm-nav" + (tab === id ? " on" : "")}
+                    aria-current={tab === id ? "page" : undefined}>
+                    <Icon width={17} height={17} /> {label}
+                    {badge != null && <span className="badge tabular">{badge}</span>}
+                  </button>
+                ))}
+              </div>
+            </React.Fragment>
           ))}
         </nav>
-        <div style={{ padding: 12, borderTop: "1px solid var(--line-dark)" }}>
-          <button onClick={() => setTour(true)} className="mono adm-help" style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "transparent", color: "var(--white)", fontSize: 12, fontWeight: 700, marginBottom: 8, cursor: "pointer" }}>
-            <Ic.help width={16} height={16} /> Ayuda · recorrido
-          </button>
-          <button onClick={() => setSound((s) => !s)} data-tour="sound" className="mono" style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 9, border: "1px solid var(--line-dark)", background: "transparent", color: sound ? "var(--orange)" : "var(--muted)", fontSize: 12, fontWeight: 700, marginBottom: 10, cursor: "pointer" }}>
-            <Ic.bell width={16} height={16} /> Sonido {sound ? "ON" : "OFF"}
-          </button>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 4px" }}>
-            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--ink-3)", display: "grid", placeItems: "center", color: "var(--orange)" }}><Ic.user width={18} height={18} /></div>
+
+        <div className="adm-side-foot">
+          <div style={{ display: "grid", gap: 7, marginBottom: 12 }}>
+            <button onClick={() => setTour(true)} className="adm-sidebtn adm-help">
+              <Ic.help width={15} height={15} /> Ayuda · recorrido
+            </button>
+            <button onClick={() => setSound((s) => !s)} data-tour="sound" className={"adm-sidebtn" + (sound ? " on" : "")}>
+              <Ic.bell width={15} height={15} /> Sonido {sound ? "ON" : "OFF"}
+            </button>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", background: "var(--ink-3)", borderRadius: 12 }}>
+            <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--orange)", display: "grid", placeItems: "center", color: "#1a1206", flexShrink: 0 }}><Ic.user width={17} height={17} /></div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 700 }}>{auth.name}</div>
-              <div className="mono" style={{ fontSize: 10.5, color: "var(--muted)", textTransform: "uppercase" }}>{auth.role}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--white)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{auth.name}</div>
+              <div className="mono" style={{ fontSize: 10, color: "var(--muted)", textTransform: "uppercase", letterSpacing: ".1em" }}>{auth.role}</div>
             </div>
-            <button onClick={() => store.logout()} title="Salir" style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}><Ic.logout /></button>
+            <button onClick={() => store.logout()} title="Cerrar sesión" aria-label="Cerrar sesión" style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", display: "grid" }}><Ic.logout width={17} height={17} /></button>
           </div>
         </div>
       </aside>
@@ -198,49 +228,55 @@ function OrdersBoard({ onDetail, onPay }) {
   const sales = today.filter((o) => o.status !== "cancelado").reduce((s, o) => s + o.total, 0);
   const avg = today.length ? Math.round(sales / Math.max(1, today.filter((o) => o.status !== "cancelado").length)) : 0;
 
+  const filtros = [["activas", "Activas"], ["salon", "Salón"], ["acobrar", "A cobrar"], ["recibido", "Recibidos"], ["preparacion", "En prep."], ["camino", "En camino"], ["todas", "Todas"]];
+
   return (
-    <div style={{ padding: "26px 28px 60px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 14, marginBottom: 22 }}>
+    <div>
+      {/* barra fija: el título y el estado acompañan mientras se scrollea la grilla */}
+      <div className="adm-topbar">
         <div>
-          <h1 className="display" style={{ fontSize: 36, margin: 0 }}>Pedidos</h1>
-          <p className="mono" style={{ fontSize: 12.5, color: "var(--muted)", margin: "6px 0 0", display: "flex", alignItems: "center", gap: 7 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--ok)", animation: "bf-pulse 2s infinite" }} /> En vivo · web, salón y mostrador
-          </p>
+          <h1>Pedidos</h1>
+          <span className="adm-live"><span className="dot" /> En vivo · web, salón y mostrador</span>
         </div>
+        <span className="mono" style={{ fontSize: 12, color: "var(--muted)" }}>
+          {filtered.length} {filtered.length === 1 ? "pedido" : "pedidos"} en esta vista
+        </span>
       </div>
 
-      <div data-tour="metrics" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 24 }} className="bf-metrics">
-        <Metric label="Ventas de hoy" value={money(sales)} accent />
-        <Metric label="Pedidos hoy" value={today.length} />
-        <Metric label="Ticket promedio" value={avg ? money(avg) : "—"} />
-        <Metric label="En curso" value={orders.filter((o) => !["entregado", "cancelado"].includes(o.status)).length} />
-      </div>
-
-      <div data-tour="filters" style={{ display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
-        {[["activas", "Activas"], ["salon", "Salón"], ["acobrar", "A cobrar"], ["recibido", "Recibidos"], ["preparacion", "En prep."], ["camino", "En camino"], ["todas", "Todas"]].map(([id, l]) => (
-          <button key={id} onClick={() => setFilter(id)} className={"catpill" + (filter === id ? " on" : "")}>{l}</button>
-        ))}
-      </div>
-
-      {filtered.length === 0 ? (
-        <div style={{ ...card, textAlign: "center", padding: "60px 20px", color: "var(--muted)" }}>
-          <div style={{ opacity: .3, display: "flex", justifyContent: "center", marginBottom: 12 }}><Ic.list width={42} height={42} /></div>
-          No hay pedidos en esta vista.
+      <div style={{ padding: "22px 28px 60px" }}>
+        <div data-tour="metrics" className="adm-metrics bf-metrics" style={{ marginBottom: 24 }}>
+          <Metric label="Ventas de hoy" value={money(sales)} accent />
+          <Metric label="Pedidos hoy" value={today.length} />
+          <Metric label="Ticket promedio" value={avg ? money(avg) : "—"} />
+          <Metric label="En curso" value={orders.filter((o) => !["entregado", "cancelado"].includes(o.status)).length} />
         </div>
-      ) : (
-        <div data-tour="cards" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 16 }}>
-          {filtered.map((o) => <OrderCard key={o.id} order={o} onDetail={onDetail} onPay={onPay} />)}
+
+        <div data-tour="filters" style={{ display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
+          {filtros.map(([id, l]) => (
+            <button key={id} onClick={() => setFilter(id)} className={"catpill" + (filter === id ? " on" : "")}>{l}</button>
+          ))}
         </div>
-      )}
+
+        {filtered.length === 0 ? (
+          <div style={{ ...card, textAlign: "center", padding: "60px 20px", color: "var(--muted)" }}>
+            <div style={{ opacity: .3, display: "flex", justifyContent: "center", marginBottom: 12 }}><Ic.list width={42} height={42} /></div>
+            No hay pedidos en esta vista.
+          </div>
+        ) : (
+          <div data-tour="cards" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: 16 }}>
+            {filtered.map((o) => <OrderCard key={o.id} order={o} onDetail={onDetail} onPay={onPay} />)}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 function Metric({ label, value, accent }) {
   return (
-    <div style={{ background: "var(--ink-2)", border: "1px solid var(--line-dark)", borderRadius: 12, padding: "16px 18px" }}>
-      <div className="mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</div>
-      <div className="display tabular" style={{ fontSize: 30, marginTop: 6, color: accent ? "var(--orange)" : "var(--white)" }}>{value}</div>
+    <div className={"adm-metric" + (accent ? " adm-metric--accent" : "")}>
+      <div className="lbl">{label}</div>
+      <div className="val tabular">{value}</div>
     </div>
   );
 }
@@ -269,7 +305,7 @@ function OrderCard({ order, onDetail, onPay }) {
   const active = !["entregado", "cancelado"].includes(order.status);
 
   return (
-    <div style={{ background: "var(--ink-2)", border: "1px solid var(--line-dark)", borderRadius: 14, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+    <div className="adm-card">
       <div style={{ height: 4, background: meta.color }} />
       <div style={{ padding: "16px 18px", flex: 1 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>

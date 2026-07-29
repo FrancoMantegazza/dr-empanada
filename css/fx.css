@@ -1070,40 +1070,150 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 }
 
 /* ============================================================
-   PANEL ADMIN — re-skin cartoon vía remap de tokens brand.css
-   El admin usa --ink/--white/--orange/etc por todos lados; los
-   remapeamos scopeados a body.bfx-admin → superficie crema/roja.
+   PANEL ADMIN
+   El admin (admin.jsx, admin-pos, admin-reports, admin-help) está
+   escrito casi enteramente contra los tokens de brand.css
+   (--ink / --white / --orange / --muted…), así que se re-tematiza
+   entero desde este bloque.
+
+   Ojo con lo que había antes: el remap apuntaba a un tema CLARO
+   (--white: marrón oscuro, --ink-2: blanco) porque --bfx-cream era
+   crema. Con el rebrand --bfx-cream pasó a #1a1611 (casi negro) y el
+   panel quedó a mitad de camino: las tarjetas blancas se veían, pero
+   todo el texto fuera de una tarjeta era marrón sobre negro, o sea
+   ilegible (el título "Pedidos", los filtros, el sidebar).
+   Ahora va oscuro y coherente con el resto del sitio: negro de marca,
+   naranja #f29211 y tinta crema.
    ============================================================ */
 body.bfx-admin{
-  background: var(--bfx-cream);
-  color: var(--bfx-deep);
-  --ink:         var(--bfx-cream);   /* fondo página → crema */
-  --ink-2:       #ffffff;            /* cards / superficies → blanco */
-  --ink-3:       var(--bfx-cream);   /* superficie anidada → crema */
-  --line-dark:   rgba(43,20,3,.14);  /* hairline oscuro sobre claro */
-  --white:       var(--bfx-deep);    /* texto principal → marrón */
-  --muted:       rgba(43,20,3,.6);
-  --muted-d:     rgba(43,20,3,.42);
-  --orange:      #d98e00;            /* acento → dorado profundo Dr. Empanada */
-  --orange-2:    #ffe3a8;
-  --orange-deep: #b47500;
-  --shadow:      0 18px 44px -22px rgba(43,20,3,.28);
-  --shadow-sm:   0 6px 18px -10px rgba(43,20,3,.22);
+  background: var(--adm-bg);
+  color: var(--bfx-ink);
+
+  /* superficies, de más al fondo a más al frente */
+  --adm-bg:      #131110;            /* lienzo de la app */
+  --ink:         #131110;
+  --ink-2:       #1c1813;            /* sidebar y tarjetas */
+  --ink-3:       #262019;            /* superficie anidada / hover */
+  --line-dark:   rgba(242,146,17,.16);
+
+  /* tinta */
+  --white:       #f6e8d2;
+  --muted:       rgba(246,232,210,.6);
+  --muted-d:     rgba(246,232,210,.4);
+
+  /* acento de marca */
+  --orange:      #f29211;
+  --orange-2:    #ffd9a4;
+  --orange-deep: #c26f00;
+
+  --shadow:      0 24px 60px -28px rgba(0,0,0,.85);
+  --shadow-sm:   0 8px 22px -12px rgba(0,0,0,.6);
 }
-/* tipografía cartoon (scoped) — display condensado tipo póster,
-   botones redondos Baloo; .mono queda Space Mono para números/tabular */
+/* tipografía: display condensado tipo póster, botones redondos Baloo;
+   .mono queda Space Mono para números y tabulares */
 body.bfx-admin .display{ font-family: var(--bfx-mouse); letter-spacing:.02em; }
 body.bfx-admin .btn{ font-family: var(--bfx-round); font-weight:800; letter-spacing:.02em; border-radius: 12px; }
 body.bfx-admin .btn-lg{ border-radius: 14px; }
 body.bfx-admin .eyebrow{ font-family: var(--bfx-mouse); letter-spacing:.2em; }
-/* texto blanco sobre acento rojo (brand.css los pinta oscuros) */
-body.bfx-admin .btn-orange{ color:#fff; }
-body.bfx-admin .adm-nav.on{ color:#fff; }
-body.bfx-admin .tag.solid{ color:#fff; }
-body.bfx-admin .opt.on{ background: rgba(226,61,22,.08); }
-body.bfx-admin ::selection{ background: var(--bfx-red); color:#fff; }
-/* scrollbar claro */
-body.bfx-admin *::-webkit-scrollbar-thumb{ background: rgba(43,20,3,.22); background-clip:content-box; }
-body.bfx-admin *::-webkit-scrollbar-thumb:hover{ background: rgba(43,20,3,.35); background-clip:content-box; }
-/* tour card sombra marca */
-body.bfx-admin .tour-card{ box-shadow: 0 18px 44px -22px rgba(43,20,3,.3); }
+body.bfx-admin ::selection{ background: var(--orange); color:#1a1206; }
+body.bfx-admin *::-webkit-scrollbar-thumb{ background: rgba(246,232,210,.18); background-clip:content-box; }
+body.bfx-admin *::-webkit-scrollbar-thumb:hover{ background: rgba(246,232,210,.3); background-clip:content-box; }
+
+/* ---------- shell ---------- */
+.adm-shell{ min-height:100vh; display:grid; grid-template-columns: 244px 1fr; background: var(--adm-bg); }
+.adm-side{
+  background: var(--ink-2); border-right:1px solid var(--line-dark);
+  display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+}
+.adm-side-head{ padding:18px 18px 16px; border-bottom:1px solid var(--line-dark); }
+.adm-side-foot{ padding:12px; border-top:1px solid var(--line-dark); margin-top:auto; }
+/* rótulo de grupo del menú */
+.adm-navgroup{
+  font-family: var(--mono); font-size:10px; font-weight:700; letter-spacing:.18em;
+  text-transform:uppercase; color: var(--muted-d);
+  padding: 16px 14px 7px;
+}
+.adm-navgroup:first-child{ padding-top:6px; }
+.adm-nav{
+  display:flex; align-items:center; gap:12px; width:100%;
+  padding:11px 13px; border-radius:11px; border:none; cursor:pointer;
+  font-family: var(--mono); font-size:12.5px; font-weight:700;
+  letter-spacing:.04em; text-transform:uppercase; text-align:left;
+  background:transparent; color: var(--muted);
+  transition: background .15s, color .15s;
+}
+.adm-nav:hover:not(.on){ background: var(--ink-3); color: var(--white); }
+.adm-nav.on{ background: var(--orange); color:#1a1206; }
+.adm-nav .badge{
+  margin-left:auto; min-width:22px; text-align:center;
+  font-size:11.5px; border-radius:100px; padding:2px 7px;
+  background: rgba(242,146,17,.18); color: var(--orange);
+}
+.adm-nav.on .badge{ background: rgba(26,18,6,.22); color:#1a1206; }
+/* botones utilitarios del pie del sidebar */
+.adm-sidebtn{
+  display:flex; align-items:center; gap:10px; width:100%;
+  padding:10px 12px; border-radius:10px; cursor:pointer;
+  border:1px solid var(--line-dark); background:transparent;
+  font-family: var(--mono); font-size:11.5px; font-weight:700; color: var(--muted);
+  transition: border-color .15s, color .15s;
+}
+.adm-sidebtn:hover{ border-color: var(--orange); color: var(--orange); }
+.adm-sidebtn.on{ color: var(--orange); border-color: rgba(242,146,17,.4); }
+
+/* ---------- barra superior de contenido ---------- */
+.adm-topbar{
+  position:sticky; top:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:16px 28px; background: rgba(19,17,16,.92); backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line-dark);
+}
+.adm-topbar h1{ font-family: var(--bfx-mouse); font-size:30px; margin:0; color: var(--white); letter-spacing:.02em; }
+.adm-live{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family: var(--mono); font-size:11.5px; letter-spacing:.06em;
+  text-transform:uppercase; color: var(--muted);
+}
+.adm-live .dot{ width:8px; height:8px; border-radius:50%; background: var(--ok); animation: bf-pulse 2s infinite; }
+
+/* ---------- métricas ---------- */
+.adm-metrics{ display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+.adm-metric{
+  background: var(--ink-2); border:1px solid var(--line-dark);
+  border-radius:14px; padding:15px 18px;
+}
+.adm-metric .lbl{
+  font-family: var(--mono); font-size:10.5px; letter-spacing:.12em;
+  text-transform:uppercase; color: var(--muted);
+}
+.adm-metric .val{ font-family: var(--bfx-mouse); font-size:32px; line-height:1.1; margin-top:4px; color: var(--white); }
+.adm-metric--accent{ border-color: rgba(242,146,17,.4); background: linear-gradient(180deg, rgba(242,146,17,.1), transparent 70%), var(--ink-2); }
+.adm-metric--accent .val{ color: var(--orange); }
+
+/* ---------- tarjeta de pedido ---------- */
+.adm-card{
+  background: var(--ink-2); border:1px solid var(--line-dark);
+  border-radius:16px; overflow:hidden; display:flex; flex-direction:column;
+  transition: border-color .18s, transform .18s;
+}
+.adm-card:hover{ border-color: rgba(242,146,17,.36); transform: translateY(-2px); }
+
+/* ---------- login ---------- */
+.adm-login{
+  min-height:100vh; display:grid; place-items:center; padding:24px;
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(242,146,17,.16), transparent 70%),
+    var(--adm-bg);
+}
+.adm-login-card{
+  background: var(--ink-2); border:1px solid var(--line-dark);
+  border-radius:20px; padding:30px 28px; box-shadow: var(--shadow);
+}
+
+@media (max-width: 900px){
+  .adm-shell{ grid-template-columns: 1fr; }
+  .adm-side{ position:relative; height:auto; flex-direction:row; align-items:center; overflow-x:auto; }
+  .adm-side-foot{ margin-top:0; border-top:none; }
+  .adm-metrics{ grid-template-columns: repeat(2,1fr); }
+  .adm-topbar{ padding:14px 18px; }
+}
