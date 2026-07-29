@@ -151,11 +151,11 @@ function Contacto({ go }) {
 
       {/* info + mapa sobre naranja de marca.
           El wave entra al revés que antes: arriba el negro de la sección del
-          formulario y abajo el naranja. El fondo del wave usa #17130e (el
-          color exacto de .bfx-red, la sección de arriba) y no #1a1611, para
-          que no quede el escalón entre dos negros parecidos. */}
+          formulario y abajo el naranja. El fondo del wave usa #191510 (el
+          color exacto de .bfx-red / --bfx-dark-sec, la sección de arriba)
+          para que no quede el escalón entre dos negros parecidos. */}
       <section className="bfx-contactinfo" aria-label="Dónde estamos">
-        <Wave fill="#f29212" style={{ background: "#17130e" }} />
+        <Wave fill="#f29212" style={{ background: "#191510" }} />
         <div className="wrap" style={{ paddingTop: "clamp(20px,3vw,40px)" }}>
           <div className="bf-two" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "clamp(24px,4vw,50px)", alignItems: "start" }}>
             <div style={{ display: "grid", gap: 16 }}>

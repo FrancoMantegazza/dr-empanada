@@ -182,7 +182,8 @@ function Home({ go }) {
             ))}
           </div>
         </div>
-        <Wave fill="#17130e" style={{ marginTop: "clamp(-40px,-3vw,-20px)", position: "relative", zIndex: 0 }} />
+        {/* #191510 = --bfx-dark-sec, el fondo de .bfx-red (ver fx.css) */}
+        <Wave fill="#191510" style={{ marginTop: "clamp(-40px,-3vw,-20px)", position: "relative", zIndex: 0 }} />
       </section>
 
       {/* ================= EXPERIENCIA (negro) ================= */}
@@ -212,24 +213,38 @@ function Home({ go }) {
             los ojos se meten entre los chips. */}
         <div style={{ position: "relative", width: "min(760px,86vw)", margin: "clamp(95px,11vw,155px) auto -6px" }}>
           <div data-float=".14" style={{ position: "relative" }}>
-            <div className="bfx-blobphoto" style={{ aspectRatio: "1.25", border: "9px solid #fff", borderBottom: "none", borderRadius: "46% 54% 0 0 / 74% 66% 0 0" }}>
+            <div className="bfx-blobphoto bfx-blobphoto--flush" style={{ aspectRatio: "1.25", border: "9px solid #fff", borderBottom: "none", borderRadius: "46% 54% 0 0 / 74% 66% 0 0" }}>
               <img src="assets/empanadas/cheese.jpg" alt="Empanada cheese de cerca" loading="lazy" />
             </div>
             <GooglyEyes style={{ left: "27%", top: "4%", width: "46%" }} />
-            <Glove side="left" style={{ left: "-7%", bottom: "8%", width: "clamp(90px,14vw,150px)" }} data-pop />
-            <Glove side="right" style={{ right: "-7%", bottom: "10%", width: "clamp(90px,14vw,150px)" }} data-pop />
-            {/* la foto terminaba cortada a cuchillo: este wave del color de la
-                sección la disuelve en el fondo */}
-            <Wave fill="#17130e" style={{ position: "absolute", left: -12, right: -12, bottom: -1, zIndex: 2 }} />
+            {/* zIndex 3: los guantes van por encima del wave de abajo */}
+            <Glove side="left" style={{ left: "-7%", bottom: "8%", width: "clamp(90px,14vw,150px)", zIndex: 3 }} data-pop />
+            <Glove side="right" style={{ right: "-7%", bottom: "10%", width: "clamp(90px,14vw,150px)", zIndex: 3 }} data-pop />
+            {/* La foto terminaba cortada a cuchillo: este wave del color de la
+                sección la disuelve en el fondo.
+                El pie va en -1 y NO más abajo: la curva sube entre 0.057 y 0.8
+                del alto, así que corriéndolo hacia abajo los puntos más bajos
+                de la curva dejaban de llegar al borde de la foto y se veía la
+                esquina sin tapar. Con el pie fijo, el alto es lo único que se
+                regula: 58px → tapa hasta ~45px del pie, por debajo de los
+                guantes (que arrancan a 49px y 61px).
+                Y el ancho va con width, NO con left+right: .bfx-wave ya trae
+                width:100%, así que si se ponen las dos anclas el width gana,
+                el right se ignora y el wave queda corrido 12px a la izquierda
+                dejando el borde blanco de la derecha sin tapar. */}
+            <Wave fill="#191510" style={{ position: "absolute", left: -12, width: "calc(100% + 24px)", bottom: -1, height: "clamp(40px,4.6vw,58px)", zIndex: 2 }} />
           </div>
         </div>
       </section>
 
-      {/* ================= FOTO FULL (parallax) ================= */}
-      <div style={{ position: "relative" }}>
+      {/* ================= FOTO FULL (parallax) =================
+          El bloque no tenía background: donde el wave no llegaba y la foto
+          todavía no había cargado se veía el body (#1a1611) contra el
+          #191510 de la sección de arriba, y quedaban dos negros distintos. */}
+      <div style={{ position: "relative", background: "#191510" }}>
         {/* el fill tiene que ser EXACTO al fondo de la sección de arriba
-            (.bfx-red) o se ve el escalón entre los dos negros */}
-        <Wave fill="#17130e" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
+            (.bfx-red / --bfx-dark-sec) o se ve el escalón entre los negros */}
+        <Wave fill="#191510" flip style={{ position: "absolute", top: -1, left: 0, right: 0, zIndex: 2 }} />
         <div style={{ height: "80vh", overflow: "hidden", position: "relative" }}>
           <img data-float=".08" src="assets/horno-fila.jpg" alt="Empanadas recién salidas del horno"
             loading="lazy" style={{ width: "100%", height: "114%", objectFit: "cover" }} />
@@ -342,7 +357,8 @@ function Home({ go }) {
         <Wave fill="#1a1611" style={{ background: "#241c12", marginBottom: "clamp(60px,8vw,110px)" }} />
         <div className="wrap" style={{ position: "relative" }}>
           <Sticker name="burger" size={150} data-pop data-idle style={{ position: "absolute", left: "3%", top: "-10%", "--rot": "-10deg" }} />
-          <Sticker name="fries" size={120} data-pop data-idle style={{ position: "absolute", right: "5%", bottom: "0%", "--rot": "12deg" }} />
+          {/* zIndex 3: asoma POR DELANTE de las polaroids de reseñas */}
+          <Sticker name="burger" size={120} data-pop data-idle style={{ position: "absolute", right: "5%", bottom: "0%", "--rot": "12deg", zIndex: 3 }} />
           <div className="bfx-kicker" data-pop>¿TE PICÓ EL ANTOJO?</div>
           <h2 className="bfx-giant bfx-giant--xl" style={{ marginTop: 16 }}>
             <span data-split="chars" style={{ display: "block" }}>PEDÍ</span>

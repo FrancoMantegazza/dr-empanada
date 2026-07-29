@@ -580,10 +580,18 @@
         });
       });
 
-      /* --- waves que respiran con el scroll --- */
+      /* --- waves que respiran con el scroll ---
+         Arranca en 1 y sólo CRECE. Antes iba de .75 a 1.12 y, como en <svg>
+         el transformOrigin no llega a aplicarse (el glifo queda escalado
+         desde el centro), a .75 el svg medía menos que su contenedor y
+         dejaba ~9px de hueco arriba Y abajo. Por ese hueco de abajo asomaba
+         el fondo del div —el color de la sección de ARRIBA— como una línea
+         cruzando la página, y en la foto de la empanada destapaba el borde.
+         Escalando sólo hacia arriba el svg nunca es más chico que su caja:
+         no puede haber hueco, salga como salga el origen. */
       if (!rm) root.querySelectorAll(".bfx-wave svg").forEach(function (svg) {
-        gsap.fromTo(svg, { scaleY: .75 }, {
-          scaleY: 1.12, transformOrigin: "50% 100%", ease: "none",
+        gsap.fromTo(svg, { scaleY: 1 }, {
+          scaleY: 1.16, transformOrigin: "50% 100%", ease: "none",
           scrollTrigger: { trigger: svg, start: "top bottom", end: "bottom 20%", scrub: 1 },
         });
       });
