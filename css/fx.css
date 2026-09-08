@@ -265,13 +265,12 @@ body.bfx-home .grain{ opacity:.35; }
 }
 .bfx-hero-stage{ position:relative; width:100%; max-width:1500px; margin:0 auto; padding: 0 24px; }
 .bfx-hero-title{ position:relative; z-index:3; text-align:center; user-select:none; }
-/* La burger cuelga POR DEBAJO del título (sobre la palabra gigante), más
-   chica, para no tapar ninguna línea del titular. z-index bajo el título. */
+/* El títere va ARRIBA del titular, en el flujo y grande: es lo primero que
+   se ve al entrar. El título quedó debajo, sin nada encima que lo tape. */
 .bfx-hero-burger{
-  position:absolute; left:50%; top:100%;
-  width: clamp(180px, 20vw, 330px); aspect-ratio: .92;
-  transform: translate(-50%,-14%);
-  z-index:2;
+  position:relative; z-index:2;
+  width: clamp(240px, 30vw, 460px); aspect-ratio: .92;
+  margin: 0 auto clamp(20px, 2.6vw, 38px);
 }
 .bfx-hero-word{
   position:relative; z-index:1; text-align:center;
@@ -286,7 +285,7 @@ body.bfx-home .grain{ opacity:.35; }
 .bfx-hero-copy{
   position:relative; z-index:3;
   display:flex; justify-content:space-between; gap:24px;
-  max-width: 1500px; margin: clamp(120px, 13vw, 210px) auto 0; padding: 10px 34px 34px;
+  max-width: 1500px; margin: clamp(40px, 5vw, 76px) auto 0; padding: 10px 34px 34px;
 }
 .bfx-hero-copy p{ max-width: 330px; margin:0; }
 .bfx-hero-copy p:last-child{ text-align:right; }
@@ -310,26 +309,83 @@ body.bfx-home .grain{ opacity:.35; }
 }
 .bfx-chip--solid{ background:#fff; color: var(--bfx-red); border-color:#fff; }
 
+/* ---------- slider de sabores (sección Nuestro Menú) ---------- */
+.bfx-saborslider{ margin-top: clamp(46px, 6vw, 84px); }
+.bfx-saborslider .stage{ position:relative; width: min(680px, 84vw); margin: 0 auto; }
+.bfx-saborslider .bfx-blobphoto{ position:relative; }
+.bfx-slide{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  opacity:0; transition: opacity .5s ease;
+}
+.bfx-slide.on{ opacity:1; }
+.bfx-slidearrow{
+  position:absolute; top:50%; transform: translateY(-50%); z-index:4;
+  width:52px; height:52px; border-radius:50%;
+  display:grid; place-items:center; cursor:pointer;
+  background:#fff; color: var(--bfx-deep); border:3px solid var(--bfx-mustard);
+  font-family: var(--bfx-round); font-weight:800; font-size:30px; line-height:0;
+  box-shadow: 0 12px 26px -10px rgba(0,0,0,.6);
+  transition: scale .15s var(--ease-out);
+}
+.bfx-slidearrow:hover{ scale: 1.08; }
+.bfx-slidearrow.left{ left: clamp(-26px, -2vw, -8px); }
+.bfx-slidearrow.right{ right: clamp(-26px, -2vw, -8px); }
+.bfx-slidecaption{
+  margin-top: 18px; text-align:center;
+  --bfx-counter: var(--bfx-dark-sec);
+  font-family: var(--bfx-round); font-weight:800; text-transform:uppercase;
+  font-size: clamp(24px, 3vw, 40px); letter-spacing:.02em;
+  color: var(--bfx-mustard);
+}
+.bfx-saborchips{
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  margin-top: clamp(24px, 3vw, 40px); position:relative; z-index:3;
+}
+.bfx-saborchips .bfx-chip{ cursor:pointer; transition: scale .15s var(--ease-out), background .15s, color .15s; }
+.bfx-saborchips .bfx-chip:hover{ scale: 1.05; }
+
 /* sección mostaza (delivery) */
 .bfx-mustardsec{ background: var(--bfx-mustard); }
 /* sobre el amarillo de marca el contorno blanco casi no se ve: acá el
    titular outline se dibuja con el marrón de marca. */
 .bfx-mustardsec .bfx-giant--outline{ -webkit-text-stroke-color: var(--bfx-deep); }
-.bfx-citycard{
-  position:relative; width: clamp(180px, 19vw, 300px); aspect-ratio: .8;
-  background:#fff; border-radius: 14px; padding: 8px;
-  box-shadow: 0 24px 55px -20px rgba(43,20,3,.4);
-  transform: rotate(var(--rot, 3deg));
+.bfx-routebox{
+  position:relative;
+  height: clamp(300px, 30vw, 440px);
+  margin-top: clamp(30px, 4vw, 56px);
 }
-.bfx-citycard img{ width:100%; height:100%; object-fit:cover; border-radius:9px; }
-.bfx-citycard .tagname{
-  position:absolute; top:-16px; left:-14px;
+.bfx-routebox > svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.bfx-routebox .bfx-rider{
+  position:absolute; left:0; top:0; z-index:1;
+  width: clamp(80px, 9vw, 130px);
+  filter: drop-shadow(0 14px 22px rgba(43,20,3,.3));
+}
+/* chips de barrio clavados sobre el recorrido: --x/--y vienen en % del
+   viewBox del svg (1440x900), igual que los waypoints de la moto en fx.js.
+   El pin centra y el chip rota: data-pop escribe el transform del chip, así
+   que el translate tiene que vivir en un nodo aparte o GSAP lo pisa. */
+.bfx-routepin{
+  position:absolute; left: var(--x); top: var(--y); z-index:2;
+  transform: translate(-50%,-50%);
+}
+.bfx-routechip{
+  display:inline-block;
+  transform: rotate(var(--rot, 0deg));
   --bfx-counter: var(--bfx-red);
-  font-size: clamp(18px,2vw,28px); color:#fff;
-  background:var(--bfx-red); padding:.4em .5em .25em; border-radius:.45em;
-  border:3px solid #fff; transform: rotate(-6deg);
-  box-shadow: 0 10px 24px -10px rgba(43,20,3,.45);
+  font-family: var(--bfx-round); font-weight:800; text-transform:uppercase;
+  font-size: clamp(14px, 1.35vw, 20px); letter-spacing:.03em; white-space:nowrap;
+  color:#fff; background: var(--bfx-red);
+  padding: .5em .8em .42em; border-radius: 100px; border:3px solid #fff;
+  box-shadow: 0 12px 26px -10px rgba(43,20,3,.5);
 }
+/* mapa del local */
+.bfx-mapcard{
+  margin: clamp(28px, 4vw, 54px) auto 0; max-width: 940px;
+  background:#fff; border:5px solid #fff; border-radius: 20px; overflow:hidden;
+  box-shadow: 0 26px 60px -22px rgba(43,20,3,.45);
+  line-height:0;
+}
+.bfx-mapcard iframe{ width:100%; height: clamp(260px, 32vw, 420px); border:0; display:block; }
 
 /* barra (cervezas) */
 .bfx-bar{ background: var(--bfx-bordo); color:#f6e8d2; }
@@ -340,6 +396,18 @@ body.bfx-home .grain{ opacity:.35; }
   transform: rotate(var(--rot, 0deg));
   will-change: transform;   /* igual que .bfx-polaroid: comparten data-inertia */
   display:flex; flex-direction:column; gap:8px;
+}
+.bfx-beercard .thumb{
+  position:relative; border-radius: 12px; overflow:hidden; aspect-ratio: 16/10;
+  background: var(--bfx-cream);
+}
+.bfx-beercard .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.bfx-beercard .thumb .rank{
+  position:absolute; top:8px; left:8px;
+  --bfx-counter: var(--bfx-red);
+  font-family: var(--bfx-round); font-weight:800; font-size:15px;
+  color:#fff; background: var(--bfx-red);
+  padding: .25em .6em .2em; border-radius:100px; border:2.5px solid #fff;
 }
 .bfx-beercard .name{ --bfx-counter:#fff; font-size:clamp(20px,2vw,27px); color:var(--bfx-red); line-height:1; }
 .bfx-beercard .brew{ font-family: var(--bfx-mouse); text-transform:uppercase; letter-spacing:.1em; font-size:15px; opacity:.65; }
@@ -856,13 +924,12 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 /* ---------- responsive ---------- */
 @media (max-width: 860px){
   .bfx-hero{ padding-top: 92px; }
-  .bfx-hero-burger{ width: 50vw; transform: translate(-50%,-16%); }
+  .bfx-hero-burger{ width: 64vw; }
   .bfx-hero-word{ font-size: 23vw; margin-top: 2vw; }
   .bfx-badge{ font-size: 15px; border-width: 2.5px; }
-  .bfx-hero-copy{ flex-direction:column; gap: 16px; padding-bottom: 26px; margin-top: clamp(110px, 42vw, 240px); }
+  .bfx-hero-copy{ flex-direction:column; gap: 16px; padding-bottom: 26px; margin-top: 30px; }
   .bfx-hero-copy p, .bfx-hero-copy p:last-child{ max-width: none; text-align:left; }
   .bfx-polaroid-row{ flex-direction: column; align-items:center; }
-  .bfx-citycard{ width: 64vw; }
   .bfx-footer-info{ grid-template-columns: 1fr 1fr; gap: 22px; }
   .bfx-footer-main{ text-align: center; }
   .bfx-footer-logo{ justify-content: center; }
@@ -874,15 +941,16 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 }
 
 /* ---------- polaroids "LA BANDA": zigzag en mobile (sin solape) ---------- */
-.bfx-route--m{ display: none; }
 @media (max-width: 720px){
   .bfx-polaroid-row{ flex-direction: column; align-items: center; gap: 30px !important; }
   .bfx-polaroid-row .bfx-polaroid{ margin-top: 0 !important; width: min(300px, 82vw) !important; }
   .bfx-polaroid-row .bfx-polaroid:nth-child(odd){ align-self: flex-start; }
   .bfx-polaroid-row .bfx-polaroid:nth-child(even){ align-self: flex-end; }
-  /* ruta de la moto: path vertical (el horizontal se deforma con preserveAspectRatio=none) */
-  .bfx-route--d{ display: none; }
-  .bfx-route--m{ display: inline; }
+  /* en celu el recorrido horizontal se deformaría con preserveAspectRatio=none:
+     se oculta y los barrios se apilan como chips normales */
+  .bfx-routebox{ height:auto; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+  .bfx-routebox > svg, .bfx-routebox .bfx-rider{ display:none; }
+  .bfx-routepin{ position:static; transform:none; }
 }
 @media (prefers-reduced-motion: reduce){
   #bfx-loader .word{ animation:none; }
@@ -893,6 +961,42 @@ html.bfx-nofx [data-split]{ visibility:visible !important; }
 /* ============================================================
    CUSTOMIZER (modal) + CHECKOUT — superficies claras cartoon
    ============================================================ */
+
+/* ---------- badge de ambiente (TEST / LOCAL) ---------- */
+.bfx-envbadge{
+  position: fixed; left: 14px; bottom: 14px; z-index: 90;
+  font-family: var(--bfx-round); font-weight: 800; font-size: 12px;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: #1c1813; background: #ffd23f;
+  padding: 6px 12px 5px; border-radius: 100px; border: 2px solid #1c1813;
+  box-shadow: 0 8px 20px -8px rgba(0,0,0,.6);
+  pointer-events: none; user-select: none;
+}
+
+/* ---------- cupón de descuento · seña · nota de envío (checkout) ---------- */
+.bfx-couponbox{
+  margin-top: 22px; padding: 16px;
+  border: 2.5px dashed rgba(242,146,17,.4); border-radius: 16px;
+  background: rgba(242,146,17,.06);
+}
+.bfx-couponon{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  font-family: var(--bfx-round); font-weight:700; font-size:17px; color: var(--bfx-green);
+}
+.bfx-couponon span{ display:inline-flex; align-items:center; gap:8px; }
+.bfx-couponon button{
+  background:none; border:none; cursor:pointer; text-decoration:underline;
+  font-family: var(--bfx-round); font-weight:700; font-size:15px; color: var(--bfx-brand);
+}
+.bfx-couponerr{ font-family: var(--body); font-size:15px; color:#e0644c; margin:8px 0 0; }
+.bfx-senabox{
+  margin-top:16px; padding:14px 16px; border-radius:14px;
+  background: rgba(96,169,5,.1); border:2px solid rgba(96,169,5,.35);
+  display:grid; gap:6px; font-family: var(--body); font-size:17px;
+}
+.bfx-senabox > div{ display:flex; justify-content:space-between; gap:12px; }
+.bfx-senabox b{ font-weight:700; }
+.bfx-shipnote{ font-family: var(--body); font-size:14.5px; line-height:1.4; opacity:.7; margin:4px 0 0; }
 
 /* blob deshabilitado (checkout "continuar") */
 .bfx-blob:disabled{ opacity:.5; cursor:not-allowed; }

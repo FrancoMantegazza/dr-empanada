@@ -96,6 +96,7 @@ function App() {
       <Customizer />
       <Toaster />
       <div className="grain" aria-hidden="true" />
+      {ENV !== "PROD" && <div className="bfx-envbadge" title={"Ambiente " + ENV + " · " + location.hostname}>{ENV}</div>}
       {Tweaks}
     </>
   );

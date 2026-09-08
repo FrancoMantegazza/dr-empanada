@@ -104,7 +104,6 @@ function Nosotros({ go }) {
         </div>
       </section>
 
-      <AntojoCTA go={go} />
     </main>
   );
 }
@@ -195,7 +194,6 @@ function Contacto({ go }) {
         <Wave fill="#1a1611" style={{ background: "#f29212", marginTop: "clamp(40px,5vw,70px)" }} />
       </section>
 
-      <AntojoCTA go={go} />
     </main>
   );
 }

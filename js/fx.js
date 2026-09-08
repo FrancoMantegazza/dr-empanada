@@ -481,12 +481,9 @@
         // horizontal (desktop) y un descenso vertical (mobile) — porque con
         // preserveAspectRatio="none" la horizontal se deforma en la sección
         // alta+angosta del celu. La ruta SVG se togglea por CSS (bfx-route--d/m).
-        var isM = window.matchMedia && window.matchMedia("(max-width: 720px)").matches;
-        var P = isM ? [
-          // d="M 260 -40 C 520 180 120 320 300 480 C 480 640 140 760 300 980"
-          [18.1, -4.4], [24.4, 12.4], [21.5, 26.9], [17.7, 40.2], [20.8, 53.3],
-          [24.5, 66.1], [21.4, 78.6], [17.9, 92.4], [20.8, 108.9],
-        ] : [
+        // en celu el recorrido se oculta (CSS) y la moto con él: no animamos
+        if (!rider.offsetParent) return;
+        var P = [
           [-5.6, 26.7], [8, 23.4], [20.5, 28.5], [32.1, 36.6], [43.3, 42.2],
           [54.2, 40.0], [64.3, 36.6], [73.8, 39.8], [83.7, 45.3], [94.8, 49.0], [108.3, 46.7],
         ];
@@ -506,13 +503,10 @@
           gsap.set(rider, { left: P[5][0] + "%", top: P[5][1] + "%", rotation: R[5] });
           return;
         }
-        // La ruta no ocupa toda la sección: en desktop la serpentina vive en
-        // una banda del 22% al 50% de la altura. Si el scrub se ata a la
-        // sección entera, media animación ocurre con esa banda fuera de
-        // pantalla y al llegar ya está a mitad de camino. Atamos el scrub a la
-        // banda: arranca cuando entra por abajo y termina cuando llega arriba,
-        // así el recorrido se ve entero de punta a punta.
-        var band = isM ? [0, 1] : [.22, .50];
+        // El scene ES la caja del recorrido (no la sección entera), así que el
+        // scrub va de punta a punta: la moto arranca cuando la ruta entra por
+        // abajo y llega al final cuando termina de salir por arriba.
+        var band = [0, 1];
         gsap.to(rider, {
           ease: "none",
           keyframes: {

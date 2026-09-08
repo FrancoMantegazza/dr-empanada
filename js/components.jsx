@@ -216,7 +216,9 @@ function Footer({ go }) {
           </div>
           <div>
             <span className="lbl">Horarios</span>
-            Lun cerrado<br />Mar a Sáb 09–00 · Dom 19–00
+            {BIZ.hours.map((h, i) => (
+              <React.Fragment key={h.d}>{i > 0 && <br />}{h.d}: {h.h}</React.Fragment>
+            ))}
           </div>
           <div>
             <span className="lbl">Pedidos</span>
@@ -225,8 +227,7 @@ function Footer({ go }) {
           </div>
           <div>
             <span className="lbl">Estado</span>
-            <OpenBadge /><br />
-            <span style={{ color: "var(--bfx-mustard)" }}>★ Promo mediodía · {HAPPY.when.toLowerCase()}</span>
+            <OpenBadge />
           </div>
         </div>
       </div>
@@ -378,7 +379,6 @@ function Customizer() {
   if (!item) return null;
 
   const isBurger = item.cat === "empanadas";
-  const toggleExtra = (id) => setExtras((xs) => xs.includes(id) ? xs.filter((x) => x !== id) : [...xs, id]);
   const base = size === "double" ? (item.priceDouble || item.price) : item.price;
   const mods = {
     medallon: isBurger ? medallon : null,
@@ -423,20 +423,8 @@ function Customizer() {
 
         {/* data-lenis-prevent: sin esto Lenis se come la rueda y el modal no scrollea */}
         <div className="bfx-modal-body" data-lenis-prevent>
-          {item.priceDouble && (
-            <Sec label="Cantidad">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                {[["single", "Por unidad", item.price], ["double", "Por docena", item.priceDouble]].map(([v, l, p]) => (
-                  <button key={v} className={"bfx-opt" + (size === v ? " on" : "")} onClick={() => setSize(v)}>
-                    <span className="bfx-tick"><span className="dot" /></span>
-                    <span className="nm">{l}</span>
-                    <span className="pr">{money(p)}</span>
-                  </button>
-                ))}
-              </div>
-            </Sec>
-          )}
-
+          {/* El cliente suma de a una: sin selector unidad/docena.
+              El variant "double" sigue existiendo en el store para el POS. */}
           {isBurger && (
             <Sec label="Cocción · mismo precio">
               <div style={{ display: "grid", gap: 8 }}>
@@ -462,21 +450,6 @@ function Customizer() {
               </div>
             </Sec>
           )}
-
-          <Sec label="Agregados">
-            <div style={{ display: "grid", gap: 8 }}>
-              {EXTRAS.map((e) => {
-                const on = extras.includes(e.id);
-                return (
-                  <button key={e.id} className={"bfx-opt" + (on ? " on" : "")} onClick={() => toggleExtra(e.id)} style={{ fontSize: 16, padding: "11px 13px" }}>
-                    <span className="bfx-tick sq">{on && <Ic.check width={13} height={13} />}</span>
-                    <span className="nm" style={{ lineHeight: 1.15 }}>{e.name}</span>
-                    <span className="pr">+{money(e.price)}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </Sec>
         </div>
 
         {/* footer */}

@@ -8,14 +8,27 @@ function Checkout({ go }) {
   const [step, setStep] = React.useState(1);
   const [order, setOrder] = React.useState(null);
   const [form, setForm] = React.useState({
-    name: "", lastname: "", phone: "", mode: "delivery",
+    name: "", lastname: "", phone: "", email: "", mode: "delivery",
     address: "", bell: "", notes: "", pay: "transferencia",
   });
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
+  // cupón: se valida al aplicar y queda guardado el objeto, no el texto suelto
+  const [couponCode, setCouponCode] = React.useState("");
+  const [coupon, setCoupon] = React.useState(null);
+  const [couponErr, setCouponErr] = React.useState("");
+  const applyCoupon = () => {
+    const c = findCoupon(couponCode);
+    if (!c) { setCoupon(null); setCouponErr("Ese cupón no existe o ya venció."); return; }
+    setCoupon(c); setCouponErr("");
+  };
+  const clearCoupon = () => { setCoupon(null); setCouponCode(""); setCouponErr(""); };
+
   const subtotal = store.cartTotal();
-  const shipping = form.mode === "delivery" ? 2500 : 0;
-  const total = subtotal + shipping;
+  const shipping = form.mode === "delivery" ? SHIPPING.price : 0;
+  const discount = couponDiscount(coupon, subtotal);
+  const total = subtotal + shipping - discount;
+  const sena = Math.round((total * SENA_PCT) / 100);
 
   if (lines.length === 0 && !order) {
     return (
@@ -35,8 +48,9 @@ function Checkout({ go }) {
   const confirm = () => {
     const o = store.placeOrder({
       name: form.name + " " + form.lastname,
-      phone: form.phone, mode: form.mode,
+      phone: form.phone, email: form.email, mode: form.mode,
       address: form.address, bell: form.bell, notes: form.notes, pay: form.pay,
+      coupon: coupon ? coupon.code : null, discount,
     });
     setOrder(o);
     if (window.FX) FX.toTop(); else window.scrollTo({ top: 0 });
@@ -66,8 +80,10 @@ function Checkout({ go }) {
                 <TField label="Nombre *"><input className="bfx-tinput" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Juan" /></TField>
                 <TField label="Apellido *"><input className="bfx-tinput" value={form.lastname} onChange={(e) => set("lastname", e.target.value)} placeholder="Pérez" /></TField>
               </div>
-              <div style={{ marginTop: 14 }}>
+              <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="bf-two">
                 <TField label="Teléfono / WhatsApp *"><input className="bfx-tinput" value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="11 1234-5678" inputMode="tel" /></TField>
+                {/* opcional: queda para mandarle promos */}
+                <TField label="Mail (opcional)"><input className="bfx-tinput" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="Para enterarte de las promos" inputMode="email" autoComplete="email" /></TField>
               </div>
 
               <div className="bfx-seclabel" style={{ margin: "22px 0 10px" }}>Modalidad de entrega</div>
@@ -91,6 +107,25 @@ function Checkout({ go }) {
                 <TField label="Notas (opcional)"><textarea rows={2} className="bfx-tinput" style={{ resize: "vertical" }} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Bien cocidas, salsa aparte..." /></TField>
               </div>
 
+              <div className="bfx-couponbox">
+                <div className="bfx-seclabel" style={{ marginBottom: 10 }}>¿Tenés un cupón de descuento?</div>
+                {coupon ? (
+                  <div className="bfx-couponon">
+                    <span><Ic.check width={16} height={16} /> {coupon.code} · {couponLabel(coupon)}</span>
+                    <button type="button" onClick={clearCoupon}>Quitar</button>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <input className="bfx-tinput" style={{ flex: 1, minWidth: 180, textTransform: "uppercase" }}
+                      value={couponCode} onChange={(e) => { setCouponCode(e.target.value); setCouponErr(""); }}
+                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); applyCoupon(); } }}
+                      placeholder="Ingresá tu código" aria-label="Código de cupón" />
+                    <button type="button" className="bfx-btn-ghost" onClick={applyCoupon} disabled={!couponCode.trim()}>Aplicar</button>
+                  </div>
+                )}
+                {couponErr && <p className="bfx-couponerr">{couponErr}</p>}
+              </div>
+
               <button className="bfx-blob" style={{ marginTop: 24, width: "100%", opacity: canStep1 ? 1 : .5 }} disabled={!canStep1} onClick={() => setStep(2)}>Continuar al pago →</button>
               {!canStep1 && <p className="bfx-hand" style={{ fontSize: 15, opacity: .55, textAlign: "center", marginTop: 10, letterSpacing: ".04em" }}>Completá los campos con *</p>}
             </div>
@@ -104,7 +139,7 @@ function Checkout({ go }) {
                 {[
                   ["transferencia", "Transferencia", "Alias / CBU al instante", Ic.copy],
                   ["mp", "Mercado Pago", "Te pasamos el link de pago", Ic.phone],
-                  ["sena", "Seña + efectivo", "Señás online y el resto en efectivo", Ic.bag],
+                  ["sena", "Seña + efectivo", "Señás el " + SENA_PCT + "% online y el resto en efectivo", Ic.bag],
                 ].map(([val, t, d, Icon]) => (
                   <button key={val} onClick={() => set("pay", val)} className={"bfx-choice" + (form.pay === val ? " on" : "")} style={{ display: "flex", alignItems: "center", gap: 14 }}>
                     <span style={{ width: 46, height: 46, borderRadius: 12, display: "grid", placeItems: "center", background: form.pay === val ? "var(--bfx-brand)" : "rgba(246,232,210,.1)", color: form.pay === val ? "var(--bfx-night)" : "rgba(246,232,210,.5)", flexShrink: 0 }}><Icon width={21} height={21} /></span>
@@ -116,6 +151,13 @@ function Checkout({ go }) {
                   </button>
                 ))}
               </div>
+
+              {form.pay === "sena" && (
+                <div className="bfx-senabox">
+                  <div><span>Seña ahora ({SENA_PCT}%)</span><b>{money(sena)}</b></div>
+                  <div><span>Resto en efectivo al recibir</span><b>{money(total - sena)}</b></div>
+                </div>
+              )}
 
               {(form.pay === "transferencia" || form.pay === "sena") && <TransferData />}
 
@@ -154,7 +196,9 @@ function Checkout({ go }) {
           </div>
           <div style={{ borderTop: "2px dashed rgba(242,146,17,.3)", paddingTop: 14, display: "grid", gap: 8 }}>
             <Row k="Subtotal" v={money(subtotal)} />
-            <Row k={form.mode === "delivery" ? "Envío" : "Take away"} v={shipping ? money(shipping) : "Gratis"} />
+            {discount > 0 && <Row k={"Cupón " + coupon.code} v={"– " + money(discount)} accent />}
+            <Row k={form.mode === "delivery" ? "Envío" : "Take away"} v={shipping ? money(shipping) : "Gratis"} big />
+            {form.mode === "delivery" && <p className="bfx-shipnote">{SHIPPING.note}</p>}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 6 }}>
               <span className="bfx-bubble" style={{ fontSize: 22 }}>Total</span>
               <span className="bfx-bubble" style={{ fontSize: 32 }}>{money(total)}</span>
@@ -166,8 +210,18 @@ function Checkout({ go }) {
   );
 }
 
-function Row({ k, v }) {
-  return <div style={{ display: "flex", justifyContent: "space-between" }}><span className="bfx-hand bfx-mut" style={{ fontSize: 17 }}>{k}</span><span className="bfx-hand" style={{ fontSize: 17 }}>{v}</span></div>;
+/* big → la línea de envío: más grande y con la tipografía clásica (Barlow) */
+function Row({ k, v, big, accent }) {
+  const base = big
+    ? { fontFamily: "var(--body)", fontSize: 21, fontWeight: 600, letterSpacing: 0 }
+    : { fontSize: 17 };
+  const cls = big ? "" : "bfx-hand";
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
+      <span className={cls + (big ? "" : " bfx-mut")} style={{ ...base, opacity: big ? .85 : undefined }}>{k}</span>
+      <span className={cls} style={{ ...base, color: accent ? "var(--bfx-green)" : undefined }}>{v}</span>
+    </div>
+  );
 }
 
 function TField({ label, children }) {
@@ -203,6 +257,7 @@ function Summary({ form }) {
     <div>
       <SumRow label="Cliente" value={form.name + " " + form.lastname} />
       <SumRow label="WhatsApp" value={form.phone} />
+      {form.email && <SumRow label="Mail" value={form.email} />}
       <SumRow label="Entrega" value={form.mode === "delivery" ? "Delivery" : "Take away"} />
       {form.mode === "delivery" && <SumRow label="Dirección" value={form.address + (form.bell ? " · Timbre " + form.bell : "")} />}
       <SumRow label="Pago" value={payLabel} />
@@ -265,7 +320,7 @@ function OrderSuccess({ order, go }) {
       </div>
 
       <div className="bfx-card" style={{ marginBottom: 18 }}>
-        <Summary form={{ name: order.name.split(" ")[0], lastname: order.name.split(" ").slice(1).join(" "), phone: order.phone, mode: order.mode, address: order.address, bell: order.bell, pay: order.pay, notes: order.notes }} />
+        <Summary form={{ name: order.name.split(" ")[0], lastname: order.name.split(" ").slice(1).join(" "), phone: order.phone, email: order.email, mode: order.mode, address: order.address, bell: order.bell, pay: order.pay, notes: order.notes }} />
         <div style={{ borderTop: "2px dashed rgba(242,146,17,.3)", marginTop: 14, paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span className="bfx-bubble" style={{ fontSize: 22 }}>Total</span>
           <span className="bfx-bubble" style={{ fontSize: 34 }}>{money(order.total)}</span>

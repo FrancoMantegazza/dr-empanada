@@ -31,6 +31,20 @@ const BIZ = {
   },
 };
 
+/* ============================================================
+   Ambiente. PROD es el dominio de producción (rama PROD en Cloudflare
+   Pages); cualquier preview de rama (*.dr-empanada.pages.dev, que es donde
+   cae TEST) o un server local se marcan como no productivos y muestran el
+   badge de ambiente para no confundir una preview con el sitio real.
+   ============================================================ */
+const PROD_HOST = "dr-empanada.pages.dev";
+const ENV = (function () {
+  const h = location.hostname;
+  if (h === PROD_HOST) return "PROD";
+  if (h === "localhost" || h === "127.0.0.1" || h === "") return "LOCAL";
+  return "TEST";
+})();
+
 const money = (n) =>
   "$" + n.toLocaleString("es-AR", { minimumFractionDigits: 0 });
 
@@ -62,6 +76,33 @@ function isHappyNow(now = new Date()) {
   const d = now.getDay(), m = minutesOf(now);
   return d >= 2 && d <= 6 && m >= 12 * 60 && m < 14 * 60 + 30;
 }
+
+/* ============================================================
+   Envío, seña y cupones — editables a mano, como los precios
+   ============================================================ */
+const SHIPPING = {
+  price: 4000,        // dentro del radio; más lejos se coordina por WhatsApp
+  radiusKm: 2.5,
+  note: "Envío dentro de 2,5 km. Si estás más lejos lo coordinamos por WhatsApp.",
+};
+// "Seña + efectivo": se abona online este % del total y el resto en efectivo.
+const SENA_PCT = 50;
+
+/* Cupones de descuento. type: "percent" (value = %) | "amount" (value = $) */
+const COUPONS = [
+  { code: "DREMPANADA10", type: "percent", value: 10 },
+];
+const findCoupon = (code) => {
+  const c = String(code || "").trim().toUpperCase();
+  return COUPONS.find((x) => x.code === c) || null;
+};
+const couponDiscount = (coupon, subtotal) => {
+  if (!coupon) return 0;
+  return coupon.type === "percent"
+    ? Math.round((subtotal * coupon.value) / 100)
+    : Math.min(coupon.value, subtotal);
+};
+const couponLabel = (c) => (c.type === "percent" ? c.value + "% off" : money(c.value) + " off");
 
 /* ============================================================
    Agregados / upgrades (carta real)
@@ -249,7 +290,9 @@ const Ic = {
 };
 
 Object.assign(window, {
+  ENV, PROD_HOST,
   BIZ, MENU, FLAT_ITEMS, findItem, REVIEWS, money, Empanada, Cloche, Logo, LogoBadge, Ic, IMG,
   EXTRAS, MEDALLONES, PROTEINAS, HAPPY, PROMO_VIERNES,
+  SHIPPING, SENA_PCT, COUPONS, findCoupon, couponDiscount, couponLabel,
   findExtra, isOpenNow, isHappyNow,
 });

@@ -167,8 +167,7 @@ function MenuCard({ item, rot = 0 }) {
       </div>
       <div className="desc">{item.desc}</div>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
-        <span className="price">{money(item.price)}{item.priceDouble && <span style={{ fontSize: 15, opacity: .55 }}> unidad</span>}</span>
-        {item.priceDouble && <span className="bfx-hand" style={{ fontSize: 16, opacity: .6 }}>Docena {money(item.priceDouble)}</span>}
+        <span className="price">{money(item.price)}</span>
       </div>
     </div>
   );

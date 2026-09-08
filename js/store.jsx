@@ -113,7 +113,8 @@ const Store = {
   createOrder(rawLines, payload) {
     const lines = this._buildLines(rawLines);
     const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-    const shipping = payload.mode === "delivery" ? 2500 : 0;
+    const shipping = payload.mode === "delivery" ? SHIPPING.price : 0;
+    const discount = Math.min(payload.discount || 0, subtotal);
     const seq = this.nextSeq();
     const order = {
       id: "DE-" + String(seq).padStart(4, "0"),
@@ -121,7 +122,8 @@ const Store = {
       createdAt: Date.now(),
       status: "recibido",
       paid: false,
-      lines, subtotal, shipping, total: subtotal + shipping,
+      lines, subtotal, shipping, discount,
+      total: subtotal + shipping - discount,
       ...payload,
     };
     write(LS.orders, [order, ...this.getOrders()]);
@@ -152,7 +154,7 @@ const Store = {
     let charged = null;
     write(LS.orders, this.getOrders().map((o) => {
       if (o.id !== id) return o;
-      const finalTotal = Math.round((o.subtotal + (o.shipping || 0)) * (1 - discount / 100));
+      const finalTotal = Math.round((o.subtotal + (o.shipping || 0) - (o.discount || 0)) * (1 - discount / 100));
       charged = {
         ...o, paid: true, payMethod: method, discount, total: finalTotal,
         cashReceived: method === "efectivo" ? cashReceived : 0,
@@ -240,7 +242,7 @@ const Store = {
       const lines = rawLines.filter(Boolean);
       const seq = this.nextSeq();
       const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-      const shipping = mode === "delivery" ? 2500 : 0;
+      const shipping = mode === "delivery" ? SHIPPING.price : 0;
       return {
         id: "DE-" + String(seq).padStart(4, "0"), seq,
         createdAt: Date.now() - mins * 60000, status,
